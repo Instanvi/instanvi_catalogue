@@ -1,0 +1,139 @@
+"use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export type Customer = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  company: string | null;
+  category: {
+    id: string;
+    name: string;
+  } | null;
+  createdAt: string;
+};
+
+export const columns: ColumnDef<Customer>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: "Customer Name",
+    cell: ({ row }) => {
+      const name = row.getValue("name") as string;
+      return (
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 bg-primary text-white flex items-center justify-center font-semibold text-xs rounded-full">
+            {name.substring(0, 2).toUpperCase()}
+          </div>
+          <span className="font-medium text-sm">{name}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "company",
+    header: "Organization",
+    cell: ({ row }) => (
+      <span className="text-muted-foreground font-medium text-sm">
+        {row.getValue("company") || "N/A"}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => {
+      const category = row.original.category;
+      return category ? (
+        <Badge
+          variant="outline"
+          className="border-primary text-primary font-medium text-xs"
+        >
+          {category.name}
+        </Badge>
+      ) : (
+        <span className="text-muted-foreground text-sm">Standard</span>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const customer = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0 hover:bg-black hover:text-white rounded-[2px]"
+            >
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="rounded-[2px] border-2 border-black"
+          >
+            <DropdownMenuLabel className="text-xs font-semibold">
+              Actions
+            </DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(customer.id)}
+              className="text-xs font-medium cursor-pointer"
+            >
+              Copy ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-blue-600">
+              <Edit className="mr-2 h-3 w-3" /> Edit Profile
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600">
+              <Trash2 className="mr-2 h-3 w-3" /> Remove Access
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
