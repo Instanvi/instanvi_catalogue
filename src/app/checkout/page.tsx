@@ -4,7 +4,7 @@ import { CheckoutForm } from "@/components/forms/checkout-form/CheckoutForm";
 import { useCart } from "@/hooks/use-cart";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { CreateOrderPayload } from "@/types/api";
+import { CreateOrderPayload, OrderType } from "@/types/api";
 import { useCreateOrder } from "@/hooks/use-orders";
 
 export default function CheckoutPage() {
@@ -24,25 +24,47 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Assuming all items are from the same business for now
-    // In a multi-vendor scenario, we would need to group by businessId or block mixed carts
-    const businessId = cart[0].businessId;
+    // Try to find catalogueId from any item in the cart (for robustness)
+    const catalogueId = cart.find((item) => item.catalogueId)?.catalogueId;
+    const businessId = cart.find((item) => item.businessId)?.businessId;
 
-    if (!businessId) {
-      toast.error("Invalid cart data: Missing business information");
+    if (!catalogueId) {
+      toast.error(
+        "Cart contains outdated items. Please clear your cart and re-add your products.",
+        {
+          duration: 5000,
+          action: {
+            label: "Clear Cart",
+            onClick: () => {
+              clearCart();
+              router.push("/");
+            },
+          },
+        },
+      );
       return;
     }
 
     try {
       const orderData: CreateOrderPayload = {
         ...values,
+        type: OrderType.B2C,
+        catalogueId: catalogueId,
         fromBusinessId: businessId,
-        items: cart.map((item) => ({
-          productId: item.id,
-          quantity: item.quantity,
-          unitPrice: parseFloat(item.price),
-        })),
+        items: cart.map((item) => {
+          if (!item.catalogueProductId) {
+            throw new Error(
+              `Missing catalogue product ID for item: ${item.name}`,
+            );
+          }
+          return {
+            catalogueProductId: item.catalogueProductId,
+            quantity: item.quantity,
+            unitPrice: parseFloat(item.price),
+          };
+        }),
         notes: values.notes,
+        paymentMethod: "MOBILE_MONEY", // Defaulting to MOBILE_MONEY as the form currently only has mobile providers
       };
 
       console.log("Creating order:", orderData);

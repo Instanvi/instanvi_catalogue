@@ -5,17 +5,31 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
+export interface ProductUnit {
+  id: string;
+  productId: string;
+  name: string;
+  price: string;
+  conversionFactor: string;
+  sku: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Product {
   id: string;
+  catalogueProductId?: string;
+  catalogueId?: string;
   name: string;
   price: string;
   compareAtPrice?: string | null;
   images: string[];
   category?: string;
   description?: string;
-  unit?: string;
   sku?: string;
-  organizationId?: string;
+  businessId?: string;
+  units?: ProductUnit[];
 }
 
 interface ProductItemProps {
@@ -103,7 +117,7 @@ export function ProductCard({
           <PriceDisplay
             price={product.price}
             compareAtPrice={product.compareAtPrice}
-            unit={product.unit}
+            unit={product.units?.find((u) => u.isDefault)?.name}
             className="text-base md:text-lg font-black text-foreground"
           />
         </div>
@@ -165,7 +179,7 @@ export function ProductListItem({
           <PriceDisplay
             price={product.price}
             compareAtPrice={product.compareAtPrice}
-            unit={product.unit}
+            unit={product.units?.find((u) => u.isDefault)?.name}
             className="font-black text-base md:text-xl"
           />
         </div>

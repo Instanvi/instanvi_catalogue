@@ -78,6 +78,21 @@ export interface UpdateBusinessPayload {
 }
 
 // --- Products ---
+export interface ProductUnitPayload {
+  name: string;
+  price: string;
+  conversionFactor: string | number;
+  sku: string;
+  isDefault?: boolean;
+}
+
+export interface ProductUnit extends ProductUnitPayload {
+  id: string;
+  productId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface CreateProductPayload {
   businessId: string;
   name: string;
@@ -87,9 +102,8 @@ export interface CreateProductPayload {
   slug?: string;
   images?: string[];
   specifications?: Record<string, unknown>;
-  unit?: string; // default: 'piece'
-  price?: string; // default: '0'
   productType?: string;
+  units?: ProductUnitPayload[];
 }
 
 export interface UpdateProductPayload {
@@ -99,10 +113,9 @@ export interface UpdateProductPayload {
   sku?: string;
   images?: string[];
   specifications?: Record<string, unknown>;
-  unit?: string;
-  price?: string;
   productType?: string;
   isActive?: boolean;
+  units?: ProductUnitPayload[];
 }
 
 // --- Catalogues ---
@@ -183,14 +196,15 @@ export enum OrderType {
 }
 
 export interface OrderItemPayload {
-  productId: string;
+  catalogueProductId: string;
   quantity: number;
   unitPrice: number;
 }
 
 export interface CreateOrderPayload {
   type?: OrderType; // default B2C
-  fromBusinessId: string; // Seller
+  catalogueId: string;
+  fromBusinessId?: string; // Seller (calculated from catalogue if missing)
   toBusinessId?: string; // Buyer (B2B)
   customerId?: string; // Buyer (B2C registered)
 

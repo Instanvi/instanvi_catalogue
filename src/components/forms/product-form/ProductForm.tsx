@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useState } from "react";
 import {
   Form,
@@ -14,21 +14,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUploader } from "@/components/ui/file-uploader";
-import { Loader2, Package } from "lucide-react";
+import { Loader2, Package, Trash2, Plus, Info } from "lucide-react";
 import { productSchema, type ProductFormValues } from "./schema";
+import { cn } from "@/lib/utils";
 
 interface ProductFormProps {
   onSubmit: (formData: FormData) => void;
   isLoading?: boolean;
   defaultValues?: Partial<ProductFormValues>;
-  categories?: { id: string; name: string }[];
 }
 
 export function ProductForm({
   onSubmit,
   isLoading,
   defaultValues,
-  categories = [],
 }: ProductFormProps) {
   const [files, setFiles] = useState<File[]>([]);
 
@@ -41,9 +40,22 @@ export function ProductForm({
       price: defaultValues?.price || "0.00",
       sku: defaultValues?.sku || "",
       category: defaultValues?.category || "",
-      unit: defaultValues?.unit || "piece",
       productType: defaultValues?.productType || "",
+      units: defaultValues?.units || [
+        {
+          name: "Unit",
+          price: "0.00",
+          conversionFactor: "1",
+          sku: "",
+          isDefault: true,
+        },
+      ],
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "units",
   });
 
   const handleFormSubmit = (values: ProductFormValues) => {
@@ -56,7 +68,7 @@ export function ProductForm({
       if (storedUser) {
         try {
           const user = JSON.parse(storedUser);
-          businessId = user.businessId;
+          businessId = user.businessId || user.organizationId; // Fallback for transition
         } catch (e) {
           console.error("Failed to parse user", e);
         }
@@ -67,19 +79,25 @@ export function ProductForm({
       formData.append("businessId", businessId);
     } else {
       console.error("Business ID missing");
-      // Depending on UX, might want to show error or return
     }
 
     // Append text fields
     formData.append("name", values.name);
     if (values.description) formData.append("description", values.description);
-    formData.append("price", values.price);
+    if (values.price) formData.append("price", values.price);
     formData.append("sku", values.sku);
     if (values.category) formData.append("category", values.category);
-    if (values.unit) formData.append("unit", values.unit);
     if (values.productType) formData.append("productType", values.productType);
 
+<<<<<<< HEAD
 
+=======
+    // Append units as stringified JSON (Standard for complex FormData)
+    formData.append("units", JSON.stringify(values.units));
+>>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
+
+    // Append units as stringified JSON (Standard for complex FormData)
+    formData.append("units", JSON.stringify(values.units));
 
     // Append files
     files.forEach((file) => {
@@ -187,15 +205,15 @@ export function ProductForm({
               />
               <FormField
                 control={form.control}
-                name="unit"
+                name="productType"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
                     <FormLabel className="text-sm font-medium text-foreground">
-                      Unit (e.g. piece, kg)
+                      Product Type
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="piece"
+                        placeholder="e.g. Physical, Digital"
                         className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
                         {...field}
                       />
@@ -206,25 +224,177 @@ export function ProductForm({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="productType"
-              render={({ field }) => (
-                <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-medium text-foreground">
-                    Product Type
+            {/* Units Section */}
+            <div className="pt-6 space-y-4">
+              <div className="flex items-center justify-between border-b pb-2">
+                <div className="space-y-1">
+                  <FormLabel className="text-base font-bold text-black flex items-center gap-2">
+                    Product Units
+                    <Info className="h-4 w-4 text-muted-foreground cursor-help" />
                   </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="e.g. Physical, Digital"
-                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <p className="text-[12px] text-muted-foreground">
+                    Define different selling units (e.g. Bottle, Pack, Crate)
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    append({
+                      name: "",
+                      price: "0.00",
+                      conversionFactor: "1",
+                      sku: "",
+                      isDefault: false,
+                    })
+                  }
+                  className="rounded-none border-primary text-primary hover:bg-primary/5 h-9"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Unit
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {fields.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className={cn(
+                      "p-4 border rounded-none bg-[#fafafa] relative group",
+                      form.watch(`units.${index}.isDefault`)
+                        ? "border-primary/30 ring-1 ring-primary/10"
+                        : "border-muted-foreground/10",
+                    )}
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`units.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="lg:col-span-1">
+                            <FormLabel className="text-[11px] font-semibold text-muted-foreground/80">
+                              Unit name
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. Bottle"
+                                className="h-9 rounded-none border-muted-foreground/20 text-sm shadow-none bg-white"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`units.${index}.price`}
+                        render={({ field }) => (
+                          <FormItem className="lg:col-span-1">
+                            <FormLabel className="text-[11px] font-semibold text-muted-foreground/80">
+                              Price
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                placeholder="0.00"
+                                className="h-9 rounded-none border-muted-foreground/20 text-sm shadow-none bg-white"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`units.${index}.conversionFactor`}
+                        render={({ field }) => (
+                          <FormItem className="lg:col-span-1">
+                            <FormLabel className="text-[11px] font-semibold text-muted-foreground/80">
+                              Factor
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="1"
+                                className="h-9 rounded-none border-muted-foreground/20 text-sm shadow-none bg-white"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`units.${index}.sku`}
+                        render={({ field }) => (
+                          <FormItem className="lg:col-span-1">
+                            <FormLabel className="text-[11px] font-semibold text-muted-foreground/80">
+                              SKU
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="SKU"
+                                className="h-9 rounded-none border-muted-foreground/20 text-sm shadow-none bg-white font-mono"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex items-end justify-between lg:col-span-1 gap-2">
+                        <FormField
+                          control={form.control}
+                          name={`units.${index}.isDefault`}
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Button
+                                  type="button"
+                                  onClick={() => {
+                                    // Reset all other units to isDefault: false
+                                    fields.forEach((_, i) =>
+                                      form.setValue(
+                                        `units.${i}.isDefault`,
+                                        i === index,
+                                      ),
+                                    );
+                                  }}
+                                  variant={field.value ? "default" : "outline"}
+                                  className={cn(
+                                    "w-full h-9 rounded-none text-[10px] font-bold tracking-tight",
+                                    field.value &&
+                                      "bg-primary text-white hover:bg-primary shadow-sm",
+                                  )}
+                                >
+                                  {field.value ? "Default unit" : "Set default"}
+                                </Button>
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        {fields.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => remove(index)}
+                            className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/5 rounded-none"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <FormField
               control={form.control}
@@ -257,8 +427,11 @@ export function ProductForm({
                 />
               </div>
             </div>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
           </div>
         </div>
 
