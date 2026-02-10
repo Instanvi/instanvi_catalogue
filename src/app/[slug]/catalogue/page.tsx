@@ -14,12 +14,16 @@ import { useCatalogue } from "@/hooks/use-catalogue";
 import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
 import { CataloguePagination } from "@/components/catalogue/CataloguePagination";
-import { CatalogueAccessModal } from "@/components/catalogue/CatalogueAccessModal";
-import { useRouter, useParams } from "next/navigation";
+import { RequestAccessModal } from "@/components/catalogue/RequestAccessModal";
+import { VerifyAccessModal } from "@/components/catalogue/VerifyAccessModal";
+import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/axios";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useCallback } from "react";
 
 export default function CatalogueViewPage() {
   const router = useRouter();
-  const { slug } = useParams();
   const {
     catalogue,
     filteredProducts,
@@ -34,32 +38,46 @@ export default function CatalogueViewPage() {
     meta,
     isPrivate,
     refetch,
+    catalogueError,
+    productsError,
   } = useCatalogue();
 
   const { cart, updateCart, getQuantity, clearCart } = useCart();
   const [view, setView] = useState<"grid" | "list">("list");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [hasGrantedAccess, setHasGrantedAccess] = useState(false);
 
-  if (loading) return <CatalogueLoading />;
+  const handleAccessSuccess = useCallback(() => {
+    setHasGrantedAccess(true);
+    refetch();
+  }, [refetch]);
 
-  if (isPrivate && catalogue) {
+  const handleRequestSuccess = () => {
+    setIsVerifying(true);
+  };
+
+  if (loading && !catalogue) return <CatalogueLoading />;
+
+  const error = catalogueError || productsError;
+  if (error) {
     return (
-      <div className="min-h-screen bg-white pb-32">
-        <CatalogueHeader catalogue={catalogue} />
-        <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[50vh]">
-          <div className="text-center space-y-4">
-            <h2 className="text-2xl font-bold">This catalogue is private</h2>
-            <p className="text-muted-foreground">
-              You need an access code to view the products.
-            </p>
-            <CatalogueAccessModal
-              isOpen={true}
-              catalogueId={slug as string}
-              onSuccess={() => {
-                refetch();
-              }}
-            />
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center space-y-6">
+          <div className="flex justify-center">
+            <AlertCircle className="h-16 w-16 text-destructive" />
           </div>
-        </main>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold tracking-tight">Access Denied</h2>
+            <p className="text-muted-foreground">{getErrorMessage(error)}</p>
+          </div>
+          <Button
+            onClick={() => router.push("/")}
+            variant="outline"
+            className="w-full"
+          >
+            Return to Home
+          </Button>
+        </div>
       </div>
     );
   }
@@ -68,6 +86,17 @@ export default function CatalogueViewPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] pb-32">
+      <RequestAccessModal
+        isOpen={isPrivate && !isVerifying && !hasGrantedAccess}
+        catalogueId={catalogue?.id || ""}
+        onSuccess={handleRequestSuccess}
+      />
+      <VerifyAccessModal
+        isOpen={isPrivate && isVerifying && !hasGrantedAccess}
+        catalogueId={catalogue?.id || ""}
+        onSuccess={handleAccessSuccess}
+        onBack={() => setIsVerifying(false)}
+      />
       <div className="sticky top-0 z-50 bg-[#FDFDFD]/90 backdrop-blur-md">
         <CatalogueHeader catalogue={catalogue} />
         <div className="max-w-5xl mx-auto px-4 py-4">

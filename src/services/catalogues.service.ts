@@ -10,6 +10,7 @@ import type {
   UnlockCataloguePayload,
   ApiResponse,
   PaginatedData,
+  VerifyAccessResponse,
 } from "../types/api";
 
 import { Product } from "./products.service";
@@ -155,7 +156,10 @@ export const cataloguesService = {
   },
 
   verifyAccess: async (id: string, data: UnlockCataloguePayload) => {
-    const response = await api.post(`/catalogues/${id}/verify-access`, data);
+    const response = await api.post<ApiResponse<VerifyAccessResponse>>(
+      `/catalogues/${id}/verify-access`,
+      data,
+    );
     return response.data;
   },
 

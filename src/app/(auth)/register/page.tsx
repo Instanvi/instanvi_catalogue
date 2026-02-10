@@ -6,6 +6,7 @@ import { useCreateBusiness } from "@/hooks/use-businesses";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import { getErrorMessage } from "@/lib/axios";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -24,7 +25,9 @@ export default function RegisterPage() {
         },
         onError: (error) => {
           console.log(error);
-          toast.error("Failed to create business");
+          toast.error("Failed to create business", {
+            description: getErrorMessage(error),
+          });
         },
       },
     );

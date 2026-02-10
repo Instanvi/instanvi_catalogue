@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { ApiError } from "@/types/api";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://instanvi-catalogue-backend.onrender.com/api/v1/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4448/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -35,5 +36,18 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const getErrorMessage = (error: unknown): string => {
+  if (isAxiosError<ApiError>(error)) {
+    return (
+      error.response?.data?.message ||
+      error.message ||
+      "An unexpected error occurred"
+    );
+  }
+  return error instanceof Error
+    ? error.message
+    : "An unexpected error occurred";
+};
 
 export default api;

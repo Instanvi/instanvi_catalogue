@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   Users,
   Package,
-  Calendar,
   Bell,
   Tag,
   BookOpen,
@@ -57,11 +56,6 @@ const menuItems = [
     title: "Categories",
     url: "/dashboard",
     icon: Tag,
-  },
-  {
-    title: "Schedules",
-    url: "/dashboard/schedules",
-    icon: Calendar,
   },
   {
     title: "Notifications",

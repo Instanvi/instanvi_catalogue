@@ -11,6 +11,14 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
+export interface ApiError {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  timestamp: string;
+  path: string;
+}
+
 export interface PaginationMeta {
   totalItems: number;
   itemCount: number;
@@ -198,6 +206,14 @@ export interface UnlockCataloguePayload {
   code: string;
 }
 
+import { Catalogue } from "@/services/catalogues.service";
+
+export interface VerifyAccessResponse {
+  message: string;
+  catalogue: Catalogue;
+  access_token: string;
+}
+
 // --- Orders ---
 export enum OrderType {
   B2B = "B2B",
@@ -261,4 +277,26 @@ export interface UpdateCustomerPayload {
   company?: string;
   address?: string;
   categoryId?: string;
+}
+
+// --- Notifications ---
+export interface NotificationPayload {
+  channel: "email" | "sms" | "whatsapp";
+  categoryId?: string;
+  title: string;
+  message: string;
+}
+
+export interface NotificationHistory {
+  id: string;
+  businessId: string;
+  channel: string;
+  categoryId?: string;
+  category?: {
+    id: string;
+    name: string;
+  };
+  title: string;
+  message: string;
+  createdAt: string;
 }

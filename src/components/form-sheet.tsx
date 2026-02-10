@@ -37,10 +37,8 @@ export function FormSheet({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent
-        className={`${sizeClasses[size]} overflow-y-auto p-0 flex flex-col`}
-      >
-        <SheetHeader className="p-8 pb-4">
+      <SheetContent className={`${sizeClasses[size]} p-0 flex flex-col h-full`}>
+        <SheetHeader className="p-8 pb-4 flex-shrink-0">
           <SheetTitle className="font-semibold text-2xl tracking-tight text-[#1c1c1c]">
             {title}
           </SheetTitle>
@@ -51,7 +49,7 @@ export function FormSheet({
           )}
         </SheetHeader>
         <Separator className="bg-muted-foreground/5" />
-        <div className="flex-1 p-8 pt-6 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto p-8 pt-6">
           <div className="max-w-full">{children}</div>
         </div>
       </SheetContent>

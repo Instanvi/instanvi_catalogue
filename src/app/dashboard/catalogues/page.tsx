@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 import { ErrorState } from "@/components/error-state";
 
@@ -94,8 +95,10 @@ export default function CataloguesPage() {
           toast.success("Category assigned successfully");
           setIsAssignSheetOpen(false);
         },
-        onError: () => {
-          toast.error("Failed to assign category");
+        onError: (error) => {
+          toast.error("Failed to assign category", {
+            description: getErrorMessage(error),
+          });
         },
       },
     );

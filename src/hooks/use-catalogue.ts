@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   cataloguesService,
   CatalogueProductItem,
@@ -27,6 +27,39 @@ export function useCatalogue() {
     enabled: !!slug,
   });
 
+  const authenticatedBusinessId = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return null;
+    try {
+      const user = JSON.parse(storedUser);
+      return user.businessId || user.organizationId;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const isPrivate = useMemo(() => {
+    if (!catalogue) return false;
+
+    // The backend returns { private: true } when access should be restricted
+    if (catalogue.private === true) return true;
+
+    // If backend explicitly says it's locked
+    if (catalogue.isLocked) return true;
+
+    // Client-side fallback check
+    if (
+      catalogue.type &&
+      catalogue.type !== "public" &&
+      catalogue.businessId !== authenticatedBusinessId
+    ) {
+      return true;
+    }
+
+    return false;
+  }, [catalogue, authenticatedBusinessId]);
+
   // 2. Fetch Catalogue Products by ID (Dependent Query)
   const {
     data: productsData,
@@ -40,7 +73,7 @@ export function useCatalogue() {
         page,
         limit: 20,
       }),
-    enabled: !!catalogue?.id && !catalogue.isLocked,
+    enabled: !!catalogue?.id && !catalogue.isLocked && !isPrivate,
   });
 
   const products = useMemo(() => {
@@ -82,60 +115,46 @@ export function useCatalogue() {
     setPage(1);
   };
 
-  const authenticatedBusinessId = useMemo(() => {
-    if (typeof window === "undefined") return null;
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return null;
-    try {
-      const user = JSON.parse(storedUser);
-      return user.businessId || user.organizationId;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  const isPrivate = useMemo(() => {
-    if (!catalogue) return false;
-
-    // The backend returns { private: true } when access should be restricted
-    if (catalogue.private === true) return true;
-
-    // If backend explicitly says it's locked
-    if (catalogue.isLocked) return true;
-
-    // Client-side fallback check
-    if (
-      catalogue.type &&
-      catalogue.type !== "public" &&
-      catalogue.businessId !== authenticatedBusinessId
-    ) {
-      return true;
-    }
-
-    return false;
-  }, [catalogue, authenticatedBusinessId]);
+  const refetch = useCallback(() => {
+    refetchCatalogue();
+    refetchProducts();
+  }, [refetchCatalogue, refetchProducts]);
 
   const loading = isLoadingCatalogue || isLoadingProducts;
 
-  return {
-    catalogue,
-    products,
-    filteredProducts,
-    categories,
-    loading,
-    meta: productsData?.meta || null,
-    search,
-    setSearch: handleSearchChange,
-    selectedCategory,
-    setSelectedCategory: handleCategoryChange,
-    page,
-    setPage,
-    isPrivate,
-    catalogueError,
-    productsError,
-    refetch: () => {
-      refetchCatalogue();
-      refetchProducts();
-    },
-  };
+  return useMemo(
+    () => ({
+      catalogue,
+      products,
+      filteredProducts,
+      categories,
+      loading,
+      meta: productsData?.meta || null,
+      search,
+      setSearch: handleSearchChange,
+      selectedCategory,
+      setSelectedCategory: handleCategoryChange,
+      page,
+      setPage,
+      isPrivate,
+      catalogueError,
+      productsError,
+      refetch,
+    }),
+    [
+      catalogue,
+      products,
+      filteredProducts,
+      categories,
+      loading,
+      productsData?.meta,
+      search,
+      selectedCategory,
+      page,
+      isPrivate,
+      catalogueError,
+      productsError,
+      refetch,
+    ],
+  );
 }

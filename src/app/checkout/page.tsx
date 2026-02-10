@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { CreateOrderPayload, OrderType } from "@/types/api";
 import { useCreateOrder } from "@/hooks/use-orders";
+import { getErrorMessage } from "@/lib/axios";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
@@ -76,7 +77,9 @@ export default function CheckoutPage() {
       router.push("/dashboard/orders");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to place order.");
+      toast.error("Failed to place order.", {
+        description: getErrorMessage(error),
+      });
     }
   };
 

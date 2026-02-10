@@ -7,6 +7,8 @@ import {
 } from "@/components/forms/auth/otp-form/OtpForm";
 import { useCustomerLogin } from "@/hooks/use-customers";
 import { Suspense } from "react";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 function VerifyOtpContent() {
   const searchParams = useSearchParams();
@@ -19,6 +21,11 @@ function VerifyOtpContent() {
     login.mutate(values, {
       onSuccess: () => {
         router.push("/dashboard");
+      },
+      onError: (error) => {
+        toast.error("Verification Failed", {
+          description: getErrorMessage(error),
+        });
       },
     });
   };

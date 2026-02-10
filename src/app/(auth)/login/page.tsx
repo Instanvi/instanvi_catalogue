@@ -7,6 +7,8 @@ import {
 import { useRequestOtp } from "@/hooks/use-customers";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,6 +21,11 @@ export default function LoginPage() {
         router.push(
           `/verify-otp?identifier=${encodeURIComponent(values.identifier)}`,
         );
+      },
+      onError: (error) => {
+        toast.error("Login Failed", {
+          description: getErrorMessage(error),
+        });
       },
     });
   };

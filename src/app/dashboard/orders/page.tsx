@@ -10,6 +10,7 @@ import { getColumns, Order } from "./components/columns";
 import { ErrorState } from "@/components/error-state";
 import { DataTable } from "@/components/data-table/DataTable";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export default function OrdersPage() {
   const { data: ordersResponse, isLoading, error, refetch } = useOrders();
@@ -24,8 +25,10 @@ export default function OrdersPage() {
           onSuccess: () => {
             toast.success(`Order status updated to ${status}`);
           },
-          onError: () => {
-            toast.error("Failed to update order status");
+          onError: (error) => {
+            toast.error("Failed to update order status", {
+              description: getErrorMessage(error),
+            });
           },
         },
       );
@@ -40,8 +43,10 @@ export default function OrdersPage() {
           onSuccess: () => {
             toast.success("Order deleted successfully");
           },
-          onError: () => {
-            toast.error("Failed to delete order");
+          onError: (error) => {
+            toast.error("Failed to delete order", {
+              description: getErrorMessage(error),
+            });
           },
         });
       }
