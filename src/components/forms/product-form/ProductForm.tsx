@@ -81,23 +81,16 @@ export function ProductForm({
       console.error("Business ID missing");
     }
 
-    // Append text fields
-    formData.append("name", values.name);
-    if (values.description) formData.append("description", values.description);
-    if (values.price) formData.append("price", values.price);
-    formData.append("sku", values.sku);
-    if (values.category) formData.append("category", values.category);
-    if (values.productType) formData.append("productType", values.productType);
+// Append text fields
+formData.append("name", values.name);
+if (values.description) formData.append("description", values.description);
+if (values.price) formData.append("price", values.price);
+formData.append("sku", values.sku);
+if (values.category) formData.append("category", values.category);
+if (values.productType) formData.append("productType", values.productType);
 
-<<<<<<< HEAD
-
-=======
-    // Append units as stringified JSON (Standard for complex FormData)
-    formData.append("units", JSON.stringify(values.units));
->>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
-
-    // Append units as stringified JSON (Standard for complex FormData)
-    formData.append("units", JSON.stringify(values.units));
+// Append units as stringified JSON (Standard for complex FormData)
+formData.append("units", JSON.stringify(values.units));
 
     // Append files
     files.forEach((file) => {
@@ -425,14 +418,9 @@ export function ProductForm({
                 <FileUploader
                   onFilesChange={(newFiles) => setFiles(newFiles)}
                 />
-              </div>
-            </div>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
-          </div>
+    </div>
+  </div>
+</div>
         </div>
 
         {/* Action Bar */}

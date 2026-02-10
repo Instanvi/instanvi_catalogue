@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Cloud, X, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -36,12 +36,17 @@ export function FileUploader({
 
       setFiles((prev) => {
         const totalFiles = [...prev, ...newFiles].slice(0, maxFiles);
-        onFilesChange?.(totalFiles);
         return totalFiles;
       });
     },
-    [maxFiles, onFilesChange],
+    [maxFiles],
   );
+
+  // Notify parent when files change, but do it in a separate effect
+  // to avoid updating parent while child is rendering
+  useEffect(() => {
+    onFilesChange?.(files);
+  }, [files, onFilesChange]);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
@@ -54,10 +59,10 @@ export function FileUploader({
   const removeFile = (fileToRemove: FileWithPreview) => {
     setFiles((prev) => {
       const filtered = prev.filter((f) => f !== fileToRemove);
-      onFilesChange?.(filtered);
       // Revoke the object URL to avoid memory leaks
       URL.revokeObjectURL(fileToRemove.preview);
       return filtered;
+      // onFilesChange will be called by useEffect when files change
     });
   };
 
