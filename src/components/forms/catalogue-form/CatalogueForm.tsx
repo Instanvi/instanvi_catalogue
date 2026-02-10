@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { catalogueSchema, CatalogueFormValues } from "./schema";
-import { cn } from "@/lib/utils";
 
 interface CatalogueFormProps {
   initialData?: CatalogueFormValues;
@@ -52,20 +51,20 @@ export function CatalogueForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
         <div className="space-y-8">
           {/* Row 1: Name and Type (Columnar Layout) */}
-          <div className="">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
-                    Catalogue name
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Catalogue Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="Ex: Summer Collection 2026"
-                      className="h-12 rounded-none border-gray-200 focus:border-primary transition-all font-normal"
+                      placeholder="e.g. Summer Collection 2026"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
@@ -78,9 +77,9 @@ export function CatalogueForm({
               control={form.control}
               name="type"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
-                    Visibility type
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Visibility Type
                   </FormLabel>
                   <Select
                     disabled={isLoading}
@@ -88,11 +87,11 @@ export function CatalogueForm({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="h-12 rounded-none border-gray-200 focus:ring-primary/20 bg-white font-normal w-full">
-                        <SelectValue placeholder="Select a type" />
+                      <SelectTrigger className="h-11 rounded-none border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none">
+                        <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="rounded-none">
+                    <SelectContent className="rounded-none border-border">
                       <SelectItem value="public">Public</SelectItem>
                       <SelectItem value="private">Private</SelectItem>
                       <SelectItem value="commission">Commission</SelectItem>
@@ -109,15 +108,15 @@ export function CatalogueForm({
             control={form.control}
             name="description"
             render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel className="text-sm font-normal text-gray-600">
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                   Description
                 </FormLabel>
                 <FormControl>
                   <Input
                     disabled={isLoading}
                     placeholder="Briefly describe the purpose of this collection..."
-                    className="h-12 rounded-none border-gray-200 focus:border-primary transition-all font-normal"
+                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
@@ -127,22 +126,25 @@ export function CatalogueForm({
           />
 
           {/* Row 3: Additional Settings */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="flex items-center justify-between p-4 border border-muted-foreground/10 bg-muted/5 rounded-none">
+            <div className="space-y-0.5">
+              <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                Allow Cloning
+              </FormLabel>
+              <FormDescription className="text-[11px] text-muted-foreground/70">
+                Enable others to duplicate this catalogue structure.
+              </FormDescription>
+            </div>
             <FormField
               control={form.control}
               name="allowCloning"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between">
-                  <div className="space-y-0.5 leading-none">
-                    <p className="font-normal text-gray-400">Settings</p>
-                    <p className="font-normal text-gray-700">Allow cloning</p>
-                  </div>
+                <FormItem>
                   <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       disabled={isLoading}
-                      className="data-[state=checked]:bg-primary"
                     />
                   </FormControl>
                 </FormItem>
@@ -151,13 +153,13 @@ export function CatalogueForm({
           </div>
         </div>
 
-        <div className="pt-8 flex justify-end w-full border-t border-gray-100">
+        <div className="pt-4">
           <Button
             disabled={isLoading}
             type="submit"
-            className="h-14 px-12 w-full rounded-none  text-sm transition-all hover:bg-primary/95 active:scale-[0.98] bg-primary text-white shadow-xl border-b-4 border-primary/20"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
           >
-            {initialData ? "Save changes" : "Create catalogue"}
+            {initialData ? "Save Changes" : "Create Catalogue"}
           </Button>
         </div>
       </form>

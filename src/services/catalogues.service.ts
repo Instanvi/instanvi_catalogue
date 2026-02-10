@@ -47,6 +47,7 @@ export interface Catalogue {
   logoUrl?: string;
   isActive: boolean;
   allowCloning: boolean;
+  customerCategoryId?: string;
   isLocked?: boolean;
   settings?: Record<string, unknown>;
   createdAt: string;

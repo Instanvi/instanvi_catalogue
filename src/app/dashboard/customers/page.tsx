@@ -7,11 +7,17 @@ import { FormSheet } from "@/components/form-sheet";
 import { CustomerForm } from "@/components/forms/customer-form";
 
 import { useCustomers, useCreateCustomer } from "@/hooks/use-customers";
+import { useCustomerCategories } from "@/hooks/use-customer-categories";
 
 export default function CustomersPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { data: customers } = useCustomers();
+  const { data: categoriesData } = useCustomerCategories();
   const createCustomer = useCreateCustomer();
+
+  const categories = Array.isArray(categoriesData)
+    ? categoriesData
+    : categoriesData?.data || [];
 
   const customersData = Array.isArray(customers)
     ? customers
@@ -38,6 +44,7 @@ export default function CustomersPage() {
         <div className="mt-8">
           <CustomerForm
             isLoading={createCustomer.isPending}
+            categories={categories}
             onSubmit={(values) => {
               createCustomer.mutate(values, {
                 onSuccess: () => {

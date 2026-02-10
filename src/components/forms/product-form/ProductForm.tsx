@@ -435,7 +435,11 @@ export function ProductForm({
             ) : (
               <Package className="mr-2 h-4 w-4" />
             )}
-            {isLoading ? "Saving..." : "Create Product"}
+            {isLoading
+              ? "Saving..."
+              : defaultValues?.name
+                ? "Update Product"
+                : "Create Product"}
           </Button>
         </div>
       </form>

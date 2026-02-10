@@ -71,50 +71,48 @@ export function CustomerForm({
             )}
           />
 
-          <div className="grid grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
-                    Email Address
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      type="email"
-                      placeholder="andre.marie@gmail.com"
-                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-[12px] font-medium" />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                  Email Address
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isLoading}
+                    type="email"
+                    placeholder="andre.marie@gmail.com"
+                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-[12px] font-medium" />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
-                    Phone Number
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isLoading}
-                      placeholder="+237 671..."
-                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-[12px] font-medium" />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                  Phone Number
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isLoading}
+                    placeholder="+237 671..."
+                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-[12px] font-medium" />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -172,10 +170,10 @@ export function CustomerForm({
           />
         </div>
 
-        <div className="pt-4 flex justify-end">
+        <div className="pt-4">
           <Button
             type="submit"
-            className="h-11 px-8 bg-[#1c1c1c] hover:bg-[#1c1c1c]/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -183,7 +181,11 @@ export function CustomerForm({
             ) : (
               <UserPlus className="mr-2 h-4 w-4" />
             )}
-            {isLoading ? "Creating..." : "Add Member"}
+            {isLoading
+              ? "Saving..."
+              : defaultValues?.name
+                ? "Update Member"
+                : "Add Member"}
           </Button>
         </div>
       </form>

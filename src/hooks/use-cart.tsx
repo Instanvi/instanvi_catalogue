@@ -11,7 +11,10 @@ import {
 import { Product } from "@/components/catalogue/ProductItem";
 
 export interface CartItem {
-  id: string; // Product ID
+  id: string; // Unique ID (unitId || productId)
+  productId: string;
+  unitId?: string;
+  unitName?: string;
   catalogueProductId?: string;
   catalogueId?: string;
   name: string;
@@ -22,8 +25,14 @@ export interface CartItem {
 
 interface CartContextType {
   cart: CartItem[];
-  updateCart: (product: Product, delta: number) => void;
-  getQuantity: (productId: string) => number;
+  updateCart: (
+    product: Product,
+    delta: number,
+    unitId?: string,
+    unitName?: string,
+    unitPrice?: string,
+  ) => void;
+  getQuantity: (productId: string, unitId?: string) => number;
   clearCart: () => void;
 }
 
@@ -49,39 +58,55 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const updateCart = useCallback((product: Product, delta: number) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        const newQuantity = existing.quantity + delta;
-        if (newQuantity <= 0) {
-          return prev.filter((item) => item.id !== product.id);
+  const updateCart = useCallback(
+    (
+      product: Product,
+      delta: number,
+      unitId?: string,
+      unitName?: string,
+      unitPrice?: string,
+    ) => {
+      const cartItemId = unitId || product.id;
+      const priceToUse = unitPrice || product.price;
+
+      setCart((prev) => {
+        const existing = prev.find((item) => item.id === cartItemId);
+        if (existing) {
+          const newQuantity = existing.quantity + delta;
+          if (newQuantity <= 0) {
+            return prev.filter((item) => item.id !== cartItemId);
+          }
+          return prev.map((item) =>
+            item.id === cartItemId ? { ...item, quantity: newQuantity } : item,
+          );
         }
-        return prev.map((item) =>
-          item.id === product.id ? { ...item, quantity: newQuantity } : item,
-        );
-      }
-      if (delta > 0) {
-        return [
-          ...prev,
-          {
-            id: product.id,
-            catalogueProductId: product.catalogueProductId,
-            catalogueId: product.catalogueId,
-            name: product.name,
-            price: product.price,
-            quantity: 1,
-            businessId: product.businessId,
-          },
-        ];
-      }
-      return prev;
-    });
-  }, []);
+        if (delta > 0) {
+          return [
+            ...prev,
+            {
+              id: cartItemId,
+              productId: product.id,
+              unitId,
+              unitName,
+              catalogueProductId: product.catalogueProductId,
+              catalogueId: product.catalogueId,
+              name: product.name,
+              price: priceToUse,
+              quantity: 1,
+              businessId: product.businessId,
+            },
+          ];
+        }
+        return prev;
+      });
+    },
+    [],
+  );
 
   const getQuantity = useCallback(
-    (productId: string) => {
-      return cart.find((item) => item.id === productId)?.quantity || 0;
+    (productId: string, unitId?: string) => {
+      const cartItemId = unitId || productId;
+      return cart.find((item) => item.id === cartItemId)?.quantity || 0;
     },
     [cart],
   );

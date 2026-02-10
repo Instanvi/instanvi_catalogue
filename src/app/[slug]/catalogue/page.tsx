@@ -35,7 +35,7 @@ export default function CatalogueViewPage() {
     refetch,
   } = useCatalogue();
 
-  const { cart, updateCart, getQuantity } = useCart();
+  const { cart, updateCart, getQuantity, clearCart } = useCart();
   const [view, setView] = useState<"grid" | "list">("list");
 
   if (loading) return <CatalogueLoading />;
@@ -108,17 +108,25 @@ export default function CatalogueViewPage() {
                   <ProductCard
                     key={product.id}
                     product={product}
-                    quantity={getQuantity(product.id)}
-                    onAdd={() => updateCart(product, 1)}
-                    onRemove={() => updateCart(product, -1)}
+                    getQuantityForUnit={(unitId) =>
+                      getQuantity(product.id, unitId)
+                    }
+                    onAdd={(unitId, unitName, unitPrice) =>
+                      updateCart(product, 1, unitId, unitName, unitPrice)
+                    }
+                    onRemove={(unitId) => updateCart(product, -1, unitId)}
                   />
                 ) : (
                   <ProductListItem
                     key={product.id}
                     product={product}
-                    quantity={getQuantity(product.id)}
-                    onAdd={() => updateCart(product, 1)}
-                    onRemove={() => updateCart(product, -1)}
+                    getQuantityForUnit={(unitId) =>
+                      getQuantity(product.id, unitId)
+                    }
+                    onAdd={(unitId, unitName, unitPrice) =>
+                      updateCart(product, 1, unitId, unitName, unitPrice)
+                    }
+                    onRemove={(unitId) => updateCart(product, -1, unitId)}
                   />
                 ),
               )}
@@ -141,6 +149,7 @@ export default function CatalogueViewPage() {
             router.push("/checkout");
           }
         }}
+        onClear={clearCart}
       />
     </div>
   );

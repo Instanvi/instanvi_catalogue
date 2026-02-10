@@ -47,7 +47,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
                 <FormControl>
                   <Input
                     placeholder="John Doe"
-                    className="h-10 border-muted-foreground/20"
+                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
                     {...field}
                   />
                 </FormControl>
@@ -66,7 +66,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
                 <FormControl>
                   <Input
                     placeholder="john@example.com"
-                    className="h-10 border-muted-foreground/20"
+                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
                     {...field}
                   />
                 </FormControl>
@@ -88,7 +88,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
                 <FormControl>
                   <Input
                     placeholder="+1..."
-                    className="h-10 border-muted-foreground/20"
+                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
                     {...field}
                   />
                 </FormControl>
@@ -107,7 +107,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
                 <FormControl>
                   <Input
                     placeholder="Acme Corp"
-                    className="h-10 border-muted-foreground/20"
+                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
                     {...field}
                   />
                 </FormControl>
@@ -128,7 +128,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
               <FormControl>
                 <Input
                   placeholder="123 Street, City, Country"
-                  className="h-10 border-muted-foreground/20"
+                  className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
                   {...field}
                 />
               </FormControl>
@@ -139,7 +139,7 @@ export function RegisterForm({ onSubmit, isLoading }: RegisterFormProps) {
 
         <Button
           type="submit"
-          className="w-full h-10 font-medium text-sm mt-6"
+          className="w-full h-11 font-semibold text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all mt-6"
           disabled={isLoading}
         >
           {isLoading ? (

@@ -58,7 +58,8 @@ export default function CheckoutPage() {
             );
           }
           return {
-            catalogueProductId: item.catalogueProductId,
+            catalogueProductId: item.catalogueProductId!,
+            productUnitId: item.unitId,
             quantity: item.quantity,
             unitPrice: parseFloat(item.price),
           };

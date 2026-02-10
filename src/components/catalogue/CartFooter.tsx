@@ -20,9 +20,10 @@ interface CartItem {
 interface CartFooterProps {
   items: CartItem[];
   onCheckout: () => void;
+  onClear: () => void;
 }
 
-export function CartFooter({ items, onCheckout }: CartFooterProps) {
+export function CartFooter({ items, onCheckout, onClear }: CartFooterProps) {
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = items.reduce(
     (acc, item) => acc + parseFloat(item.price) * item.quantity,
@@ -116,12 +117,21 @@ export function CartFooter({ items, onCheckout }: CartFooterProps) {
                 }).format(totalPrice)}
               </span>
             </div>
-            <Button
-              onClick={onCheckout}
-              className="w-full h-16 bg-primary text-white hover:bg-primary/90 text-lg font-bold rounded-none transition-all shadow-none"
-            >
-              Confirm Selection
-            </Button>
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={onClear}
+                className="flex-1 h-14 border-primary/20 text-primary hover:bg-primary/5 rounded-none font-bold uppercase tracking-wider"
+              >
+                Clear Cart
+              </Button>
+              <Button
+                onClick={onCheckout}
+                className="flex-[2] h-14 bg-primary text-white hover:bg-primary/90 rounded-none font-bold uppercase tracking-wider shadow-none"
+              >
+                Confirm Selection
+              </Button>
+            </div>
           </div>
         </SheetContent>
       </Sheet>

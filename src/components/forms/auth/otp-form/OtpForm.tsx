@@ -60,7 +60,7 @@ export function OtpForm({ onSubmit, isLoading, identifier }: OtpFormProps) {
         />
         <Button
           type="submit"
-          className="w-full h-10 font-medium text-sm"
+          className="w-full h-11 font-semibold text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
           disabled={isLoading}
         >
           {isLoading ? (

@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Building2, LogIn, ArrowRight, User } from "lucide-react";
+import { Loader2, Building2, ArrowRight, User } from "lucide-react";
 import {
   businessLoginSchema,
   businessRegisterSchema,
@@ -78,13 +78,13 @@ export function BusinessForm({
                 name="identifier"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">
+                    <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                       Email or Phone Number
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="name@company.com"
-                        className="h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                        className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                         {...field}
                       />
                     </FormControl>
@@ -95,7 +95,7 @@ export function BusinessForm({
 
               <Button
                 type="submit"
-                className="w-full h-10 font-medium text-sm mt-2 rounded-none shadow-none"
+                className="w-full h-11 font-semibold text-sm mt-2 rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -122,15 +122,15 @@ export function BusinessForm({
                 name="businessName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">
+                    <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                       Business Name
                     </FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Building2 className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Building2 className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                         <Input
                           placeholder="Acme Inc."
-                          className="pl-9 h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                          className="pl-9 h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                           {...field}
                         />
                       </div>
@@ -146,15 +146,15 @@ export function BusinessForm({
                   name="adminName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">
+                      <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                         Admin Name
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <User className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <User className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             placeholder="John Doe"
-                            className="pl-9 h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                            className="pl-9 h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                             {...field}
                           />
                         </div>
@@ -169,13 +169,13 @@ export function BusinessForm({
                   name="industry"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">
+                      <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                         Industry (Optional)
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Technology"
-                          className="h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                          className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                           {...field}
                         />
                       </FormControl>
@@ -191,13 +191,13 @@ export function BusinessForm({
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">
+                      <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                         Email Address
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="admin@acme.com"
-                          className="h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                          className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                           {...field}
                         />
                       </FormControl>
@@ -211,13 +211,13 @@ export function BusinessForm({
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">
+                      <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                         Phone Number
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="+1 234 567 890"
-                          className="h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                          className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                           {...field}
                         />
                       </FormControl>
@@ -232,13 +232,13 @@ export function BusinessForm({
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">
+                    <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                       Business Address (Optional)
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="123 Main St, City, Country"
-                        className="h-10 border-muted-foreground/20 rounded-none focus-visible:ring-primary"
+                        className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary shadow-none transition-colors"
                         {...field}
                       />
                     </FormControl>
@@ -249,7 +249,7 @@ export function BusinessForm({
 
               <Button
                 type="submit"
-                className="w-full h-10 font-medium text-sm mt-4 rounded-none shadow-none"
+                className="w-full h-11 font-semibold text-sm mt-4 rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
                 disabled={isLoading}
               >
                 {isLoading ? (
