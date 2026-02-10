@@ -29,16 +29,6 @@ export function CatalogueHeader({ catalogue }: CatalogueHeaderProps) {
               {catalogue.description}
             </p>
           )}
-          <div className="flex items-center justify-center md:justify-start gap-4 pt-4">
-            <div className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest">
-              Exclusive Collection
-            </div>
-            {catalogue?.type && (
-              <div className="px-3 py-1 bg-muted text-muted-foreground text-[10px] font-bold uppercase tracking-widest">
-                {catalogue.type}
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>

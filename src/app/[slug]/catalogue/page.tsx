@@ -15,8 +15,10 @@ import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
 import { CataloguePagination } from "@/components/catalogue/CataloguePagination";
 import { CatalogueAccessModal } from "@/components/catalogue/CatalogueAccessModal";
+import { useRouter } from "next/navigation";
 
 export default function CatalogueViewPage() {
+  const router = useRouter();
   const {
     catalogue,
     filteredProducts,
@@ -84,10 +86,7 @@ export default function CatalogueViewPage() {
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         <section className="space-y-6">
-          <div className="flex items-center justify-between border-b border-muted/20 pb-4">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
-              {meta?.totalItems || 0} Products Available
-            </h2>
+          <div className="flex items-center justify-end border-b border-muted/20 pb-4">
             <CataloguePagination
               currentPage={page}
               totalPages={totalPages}
@@ -132,20 +131,16 @@ export default function CatalogueViewPage() {
               }}
             />
           )}
-
-          <div className="pt-8">
-            <CataloguePagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-            />
-          </div>
         </section>
       </main>
 
       <CartFooter
         items={cart}
-        onCheckout={() => console.log("Checkout initiated", cart)}
+        onCheckout={() => {
+          if (cart.length > 0) {
+            router.push("/checkout");
+          }
+        }}
       />
     </div>
   );
