@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -63,6 +65,14 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </>
           )}
+        </Button>
+        <Button
+          asChild
+          variant="outline"
+          className="w-full h-11 font-semibold text-sm rounded-none"
+          disabled={isLoading}
+        >
+          <Link href="/register">Register</Link>
         </Button>
       </form>
     </Form>
