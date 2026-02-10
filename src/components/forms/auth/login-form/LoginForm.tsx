@@ -66,14 +66,6 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
             </>
           )}
         </Button>
-        <Button
-          asChild
-          variant="outline"
-          className="w-full h-11 font-semibold text-sm rounded-none"
-          disabled={isLoading}
-        >
-          <Link href="/register">Register</Link>
-        </Button>
       </form>
     </Form>
   );

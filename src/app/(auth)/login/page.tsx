@@ -39,18 +39,17 @@ export default function LoginPage() {
 
           <LoginForm onSubmit={handleLogin} isLoading={isRequestingOtp} />
 
-
           <div className="pt-4 border-t border-muted-foreground/10 text-center">
-                      <p className="text-sm text-muted-foreground">
-                        Already have an account?{" "}
-                        <Link
-                          href="/register"
-                          className="text-primary font-medium hover:underline"
-                        >
-                          Sign Up
-                        </Link>
-                      </p>
-                    </div>
+            <p className="text-sm text-muted-foreground">
+              I don&apos;t have a business account?{" "}
+              <Link
+                href="/register"
+                className="text-primary font-medium hover:underline"
+              >
+                Create a Business Account
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

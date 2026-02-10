@@ -11,8 +11,6 @@ export default function RegisterPage() {
       ...values,
       settings: {},
     };
-    console.log("Payload:", payload);
-    // TODO: Implement business creation logic
   };
 
   return (
