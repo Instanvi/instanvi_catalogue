@@ -89,6 +89,13 @@ export function ProductForm({
     if (values.category) formData.append("category", values.category);
     if (values.productType) formData.append("productType", values.productType);
 
+<<<<<<< HEAD
+
+=======
+    // Append units as stringified JSON (Standard for complex FormData)
+    formData.append("units", JSON.stringify(values.units));
+>>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
+
     // Append units as stringified JSON (Standard for complex FormData)
     formData.append("units", JSON.stringify(values.units));
 
@@ -420,6 +427,11 @@ export function ProductForm({
                 />
               </div>
             </div>
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
           </div>
         </div>
 
