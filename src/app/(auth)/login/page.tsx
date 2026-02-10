@@ -6,6 +6,7 @@ import {
 } from "@/components/forms/auth/login-form";
 import { useRequestOtp } from "@/hooks/use-customers";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,6 +38,19 @@ export default function LoginPage() {
           </div>
 
           <LoginForm onSubmit={handleLogin} isLoading={isRequestingOtp} />
+
+
+          <div className="pt-4 border-t border-muted-foreground/10 text-center">
+                      <p className="text-sm text-muted-foreground">
+                        Already have an account?{" "}
+                        <Link
+                          href="/register"
+                          className="text-primary font-medium hover:underline"
+                        >
+                          Sign Up
+                        </Link>
+                      </p>
+                    </div>
         </div>
       </div>
     </div>
