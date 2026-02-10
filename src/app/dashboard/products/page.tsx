@@ -7,6 +7,7 @@ import { FormSheet } from "@/components/form-sheet";
 import { ProductForm } from "@/components/forms/product-form";
 
 import { useProducts, useCreateProduct } from "@/hooks/use-products";
+import { ErrorState } from "@/components/error-state";
 
 import { CatalogueSelectionSheet } from "@/components/catalogue-selection-sheet";
 import { FolderPlus } from "lucide-react";
@@ -16,10 +17,19 @@ export default function ProductsPage() {
   const [isCatalogueSheetOpen, setIsCatalogueSheetOpen] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
-  const { data: products } = useProducts();
+  const { data: products, isLoading, error, refetch } = useProducts();
   const createProduct = useCreateProduct();
 
   const productsData = products?.items || [];
+
+  if (error)
+    return (
+      <ErrorState
+        title="Products Unavailable"
+        message="Your product catalog could not be loaded at this time."
+        onRetry={() => refetch()}
+      />
+    );
 
   return (
     <div className="space-y-8">
@@ -30,6 +40,7 @@ export default function ProductsPage() {
           searchKey="name"
           addLabel="Add New Product"
           onAdd={() => setIsSheetOpen(true)}
+          isLoading={isLoading}
           bulkActions={[
             {
               label: "Add to Catalogue",

@@ -8,10 +8,11 @@ import { CustomerForm } from "@/components/forms/customer-form";
 
 import { useCustomers, useCreateCustomer } from "@/hooks/use-customers";
 import { useCustomerCategories } from "@/hooks/use-customer-categories";
+import { ErrorState } from "@/components/error-state";
 
 export default function CustomersPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { data: customers } = useCustomers();
+  const { data: customers, isLoading, error, refetch } = useCustomers();
   const { data: categoriesData } = useCustomerCategories();
   const createCustomer = useCreateCustomer();
 
@@ -23,6 +24,15 @@ export default function CustomersPage() {
     ? customers
     : customers?.data || [];
 
+  if (error)
+    return (
+      <ErrorState
+        title="Customers Offline"
+        message="We are unable to synchronize your customer database."
+        onRetry={() => refetch()}
+      />
+    );
+
   return (
     <div className="space-y-8">
       <div className="bg-white">
@@ -32,6 +42,7 @@ export default function CustomersPage() {
           searchKey="name"
           addLabel="Add New Customer"
           onAdd={() => setIsSheetOpen(true)}
+          isLoading={isLoading}
         />
       </div>
 

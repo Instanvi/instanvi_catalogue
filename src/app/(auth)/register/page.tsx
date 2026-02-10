@@ -1,15 +1,18 @@
 "use client";
 
-import {
-  RegisterForm,
-  type RegisterFormValues,
-} from "@/components/forms/auth/register-form";
+import { CreateBusinessForm } from "@/components/forms/auth/business-form/CreateBusinessForm";
+import { type CreateBusinessFormValues } from "@/components/forms/auth/business-form/schema";
 import Link from "next/link";
 
 export default function RegisterPage() {
-  const handleRegister = (values: RegisterFormValues) => {
-    console.log("Registering:", values);
-    // TODO: Implement registration logic
+  const handleRegister = (values: CreateBusinessFormValues) => {
+    console.log("Creating Business:", values);
+    const payload = {
+      ...values,
+      settings: {},
+    };
+    console.log("Payload:", payload);
+    // TODO: Implement business creation logic
   };
 
   return (
@@ -18,15 +21,15 @@ export default function RegisterPage() {
         <div className="bg-white rounded-none border border-muted-foreground/10 p-8 space-y-6">
           <div className="space-y-2 text-center">
             <h1 className="text-2xl font-semibold text-foreground">
-              Create Account
+              Create Business
             </h1>
             <p className="text-sm text-muted-foreground">
-              Apply for customer access. We&apos;ll review your application and
-              send you a verification code.
+              Register your organization to start managing your catalogue and
+              orders.
             </p>
           </div>
 
-          <RegisterForm onSubmit={handleRegister} />
+          <CreateBusinessForm onSubmit={handleRegister} />
 
           <div className="pt-4 border-t border-muted-foreground/10 text-center">
             <p className="text-sm text-muted-foreground">

@@ -6,6 +6,7 @@ import { columns } from "./components/columns";
 import { schedulesService } from "@/services/schedules.service";
 import { useState } from "react";
 import { FormSheet } from "@/components/form-sheet";
+import { ErrorState } from "@/components/error-state";
 
 export default function SchedulesPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -13,13 +14,20 @@ export default function SchedulesPage() {
     data: schedules,
     isLoading,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["schedules"],
     queryFn: schedulesService.getAll,
   });
 
-  if (isLoading) return <div>Loading schedules...</div>;
-  if (error) return <div>Error loading schedules</div>;
+  if (error)
+    return (
+      <ErrorState
+        title="Campaigns Offline"
+        message="Your scheduled campaigns could not be retrieved at this moment."
+        onRetry={() => refetch()}
+      />
+    );
 
   const data = schedules || [];
 
@@ -32,6 +40,7 @@ export default function SchedulesPage() {
           searchKey="title"
           addLabel="New Campaign"
           onAdd={() => setIsSheetOpen(true)}
+          isLoading={isLoading}
         />
       </div>
 

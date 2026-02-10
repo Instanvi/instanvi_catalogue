@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { DataTable } from "@/components/data-table/DataTable";
 import { getColumns } from "./components/columns";
 import { useStock, useUpdateStock } from "@/hooks/use-stock";
+import { ErrorState } from "@/components/error-state";
 import { FormSheet } from "@/components/form-sheet";
 import { StockUpdateForm } from "@/components/forms/stock-form/StockUpdateForm";
 import { StockUpdateValues } from "@/components/forms/stock-form/schema";
@@ -42,8 +43,14 @@ export default function StockPage() {
     );
   };
 
-  if (isLoading) return <div>Loading stock data...</div>;
-  if (error) return <div>Error loading stock data</div>;
+  if (error)
+    return (
+      <ErrorState
+        title="Inventory Unavailable"
+        message="We encountered an issue retrieving your current stock levels."
+        onRetry={() => window.location.reload()}
+      />
+    );
 
   return (
     <div className="space-y-8">
@@ -57,6 +64,7 @@ export default function StockPage() {
             setSelectedStock(null);
             setIsSheetOpen(true);
           }}
+          isLoading={isLoading}
           bulkActions={[
             {
               label: "Update Stock",

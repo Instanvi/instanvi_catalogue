@@ -2,11 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ordersService } from "@/services/orders.service";
 import { CreateOrderPayload } from "@/types/api";
 
-export const useOrders = (businessId: string | null) => {
+export const useOrders = () => {
   return useQuery({
-    queryKey: ["orders", businessId],
-    queryFn: () => ordersService.getOrders(businessId!),
-    enabled: !!businessId,
+    queryKey: ["orders"],
+    queryFn: () => ordersService.getOrders(),
   });
 };
 
@@ -38,6 +37,17 @@ export const useUpdateOrderStatus = () => {
         | "CANCELLED"
         | "PAID";
     }) => ordersService.updateOrderStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+};
+
+export const useDeleteOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => ordersService.deleteOrder(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     },

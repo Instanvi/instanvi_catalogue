@@ -16,15 +16,24 @@ import {
 
 export type Customer = {
   id: string;
-  name: string;
-  email: string | null;
-  phone: string | null;
-  company: string | null;
+  providerBusinessId: string;
+  customerBusinessId: string;
+  categoryId: string;
+  notes: string | null;
+  isActive: boolean;
+  createdAt: string;
+  customerBusiness: {
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    type: string;
+  };
   category: {
     id: string;
     name: string;
+    businessId: string;
   } | null;
-  createdAt: string;
 };
 
 export const columns: ColumnDef<Customer>[] = [
@@ -51,28 +60,38 @@ export const columns: ColumnDef<Customer>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "customerBusiness.name",
     header: "Customer Name",
     cell: ({ row }) => {
-      const name = row.getValue("name") as string;
+      const name = row.original.customerBusiness?.name;
       return <span className="font-medium text-sm">{name}</span>;
     },
   },
   {
-    accessorKey: "company",
-    header: "Organization",
+    accessorKey: "customerBusiness.type",
+    header: "Type",
     cell: ({ row }) => (
-      <span className="text-muted-foreground font-medium text-sm">
-        {row.getValue("company") || "N/A"}
+      <span className="text-muted-foreground font-medium text-xs">
+        {row.original.customerBusiness?.type || "N/A"}
       </span>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "customerBusiness.email",
     header: "Email",
+    cell: ({ row }) => (
+      <span className="text-sm">{row.original.customerBusiness?.email}</span>
+    ),
   },
   {
-    accessorKey: "category",
+    accessorKey: "customerBusiness.phone",
+    header: "Phone",
+    cell: ({ row }) => (
+      <span className="text-sm">{row.original.customerBusiness?.phone}</span>
+    ),
+  },
+  {
+    accessorKey: "category.name",
     header: "Category",
     cell: ({ row }) => {
       const category = row.original.category;

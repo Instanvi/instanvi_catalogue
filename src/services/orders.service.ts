@@ -7,10 +7,8 @@ export const ordersService = {
     return response.data;
   },
 
-  getOrders: async (organizationId: string) => {
-    const response = await api.get("/orders", {
-      params: { organizationId },
-    });
+  getOrders: async () => {
+    const response = await api.get("/orders");
     return response.data;
   },
 
@@ -24,6 +22,10 @@ export const ordersService = {
     status: UpdateOrderStatusPayload["status"],
   ) => {
     const response = await api.patch(`/orders/${id}/status`, { status });
+    return response.data;
+  },
+  deleteOrder: async (id: string) => {
+    const response = await api.delete(`/orders/${id}`);
     return response.data;
   },
 };

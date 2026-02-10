@@ -14,7 +14,7 @@ const menuItems = [
   { title: "Catalogues", url: "/dashboard/catalogues" },
   { title: "Products", url: "/dashboard/products" },
   { title: "Stock", url: "/dashboard/stock" },
-  { title: "Categories", url: "/dashboard/categories" },
+  { title: "Categories", url: "/dashboard" },
   { title: "Customers", url: "/dashboard/customers" },
   { title: "Schedules", url: "/dashboard/schedules" },
   { title: "Notifications", url: "/dashboard/notifications" },

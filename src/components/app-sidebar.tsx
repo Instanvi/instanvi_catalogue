@@ -11,7 +11,6 @@ import {
   Cube,
   ShoppingCart,
   Power,
-  Info,
 } from "@phosphor-icons/react";
 
 import { usePathname, useRouter } from "next/navigation";
@@ -24,7 +23,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -57,7 +55,7 @@ const menuItems = [
   },
   {
     title: "Categories",
-    url: "/dashboard/categories",
+    url: "/dashboard",
     icon: Tag,
   },
   {

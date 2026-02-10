@@ -25,12 +25,15 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
 
+import { DataTableSkeleton } from "./DataTableSkeleton";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchKey?: string;
   onAdd?: () => void;
   addLabel?: string;
+  isLoading?: boolean;
   bulkActions?: {
     label: string;
     onClick: (rows: TData[]) => void;
@@ -45,6 +48,7 @@ export function DataTable<TData, TValue>({
   searchKey,
   onAdd,
   addLabel = "Add New",
+  isLoading,
   bulkActions = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -68,6 +72,16 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  if (isLoading) {
+    return (
+      <DataTableSkeleton
+        columnCount={columns.length}
+        searchable={!!searchKey}
+        addable={!!onAdd}
+      />
+    );
+  }
 
   const selectedRows = table.getFilteredSelectedRowModel().rows;
   const hasSelection = selectedRows.length > 0;

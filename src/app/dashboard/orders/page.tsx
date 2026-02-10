@@ -1,41 +1,70 @@
 "use client";
 
+import { useCallback, useMemo } from "react";
+import {
+  useOrders,
+  useUpdateOrderStatus,
+  useDeleteOrder,
+} from "@/hooks/use-orders";
+import { getColumns, Order } from "./components/columns";
+import { ErrorState } from "@/components/error-state";
 import { DataTable } from "@/components/data-table/DataTable";
-import { columns } from "./components/columns";
-import { useState } from "react";
-import { useOrders } from "@/hooks/use-orders";
+import { toast } from "sonner";
 
 export default function OrdersPage() {
-  const [businessId] = useState<string | null>(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          const user = JSON.parse(storedUser);
-          return user.businessId || null;
-        } catch {
-          return null;
-        }
-      }
-    }
-    return null;
-  });
+  const { data: ordersResponse, isLoading, error, refetch } = useOrders();
+  const updateStatus = useUpdateOrderStatus();
+  const deleteOrder = useDeleteOrder();
 
-  const { data: ordersResponse, isLoading, error } = useOrders(businessId);
+  const handleUpdateStatus = useCallback(
+    (id: string, status: Order["status"]) => {
+      updateStatus.mutate(
+        { id, status: status },
+        {
+          onSuccess: () => {
+            toast.success(`Order status updated to ${status}`);
+          },
+          onError: () => {
+            toast.error("Failed to update order status");
+          },
+        },
+      );
+    },
+    [updateStatus],
+  );
+
+  const handleDelete = useCallback(
+    (id: string) => {
+      if (confirm("Are you sure you want to delete this order?")) {
+        deleteOrder.mutate(id, {
+          onSuccess: () => {
+            toast.success("Order deleted successfully");
+          },
+          onError: () => {
+            toast.error("Failed to delete order");
+          },
+        });
+      }
+    },
+    [deleteOrder],
+  );
+
+  const columns = useMemo(
+    () => getColumns(handleUpdateStatus, handleDelete),
+    [handleUpdateStatus, handleDelete],
+  );
 
   const ordersData = Array.isArray(ordersResponse)
     ? ordersResponse
     : ordersResponse?.data?.items || ordersResponse?.data || [];
 
-  if (isLoading)
-    return (
-      <div className="p-8 text-center text-muted-foreground">
-        Loading orders...
-      </div>
-    );
   if (error)
     return (
-      <div className="p-8 text-center text-red-500">Error loading orders</div>
+      <ErrorState
+        title="Orders Unavailable"
+        message="We couldn't retrieve your distribution orders at this time."
+        onRetry={() => refetch()}
+      />
     );
 
   return (
@@ -46,8 +75,7 @@ export default function OrdersPage() {
           data={ordersData}
           searchKey="id"
           addLabel="New Order"
-          // In a real app, adding an order might be different, but keeping consistency
-          onAdd={() => {}}
+          isLoading={isLoading}
         />
       </div>
     </div>

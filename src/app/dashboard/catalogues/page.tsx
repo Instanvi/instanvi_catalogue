@@ -24,6 +24,8 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
+import { ErrorState } from "@/components/error-state";
+
 import { CustomerCategory } from "@/services/customer-categories.service";
 
 export default function CataloguesPage() {
@@ -36,7 +38,12 @@ export default function CataloguesPage() {
 
   const queryClient = useQueryClient();
 
-  const { data: catalogues, error } = useQuery({
+  const {
+    data: catalogues,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["catalogues"],
     queryFn: cataloguesService.getAll,
   });
@@ -98,7 +105,14 @@ export default function CataloguesPage() {
 
   const safeData = Array.isArray(catalogues) ? catalogues : [];
 
-  if (error) return <div>Error loading catalogues</div>;
+  if (error)
+    return (
+      <ErrorState
+        title="Catalogues Offline"
+        message="Your digital showcases are currently unreachable."
+        onRetry={() => refetch()}
+      />
+    );
 
   return (
     <div className="space-y-8">
@@ -109,6 +123,7 @@ export default function CataloguesPage() {
           searchKey="name"
           addLabel="Add Catalogue"
           onAdd={() => setIsSheetOpen(true)}
+          isLoading={isLoading}
         />
       </div>
 
