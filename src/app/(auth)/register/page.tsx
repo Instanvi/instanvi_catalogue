@@ -2,15 +2,32 @@
 
 import { CreateBusinessForm } from "@/components/forms/auth/business-form/CreateBusinessForm";
 import { type CreateBusinessFormValues } from "@/components/forms/auth/business-form/schema";
+import { useCreateBusiness } from "@/hooks/use-businesses";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const createBusiness = useCreateBusiness();
+
   const handleRegister = (values: CreateBusinessFormValues) => {
-    console.log("Creating Business:", values);
-    const payload = {
-      ...values,
-      settings: {},
-    };
+    createBusiness.mutate(
+      {
+        ...values,
+        settings: {},
+      },
+      {
+        onSuccess: () => {
+          toast.success("Business created successfully!");
+          router.push("/login");
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error("Failed to create business");
+        },
+      },
+    );
   };
 
   return (
@@ -27,7 +44,10 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          <CreateBusinessForm onSubmit={handleRegister} />
+          <CreateBusinessForm
+            onSubmit={handleRegister}
+            isLoading={createBusiness.isPending}
+          />
 
           <div className="pt-4 border-t border-muted-foreground/10 text-center">
             <p className="text-sm text-muted-foreground">
