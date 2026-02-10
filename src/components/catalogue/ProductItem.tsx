@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,9 +26,9 @@ export interface Product {
   name: string;
   price: string;
   compareAtPrice?: string | null;
-  images: string[];
+  images?: string[] | null;
   category?: string;
-  description?: string;
+  description?: string | null;
   sku?: string;
   businessId?: string;
   units?: ProductUnit[];
@@ -34,9 +36,9 @@ export interface Product {
 
 interface ProductItemProps {
   product: Product;
-  quantity?: number;
-  onAdd: () => void;
-  onRemove: () => void;
+  getQuantityForUnit: (unitId?: string) => number;
+  onAdd: (unitId?: string, unitName?: string, unitPrice?: string) => void;
+  onRemove: (unitId?: string) => void;
 }
 
 export function QuantitySelector({
@@ -91,11 +93,18 @@ export function QuantitySelector({
 
 export function ProductCard({
   product,
-  quantity = 0,
+  getQuantityForUnit,
   onAdd,
   onRemove,
 }: ProductItemProps) {
-  const imageUrl = product.images[0] || "/placeholder-product.png";
+  const [selectedUnit, setSelectedUnit] = useState<ProductUnit | undefined>(
+    product.units?.find((u) => u.isDefault) || product.units?.[0],
+  );
+
+  const imageUrl = product.images?.[0] || "/placeholder-product.png";
+  const quantity = getQuantityForUnit(selectedUnit?.id);
+
+  const currentPrice = selectedUnit ? selectedUnit.price : product.price;
 
   return (
     <div className="group bg-white rounded-none border border-muted/50 overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:border-primary/20">
@@ -115,24 +124,47 @@ export function ProductCard({
             {product.name}
           </h3>
           <PriceDisplay
-            price={product.price}
+            price={currentPrice}
             compareAtPrice={product.compareAtPrice}
-            unit={product.units?.find((u) => u.isDefault)?.name}
+            unit={selectedUnit?.name}
             className="text-base md:text-lg font-black text-foreground"
           />
         </div>
+
+        {product.units && product.units.length > 1 && (
+          <div className="flex flex-wrap gap-1.5">
+            {product.units.map((unit) => (
+              <button
+                key={unit.id}
+                onClick={() => setSelectedUnit(unit)}
+                className={cn(
+                  "px-2 py-1 text-[10px] font-bold uppercase tracking-wider border transition-colors",
+                  selectedUnit?.id === unit.id
+                    ? "bg-primary text-white border-primary"
+                    : "bg-transparent text-muted-foreground border-muted-foreground/20 hover:border-primary/50",
+                )}
+              >
+                {unit.name}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="flex items-center gap-2 pt-2">
           {quantity > 0 ? (
             <QuantitySelector
               quantity={quantity}
-              onAdd={onAdd}
-              onRemove={onRemove}
+              onAdd={() =>
+                onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
+              }
+              onRemove={() => onRemove(selectedUnit?.id)}
               size="default"
             />
           ) : (
             <Button
-              onClick={onAdd}
+              onClick={() =>
+                onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
+              }
               size="default"
               className="w-full h-11 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300 text-xs font-bold uppercase tracking-wider"
             >
@@ -148,11 +180,17 @@ export function ProductCard({
 
 export function ProductListItem({
   product,
-  quantity = 0,
+  getQuantityForUnit,
   onAdd,
   onRemove,
 }: ProductItemProps) {
-  const imageUrl = product.images[0] || "/placeholder-product.png";
+  const [selectedUnit, setSelectedUnit] = useState<ProductUnit | undefined>(
+    product.units?.find((u) => u.isDefault) || product.units?.[0],
+  );
+
+  const imageUrl = product.images?.[0] || "/placeholder-product.png";
+  const quantity = getQuantityForUnit(selectedUnit?.id);
+  const currentPrice = selectedUnit ? selectedUnit.price : product.price;
 
   return (
     <div className="group flex items-center gap-6 bg-white p-4 md:p-6 rounded-none border border-muted/50 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
@@ -174,12 +212,31 @@ export function ProductListItem({
           <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
             {product.description || "No description available"}
           </p>
+
+          {product.units && product.units.length > 1 && (
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {product.units.map((unit) => (
+                <button
+                  key={unit.id}
+                  onClick={() => setSelectedUnit(unit)}
+                  className={cn(
+                    "px-2 py-1 text-[10px] font-bold uppercase tracking-wider border transition-colors",
+                    selectedUnit?.id === unit.id
+                      ? "bg-primary text-white border-primary"
+                      : "bg-transparent text-muted-foreground border-muted-foreground/20 hover:border-primary/50",
+                  )}
+                >
+                  {unit.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex-shrink-0 flex flex-col items-end gap-1">
           <PriceDisplay
-            price={product.price}
+            price={currentPrice}
             compareAtPrice={product.compareAtPrice}
-            unit={product.units?.find((u) => u.isDefault)?.name}
+            unit={selectedUnit?.name}
             className="font-black text-base md:text-xl"
           />
         </div>
@@ -191,7 +248,7 @@ export function ProductListItem({
             <Button
               variant="ghost"
               size="icon"
-              onClick={onRemove}
+              onClick={() => onRemove(selectedUnit?.id)}
               className="h-10 w-10 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
             >
               <Minus className="h-5 w-5" />
@@ -202,7 +259,9 @@ export function ProductListItem({
             <Button
               variant="ghost"
               size="icon"
-              onClick={onAdd}
+              onClick={() =>
+                onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
+              }
               className="h-10 w-10 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
             >
               <Plus className="h-5 w-5" />
@@ -211,7 +270,9 @@ export function ProductListItem({
         ) : (
           <Button
             size="icon"
-            onClick={onAdd}
+            onClick={() =>
+              onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
+            }
             className="h-12 w-12 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300"
           >
             <Plus className="h-6 w-6" />

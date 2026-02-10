@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "instanvi-catalogue-backend.onrender.com",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+      },
     ],
   },
 };

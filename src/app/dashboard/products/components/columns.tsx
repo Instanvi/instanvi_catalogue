@@ -119,7 +119,7 @@ export const columns: ColumnDef<Product>[] = [
       const units = row.original.units || [];
       const defaultUnit = units.find((u) => u.isDefault) || units[0];
       return (
-        <div className="text-xs font-medium text-slate-500 italic">
+        <div className="text-xs font-medium text-slate-500 italic capitalize">
           per {defaultUnit?.name || "piece"}
         </div>
       );

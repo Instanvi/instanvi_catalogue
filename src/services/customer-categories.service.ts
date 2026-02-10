@@ -16,27 +16,27 @@ export interface CustomerCategory {
 
 export const customerCategoriesService = {
   getAll: async () => {
-    const response = await api.get("/customers/categories");
+    const response = await api.get("/customer-categories");
     return response.data;
   },
 
   getOne: async (id: string) => {
-    const response = await api.get(`/customers/categories/${id}`);
+    const response = await api.get(`/customer-categories/${id}`);
     return response.data;
   },
 
   create: async (data: unknown) => {
-    const response = await api.post("/customers/categories", data);
+    const response = await api.post("/customer-categories", data);
     return response.data;
   },
 
   update: async (id: string, data: unknown) => {
-    const response = await api.patch(`/customers/categories/${id}`, data);
+    const response = await api.patch(`/customer-categories/${id}`, data);
     return response.data;
   },
 
   delete: async (id: string) => {
-    const response = await api.delete(`/customers/categories/${id}`);
+    const response = await api.delete(`/customer-categories/${id}`);
     return response.data;
   },
 };

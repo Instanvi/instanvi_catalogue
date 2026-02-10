@@ -133,7 +133,7 @@ export function ScheduleForm({
 
         <Button
           type="submit"
-          className="w-full h-12 bg-black hover:bg-black/90 text-white font-bold uppercase tracking-widest rounded-none shadow-none transition-all duration-300"
+          className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest rounded-none shadow-none transition-all duration-300"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -141,7 +141,11 @@ export function ScheduleForm({
           ) : (
             <Calendar className="mr-2 h-5 w-5" />
           )}
-          {isLoading ? "Scheduling..." : "Book Schedule"}
+          {isLoading
+            ? "Scheduling..."
+            : defaultValues?.title
+              ? "Update Schedule"
+              : "Book Schedule"}
         </Button>
       </form>
     </Form>

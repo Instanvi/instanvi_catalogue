@@ -131,6 +131,7 @@ export interface CreateCataloguePayload {
   type?: CatalogueType;
   coverImageUrl?: string;
   allowCloning?: boolean;
+  customerCategoryId?: string;
   settings?: Record<string, unknown>;
 }
 
@@ -141,6 +142,7 @@ export interface UpdateCataloguePayload {
   type?: CatalogueType;
   coverImageUrl?: string;
   allowCloning?: boolean;
+  customerCategoryId?: string;
   isActive?: boolean;
   settings?: Record<string, unknown>;
 }
@@ -153,11 +155,18 @@ export interface AddProductToCataloguePayload {
   customNote?: string;
 }
 
+export interface BulkProductUnitPricePayload {
+  productUnitId: string;
+  price: number;
+  compareAtPrice?: number;
+}
+
 export interface BulkProductPayload {
   productId: string;
   price: number;
   compareAtPrice?: number;
   displayOrder?: number;
+  unitPrices: BulkProductUnitPricePayload[];
 }
 
 export interface BulkAddProductsPayload {
@@ -197,6 +206,7 @@ export enum OrderType {
 
 export interface OrderItemPayload {
   catalogueProductId: string;
+  productUnitId?: string;
   quantity: number;
   unitPrice: number;
 }

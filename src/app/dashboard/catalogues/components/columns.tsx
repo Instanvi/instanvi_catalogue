@@ -16,7 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const columns: ColumnDef<Catalogue>[] = [
+import { cn } from "@/lib/utils";
+import { Users } from "lucide-react";
+
+export const getColumns = (
+  onAssignCategory: (catalogue: Catalogue) => void,
+): ColumnDef<Catalogue>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -163,6 +168,12 @@ export const columns: ColumnDef<Catalogue>[] = [
               <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50">
                 <Edit className="mr-2 h-3 w-3" /> Edit Details
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50 text-blue-600"
+                onClick={() => onAssignCategory(catalogue)}
+              >
+                <Users className="mr-2 h-3 w-3" /> Assign Category
+              </DropdownMenuItem>
               <DropdownMenuSeparator className="bg-slate-200" />
               <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-red-50 text-red-600">
                 <Trash2 className="mr-2 h-3 w-3" /> Delete
@@ -174,5 +185,3 @@ export const columns: ColumnDef<Catalogue>[] = [
     },
   },
 ];
-
-import { cn } from "@/lib/utils";

@@ -207,10 +207,10 @@ export function CategoryForm({
           </div>
         </div>
 
-        <div className="pt-4 flex justify-end">
+        <div className="pt-4">
           <Button
             type="submit"
-            className="h-11 px-8 bg-[#1c1c1c] hover:bg-[#1c1c1c]/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? (

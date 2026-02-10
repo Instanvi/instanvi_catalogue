@@ -66,9 +66,9 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <section className="space-y-6">
-          <h3 className="text-xl font-semibold border-b-2 border-primary pb-2 tracking-tighter text-black">
+          <h3 className="text-xl font-semibold border-b-2 border-[#1c1c1c] pb-2 tracking-tighter text-[#1c1c1c]">
             01. Customer Details
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -76,18 +76,18 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               control={form.control}
               name="customerName"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Full Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Jane Doe"
-                      className="rounded-none h-12 border-gray-200 focus:border-primary transition-all font-normal"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -96,18 +96,18 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               control={form.control}
               name="customerEmail"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Email Address
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="jane@example.com"
-                      className="rounded-none h-12 border-gray-200 focus:border-primary transition-all font-normal"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -116,18 +116,18 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               control={form.control}
               name="customerPhone"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Phone Number
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="+237 6xx xxx xxx"
-                      className="rounded-none h-12 border-gray-200 focus:border-primary transition-all font-normal"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -136,18 +136,18 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               control={form.control}
               name="shippingAddress"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Shipping Address
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Douala, Akwa"
-                      className="rounded-none h-12 border-gray-200 focus:border-primary transition-all font-normal"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -155,7 +155,7 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
         </section>
 
         <section className="space-y-6">
-          <h3 className="text-xl  border-b-2 border-primary pb-2 tracking-tighter text-black">
+          <h3 className="text-xl font-semibold border-b-2 border-[#1c1c1c] pb-2 tracking-tighter text-[#1c1c1c]">
             02. Payment & Notes
           </h3>
           <div className="space-y-8">
@@ -164,7 +164,7 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               name="paymentMethod"
               render={({ field }) => (
                 <FormItem className="space-y-4">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Select Payment Provider
                   </FormLabel>
                   <div className="flex flex-col gap-4">
@@ -176,15 +176,15 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
                           onClick={() => field.onChange(method.id)}
                           className={cn(
                             "relative cursor-pointer group transition-all duration-300",
-                            "border-2 p-6 flex items-center justify-start gap-5",
+                            "border p-6 flex items-center justify-start gap-5 rounded-none",
                             isSelected
-                              ? "border-primary bg-primary/5 shadow-md"
-                              : "border-gray-100 hover:border-primary/50 bg-white",
+                              ? "border-primary bg-primary/5"
+                              : "border-muted-foreground/20 hover:border-primary/50 bg-white",
                           )}
                         >
                           <div
                             className={cn(
-                              "w-12 h-12 rounded-none flex items-center justify-center shadow-inner shrink-0",
+                              "w-12 h-12 rounded-none flex items-center justify-center shrink-0",
                               method.color,
                             )}
                           >
@@ -201,21 +201,21 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
                             <p
                               className={cn(
                                 "font-bold text-base transition-colors",
-                                isSelected ? "text-primary" : "text-black",
+                                isSelected ? "text-primary" : "text-[#1c1c1c]",
                               )}
                             >
                               {method.label}
                             </p>
-                            <p className="text-xs text-gray-400 font-normal">
+                            <p className="text-xs text-muted-foreground font-medium">
                               Instant Mobile Payment
                             </p>
                           </div>
                           <div
                             className={cn(
-                              "w-5 h-5 border-2 rounded-full flex items-center justify-center transition-all",
+                              "w-5 h-5 border rounded-full flex items-center justify-center transition-all",
                               isSelected
                                 ? "border-primary bg-primary"
-                                : "border-gray-200",
+                                : "border-muted-foreground/30",
                             )}
                           >
                             {isSelected && (
@@ -230,7 +230,7 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
                       );
                     })}
                   </div>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -239,18 +239,18 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-sm font-normal text-gray-600">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Order Notes
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Delivery instructions (optional)..."
-                      className="rounded-none h-12 border-gray-200 focus:border-primary transition-all font-normal"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -260,7 +260,7 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-16 rounded-none bg-primary text-white font-black text-xl hover:bg-primary/95 transition-all shadow-xl active:scale-[0.99] border-b-4 border-primary/20"
+          className="w-full h-14 rounded-none bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-all active:scale-[0.99]"
         >
           {isLoading ? (
             <Loader2 className="mr-2 h-6 w-6 animate-spin" />
