@@ -26,7 +26,7 @@ export default function ProductsPage() {
       <div className="bg-white">
         <DataTable
           columns={columns}
-          data={productsData}
+          data={productsData as Product[]}
           searchKey="name"
           addLabel="Add New Product"
           onAdd={() => setIsSheetOpen(true)}
@@ -54,15 +54,10 @@ export default function ProductsPage() {
         description="Synchronize a new asset with your central repository."
         isOpen={isSheetOpen}
         onOpenChange={setIsSheetOpen}
-        size="2xl"
+        size="full"
       >
         <div className="mt-8">
           <ProductForm
-            categories={[
-              { id: "c1", name: "VIP" },
-              { id: "c2", name: "Reseller" },
-              { id: "c3", name: "Standard" },
-            ]}
             isLoading={createProduct.isPending}
             onSubmit={(formData) => {
               createProduct.mutate(formData, {

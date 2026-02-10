@@ -22,14 +22,21 @@ import {
 
 import { Switch } from "@/components/ui/switch";
 
+export type ProductUnit = {
+  id: string;
+  name: string;
+  price: string;
+  isDefault: boolean;
+};
+
 export type Product = {
   id: string;
   name: string;
   category?: string;
   sku: string;
   price: string;
-  unit: string;
-  images: string[];
+  units?: ProductUnit[];
+  images?: string[] | null;
   isActive: boolean;
   updatedAt: string;
 };
@@ -106,12 +113,14 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "unit",
+    accessorKey: "units",
     header: "Unit",
     cell: ({ row }) => {
+      const units = row.original.units || [];
+      const defaultUnit = units.find((u) => u.isDefault) || units[0];
       return (
         <div className="text-xs font-medium text-slate-500 italic">
-          per {row.getValue("unit")}
+          per {defaultUnit?.name || "piece"}
         </div>
       );
     },

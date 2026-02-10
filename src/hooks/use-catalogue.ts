@@ -44,13 +44,15 @@ export function useCatalogue() {
   });
 
   const products = useMemo(() => {
-    if (!productsData?.items) return [] as Product[];
+    if (!productsData?.items || !catalogue) return [] as Product[];
     return productsData.items.map((p: CatalogueProductItem) => ({
       ...p.product,
+      catalogueProductId: p.catalogueProduct.id,
+      catalogueId: catalogue.id,
       price: p.catalogueProduct?.basePrice || p.product?.price || "0",
       compareAtPrice: p.catalogueProduct?.compareAtPrice,
     }));
-  }, [productsData]);
+  }, [productsData, catalogue]);
 
   const categories = useMemo(() => {
     // Note: In a real app with server-side pagination,

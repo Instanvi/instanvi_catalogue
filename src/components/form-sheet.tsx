@@ -12,7 +12,7 @@ interface FormSheetProps {
   title: string;
   description?: string;
   children: React.ReactNode;
-  size?: "md" | "lg" | "xl" | "2xl";
+  size?: "md" | "lg" | "xl" | "2xl" | "4xl" | "5xl" | "full";
 }
 
 import { Separator } from "@/components/ui/separator";
@@ -30,6 +30,9 @@ export function FormSheet({
     lg: "sm:max-w-lg",
     xl: "sm:max-w-xl",
     "2xl": "sm:max-w-2xl",
+    "4xl": "sm:max-w-4xl",
+    "5xl": "sm:max-w-5xl",
+    full: "sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[1200px]",
   };
 
   return (

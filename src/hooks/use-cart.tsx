@@ -11,7 +11,9 @@ import {
 import { Product } from "@/components/catalogue/ProductItem";
 
 export interface CartItem {
-  id: string;
+  id: string; // Product ID
+  catalogueProductId?: string;
+  catalogueId?: string;
   name: string;
   price: string;
   quantity: number;
@@ -28,28 +30,24 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load from local storage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (e) {
-        console.error("Failed to parse cart", e);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
+      if (savedCart) {
+        try {
+          return JSON.parse(savedCart);
+        } catch (e) {
+          console.error("Failed to parse cart", e);
+        }
       }
     }
-    setIsLoaded(true);
-  }, []);
+    return [];
+  });
 
   // Save to local storage on change
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart, isLoaded]);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const updateCart = useCallback((product: Product, delta: number) => {
     setCart((prev) => {
@@ -68,10 +66,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
           ...prev,
           {
             id: product.id,
+            catalogueProductId: product.catalogueProductId,
+            catalogueId: product.catalogueId,
             name: product.name,
             price: product.price,
             quantity: 1,
-            businessId: product.organizationId,
+            businessId: product.businessId,
           },
         ];
       }
@@ -91,9 +91,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <CartContext.Provider
-      value={{ cart, updateCart, getQuantity, clearCart }}
-    >
+    <CartContext.Provider value={{ cart, updateCart, getQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );

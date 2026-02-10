@@ -1,27 +1,39 @@
 import api from "../lib/axios";
 import { ApiResponse, PaginatedData } from "../types/api";
 
-export interface Product {
+export interface ProductUnit {
   id: string;
-  organizationId: string;
+  productId: string;
   name: string;
-  description?: string;
-  category?: string;
-  sku: string;
-  slug: string;
-  images: string[];
-  specifications: Record<string, unknown>;
   price: string;
-  productType?: string;
-  unit: string;
-  isActive: boolean;
+  conversionFactor: string;
+  sku: string;
+  isDefault: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
+export interface Product {
+  id: string;
+  businessId: string;
+  name: string;
+  description?: string | null;
+  category?: string;
+  sku: string;
+  slug: string;
+  images?: string[] | null;
+  specifications: Record<string, unknown>;
+  price: string;
+  productType?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  units: ProductUnit[];
+}
+
 export const productsService = {
   getAll: async (
-    params: { page?: number; limit?: number; organizationId?: string } = {},
+    params: { page?: number; limit?: number; businessId?: string } = {},
   ) => {
     const response = await api.get<ApiResponse<PaginatedData<Product>>>(
       "/products",
