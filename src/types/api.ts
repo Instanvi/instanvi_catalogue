@@ -202,6 +202,7 @@ export interface CreateOrderPayload {
 
   items: OrderItemPayload[];
   notes?: string;
+  paymentMethod?: "CASH" | "CARD" | "BANK_TRANSFER" | "MOBILE_MONEY" | "OTHER";
 }
 
 export interface UpdateOrderStatusPayload {

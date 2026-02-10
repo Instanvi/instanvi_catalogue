@@ -15,6 +15,7 @@ export interface Product {
   description?: string;
   unit?: string;
   sku?: string;
+  organizationId?: string;
 }
 
 interface ProductItemProps {

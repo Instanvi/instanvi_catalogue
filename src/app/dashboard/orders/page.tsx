@@ -1,10 +1,9 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/data-table/DataTable";
 import { columns } from "./components/columns";
-import { ordersService } from "@/services/orders.service";
 import { useState } from "react";
+import { useOrders } from "@/hooks/use-orders";
 
 export default function OrdersPage() {
   const [businessId] = useState<string | null>(() => {
@@ -22,15 +21,7 @@ export default function OrdersPage() {
     return null;
   });
 
-  const {
-    data: ordersResponse,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["orders", businessId],
-    queryFn: () => ordersService.getOrders(businessId!),
-    enabled: !!businessId,
-  });
+  const { data: ordersResponse, isLoading, error } = useOrders(businessId);
 
   const ordersData = Array.isArray(ordersResponse)
     ? ordersResponse

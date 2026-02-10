@@ -10,7 +10,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "InstaNVi Catalogue",
+  title: "Instanvi Catalogue",
   description: "Premium Catalogue Management",
 };
 
