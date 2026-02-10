@@ -12,7 +12,6 @@ export const productSchema = zod.object({
   unit: zod.string().optional(),
   productType: zod.string().optional(),
   images: zod.any().optional(),
-  categoryPrices: zod.record(zod.string(), zod.string()).optional(),
 });
 
 export type ProductFormValues = zod.infer<typeof productSchema>;

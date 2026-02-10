@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4448/api/v1/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "https://instanvi-catalogue-backend.onrender.com/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },

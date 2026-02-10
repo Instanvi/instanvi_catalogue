@@ -43,31 +43,30 @@ export function ProductForm({
       category: defaultValues?.category || "",
       unit: defaultValues?.unit || "piece",
       productType: defaultValues?.productType || "",
-      categoryPrices: defaultValues?.categoryPrices || {},
     },
   });
 
   const handleFormSubmit = (values: ProductFormValues) => {
     const formData = new FormData();
 
-    // Get organizationId
-    let organizationId = "";
+    // Get businessId
+    let businessId = "";
     if (typeof window !== "undefined") {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         try {
           const user = JSON.parse(storedUser);
-          organizationId = user.organizationId;
+          businessId = user.businessId;
         } catch (e) {
           console.error("Failed to parse user", e);
         }
       }
     }
 
-    if (organizationId) {
-      formData.append("organizationId", organizationId);
+    if (businessId) {
+      formData.append("businessId", businessId);
     } else {
-      console.error("Organization ID missing");
+      console.error("Business ID missing");
       // Depending on UX, might want to show error or return
     }
 
@@ -80,15 +79,7 @@ export function ProductForm({
     if (values.unit) formData.append("unit", values.unit);
     if (values.productType) formData.append("productType", values.productType);
 
-    // Append category prices
-    if (values.categoryPrices) {
-      formData.append(
-        "specifications",
-        JSON.stringify({ categoryPrices: values.categoryPrices }),
-      );
-      // Note: Backend doesn't have explicit categoryPrices field, putting in specifications for now
-      // Or ignore if backend doesn't support it yet.
-    }
+
 
     // Append files
     files.forEach((file) => {
@@ -267,39 +258,7 @@ export function ProductForm({
               </div>
             </div>
 
-            {/* Pricing Segments Section */}
-            {categories.length > 0 && (
-              <div className="pt-4 space-y-4">
-                <FormLabel className="text-sm font-semibold text-foreground block border-b pb-2">
-                  Category Pricing
-                </FormLabel>
-                <div className="space-y-4">
-                  {categories.map((category) => (
-                    <FormField
-                      key={category.id}
-                      control={form.control}
-                      name={`categoryPrices.${category.id}`}
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-medium text-muted-foreground">
-                            {category.name} Segment Price
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              step="0.01"
-                              placeholder="0.00"
-                              className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+
           </div>
         </div>
 
