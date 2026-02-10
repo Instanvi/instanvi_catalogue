@@ -1,55 +1,100 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useState, useMemo } from "react";
 import { DataTable } from "@/components/data-table/DataTable";
-import { columns } from "./components/columns";
-import { stockService } from "@/services/stock.service";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { getColumns } from "./components/columns";
+import { useStock, useUpdateStock } from "@/hooks/use-stock";
+import { FormSheet } from "@/components/form-sheet";
+import { StockUpdateForm } from "@/components/forms/stock-form/StockUpdateForm";
+import { StockUpdateValues } from "@/components/forms/stock-form/schema";
+import { StockItem } from "@/services/stock.service";
+import { Settings2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function StockPage() {
-  const {
-    data: stockItems,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["stock"],
-    queryFn: stockService.getAll,
-  });
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [selectedStock, setSelectedStock] = useState<StockItem | null>(null);
+
+  const { data: stockItems, isLoading, error } = useStock();
+  const updateStock = useUpdateStock();
+
+  const onUpdate = (item: StockItem) => {
+    setSelectedStock(item);
+    setIsSheetOpen(true);
+  };
+
+  const columns = useMemo(() => getColumns(onUpdate), []);
+  const data = stockItems || [];
+
+  const handleUpdateSubmit = (values: StockUpdateValues) => {
+    updateStock.mutate(
+      {
+        id: values.stockId,
+        quantity: values.quantity,
+        reason: values.reason,
+      },
+      {
+        onSuccess: () => {
+          setIsSheetOpen(false);
+          setSelectedStock(null);
+        },
+      },
+    );
+  };
 
   if (isLoading) return <div>Loading stock data...</div>;
   if (error) return <div>Error loading stock data</div>;
 
-  const data = stockItems || [];
-
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">
-            Stock Management
-          </h2>
-          <p className="text-muted-foreground">
-            Monitor product inventory levels and adjust quantities.
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          {/* Add Adjustment Button or Bulk Update */}
-          <Button variant="outline">Export</Button>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> Stock Adjustment
-          </Button>
-        </div>
-      </div>
       <div className="bg-white">
         <DataTable
           columns={columns}
           data={data}
-          searchKey="name"
-          // addLabel="Add Adjustment" // Using header buttons for now
-          // onAdd={() => {}}
+          searchKey="product_name"
+          addLabel="Update Stock Total"
+          onAdd={() => {
+            setSelectedStock(null);
+            setIsSheetOpen(true);
+          }}
+          bulkActions={[
+            {
+              label: "Update Stock",
+              icon: <Settings2 className="h-4 w-4" />,
+              onClick: (rows) => {
+                if (rows.length > 1) {
+                  toast.warning(
+                    "Please select only one product to update total stock levels.",
+                  );
+                  return;
+                }
+                onUpdate(rows[0]);
+              },
+            },
+          ]}
         />
       </div>
+
+      <FormSheet
+        title="Update Stock Levels"
+        description="Set the current total quantity available for your products."
+        isOpen={isSheetOpen}
+        onOpenChange={(open) => {
+          setIsSheetOpen(open);
+          if (!open) setSelectedStock(null);
+        }}
+      >
+        <div className="mt-8">
+          <StockUpdateForm
+            isLoading={updateStock.isPending}
+            stockItems={data}
+            defaultValues={
+              selectedStock ? { stockId: selectedStock.id } : undefined
+            }
+            onSubmit={handleUpdateSubmit}
+          />
+        </div>
+      </FormSheet>
     </div>
   );
 }

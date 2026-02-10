@@ -49,6 +49,7 @@ export interface Catalogue {
   allowCloning: boolean;
   customerCategoryId?: string;
   isLocked?: boolean;
+  private?: boolean;
   settings?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;

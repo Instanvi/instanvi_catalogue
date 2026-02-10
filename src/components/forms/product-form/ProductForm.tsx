@@ -32,8 +32,7 @@ export function ProductForm({
   const [files, setFiles] = useState<File[]>([]);
 
   const form = useForm<ProductFormValues>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    resolver: zodResolver(productSchema) as any,
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: defaultValues?.name || "",
       description: defaultValues?.description || "",
@@ -88,13 +87,6 @@ export function ProductForm({
     formData.append("sku", values.sku);
     if (values.category) formData.append("category", values.category);
     if (values.productType) formData.append("productType", values.productType);
-
-<<<<<<< HEAD
-
-=======
-    // Append units as stringified JSON (Standard for complex FormData)
-    formData.append("units", JSON.stringify(values.units));
->>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
 
     // Append units as stringified JSON (Standard for complex FormData)
     formData.append("units", JSON.stringify(values.units));
@@ -427,11 +419,6 @@ export function ProductForm({
                 />
               </div>
             </div>
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 254a11381cca8fcc481d7eb4786ee9906dd44778
           </div>
         </div>
 

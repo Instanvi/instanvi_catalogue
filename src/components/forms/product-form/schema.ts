@@ -2,13 +2,10 @@ import * as zod from "zod";
 
 export const unitSchema = zod.object({
   name: zod.string().min(1, "Unit name is required"),
-  price: zod
-    .string()
-    .regex(/^\d+(\.\d{1,2})?$/, "Invalid price format")
-    .default("0.00"),
-  conversionFactor: zod.string().default("1"),
+  price: zod.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid price format"),
+  conversionFactor: zod.string(),
   sku: zod.string().min(1, "Unit SKU is required"),
-  isDefault: zod.boolean().default(false),
+  isDefault: zod.boolean(),
 });
 
 export const productSchema = zod.object({

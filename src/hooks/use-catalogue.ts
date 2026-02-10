@@ -82,7 +82,39 @@ export function useCatalogue() {
     setPage(1);
   };
 
-  const isPrivate = !!catalogue?.isLocked;
+  const authenticatedBusinessId = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return null;
+    try {
+      const user = JSON.parse(storedUser);
+      return user.businessId || user.organizationId;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const isPrivate = useMemo(() => {
+    if (!catalogue) return false;
+
+    // The backend returns { private: true } when access should be restricted
+    if (catalogue.private === true) return true;
+
+    // If backend explicitly says it's locked
+    if (catalogue.isLocked) return true;
+
+    // Client-side fallback check
+    if (
+      catalogue.type &&
+      catalogue.type !== "public" &&
+      catalogue.businessId !== authenticatedBusinessId
+    ) {
+      return true;
+    }
+
+    return false;
+  }, [catalogue, authenticatedBusinessId]);
+
   const loading = isLoadingCatalogue || isLoadingProducts;
 
   return {

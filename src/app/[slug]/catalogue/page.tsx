@@ -15,10 +15,11 @@ import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
 import { CataloguePagination } from "@/components/catalogue/CataloguePagination";
 import { CatalogueAccessModal } from "@/components/catalogue/CatalogueAccessModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 export default function CatalogueViewPage() {
   const router = useRouter();
+  const { slug } = useParams();
   const {
     catalogue,
     filteredProducts,
@@ -52,7 +53,7 @@ export default function CatalogueViewPage() {
             </p>
             <CatalogueAccessModal
               isOpen={true}
-              catalogueId={catalogue.id}
+              catalogueId={slug as string}
               onSuccess={() => {
                 refetch();
               }}
