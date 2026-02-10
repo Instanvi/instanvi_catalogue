@@ -3,6 +3,7 @@ import {
   customersService,
   customerAuthService,
 } from "../services/customers.service";
+import type { UpdateCustomerPayload } from "../types/api";
 
 // Admin Hooks
 export const useCustomers = () => {
@@ -25,7 +26,7 @@ export const useCreateCustomer = () => {
 export const useUpdateCustomer = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: unknown }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateCustomerPayload }) =>
       customersService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
