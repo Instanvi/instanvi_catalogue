@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Loader2,
-  Tags,
   Percent,
   TrendingUp,
   CheckCircle2,
@@ -27,50 +26,48 @@ import { categorySchema, type CategoryFormValues } from "./schema";
 interface CategoryFormProps {
   onSubmit: (values: CategoryFormValues) => void;
   isLoading?: boolean;
-  defaultValues?: Partial<CategoryFormValues>;
+  initialData?: Partial<CategoryFormValues>;
 }
 
 export function CategoryForm({
   onSubmit,
   isLoading,
-  defaultValues,
+  initialData,
 }: CategoryFormProps) {
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema) as Resolver<CategoryFormValues>,
     defaultValues: {
-      name: defaultValues?.name || "",
-      description: defaultValues?.description || "",
-      discountPercentage: defaultValues?.discountPercentage || "0",
-      markupPercentage: defaultValues?.markupPercentage || "0",
-      priority: defaultValues?.priority || 0,
-      isDefault: defaultValues?.isDefault || false,
+      name: initialData?.name || "",
+      description: initialData?.description || "",
+      discountPercentage: initialData?.discountPercentage || "0",
+      markupPercentage: initialData?.markupPercentage || "0",
+      priority: initialData?.priority || 0,
+      isDefault: initialData?.isDefault || false,
     },
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-6">
-          <div className="bg-primary/5 p-4 border-l-4 border-primary space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[13px] font-bold text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Category Name
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <Tags className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground/50" />
-                      <Input
-                        placeholder="e.g. VIP Retailers"
-                        className="h-10 pl-10"
-                        {...field}
-                      />
-                    </div>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="e.g. VIP Retailers"
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -80,46 +77,48 @@ export function CategoryForm({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[13px] font-bold text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Description
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Describe this category..."
-                      className="h-10"
+                      disabled={isLoading}
+                      placeholder="Describe the purpose of this pricing tier..."
+                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="discountPercentage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[13px] font-bold text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Global Discount (%)
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Percent className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/50" />
+                      <Percent className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground/50" />
                       <Input
+                        disabled={isLoading}
                         type="number"
                         step="0.01"
-                        className="h-10 pl-10"
+                        className="h-11 pl-10 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                         {...field}
                       />
                     </div>
                   </FormControl>
-                  <FormDescription className="text-[10px] text-muted-foreground">
-                    Applied to all products for this category.
+                  <FormDescription className="text-[11px] text-muted-foreground/60 leading-tight">
+                    Applied automatically to all products for this category.
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -128,64 +127,66 @@ export function CategoryForm({
               name="markupPercentage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[13px] font-bold text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Global Markup (%)
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <TrendingUp className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/50" />
+                      <TrendingUp className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground/50" />
                       <Input
+                        disabled={isLoading}
                         type="number"
                         step="0.01"
-                        className="h-10 pl-10"
+                        className="h-11 pl-10 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                         {...field}
                       />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="priority"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[13px] font-bold text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Priority Order
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <ListOrdered className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground/50" />
+                      <ListOrdered className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground/50" />
                       <Input
+                        disabled={isLoading}
                         type="number"
-                        className="h-10 pl-10"
+                        className="h-11 pl-10 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                         {...field}
                         onChange={(e) =>
-                          field.onChange(parseInt(e.target.value))
+                          field.onChange(parseInt(e.target.value) || 0)
                         }
                       />
                     </div>
                   </FormControl>
-                  <FormDescription className="text-[10px] text-muted-foreground">
-                    Higher priority overrides overlapping logic.
+                  <FormDescription className="text-[11px] text-muted-foreground/60 leading-tight">
+                    Higher priority tiers take precedence in overlapping logic.
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 border border-muted-foreground/10 bg-muted/5">
+          <div className="flex items-center justify-between p-4 border border-muted-foreground/10 bg-muted/5 rounded-none">
             <div className="space-y-0.5">
-              <FormLabel className="text-sm font-bold">
-                Set as Default
+              <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                Set as Default Category
               </FormLabel>
-              <FormDescription className="text-xs">
-                New members will be automatically assigned to this category.
+              <FormDescription className="text-[11px] text-muted-foreground/70">
+                New registered members will be automatically assigned here.
               </FormDescription>
             </div>
             <FormField
@@ -195,6 +196,7 @@ export function CategoryForm({
                 <FormItem>
                   <FormControl>
                     <Switch
+                      disabled={isLoading}
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
@@ -205,18 +207,24 @@ export function CategoryForm({
           </div>
         </div>
 
-        <Button
-          type="submit"
-          className="w-full h-12 bg-black hover:bg-black/90 text-white font-bold rounded-none"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-          ) : (
-            <CheckCircle2 className="mr-2 h-5 w-5" />
-          )}
-          {isLoading ? "Saving Category..." : "Save Member Category"}
-        </Button>
+        <div className="pt-4 flex justify-end">
+          <Button
+            type="submit"
+            className="h-11 px-8 bg-[#1c1c1c] hover:bg-[#1c1c1c]/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <CheckCircle2 className="mr-2 h-4 w-4" />
+            )}
+            {isLoading
+              ? "Saving..."
+              : initialData
+                ? "Update Category"
+                : "Save Category"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

@@ -1,4 +1,5 @@
 import api from "../lib/axios";
+import { RequestOtpPayload, LoginPayload } from "../types/api";
 
 export const membersService = {
   getProfile: async () => {
@@ -20,12 +21,20 @@ export const membersService = {
 
 export const authService = {
   requestOtp: async (identifier: string) => {
-    const response = await api.post("/auth/request-otp", { identifier });
+    const payload: RequestOtpPayload = { identifier };
+    const response = await api.post("/auth/request-otp", payload);
     return response.data;
   },
 
   login: async (identifier: string, code: string) => {
-    const response = await api.post("/auth/login", { identifier, code });
+    const payload: LoginPayload = { identifier, code };
+    const response = await api.post("/auth/login", payload);
+    if (response.data?.data?.access_token) {
+      localStorage.setItem("token", response.data.data.access_token);
+    }
+    if (response.data?.data?.user) {
+      localStorage.setItem("user", JSON.stringify(response.data.data.user));
+    }
     return response.data;
   },
 };

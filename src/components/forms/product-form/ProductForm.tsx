@@ -33,12 +33,16 @@ export function ProductForm({
   const [files, setFiles] = useState<File[]>([]);
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(productSchema) as any,
     defaultValues: {
       name: defaultValues?.name || "",
       description: defaultValues?.description || "",
-      basePrice: defaultValues?.basePrice || "0.00",
+      price: defaultValues?.price || "0.00",
       sku: defaultValues?.sku || "",
+      category: defaultValues?.category || "",
+      unit: defaultValues?.unit || "piece",
+      productType: defaultValues?.productType || "",
       categoryPrices: defaultValues?.categoryPrices || {},
     },
   });
@@ -46,15 +50,44 @@ export function ProductForm({
   const handleFormSubmit = (values: ProductFormValues) => {
     const formData = new FormData();
 
+    // Get organizationId
+    let organizationId = "";
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          organizationId = user.organizationId;
+        } catch (e) {
+          console.error("Failed to parse user", e);
+        }
+      }
+    }
+
+    if (organizationId) {
+      formData.append("organizationId", organizationId);
+    } else {
+      console.error("Organization ID missing");
+      // Depending on UX, might want to show error or return
+    }
+
     // Append text fields
     formData.append("name", values.name);
     if (values.description) formData.append("description", values.description);
-    formData.append("basePrice", values.basePrice);
-    if (values.sku) formData.append("sku", values.sku);
+    formData.append("price", values.price);
+    formData.append("sku", values.sku);
+    if (values.category) formData.append("category", values.category);
+    if (values.unit) formData.append("unit", values.unit);
+    if (values.productType) formData.append("productType", values.productType);
 
     // Append category prices
     if (values.categoryPrices) {
-      formData.append("categoryPrices", JSON.stringify(values.categoryPrices));
+      formData.append(
+        "specifications",
+        JSON.stringify({ categoryPrices: values.categoryPrices }),
+      );
+      // Note: Backend doesn't have explicit categoryPrices field, putting in specifications for now
+      // Or ignore if backend doesn't support it yet.
     }
 
     // Append files
@@ -69,37 +102,28 @@ export function ProductForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="max-w-2xl mx-auto space-y-8 pb-10"
+        className="space-y-6 pb-10"
       >
         <div className="space-y-6">
-          {/* Header Section */}
-          <div className="space-y-1">
-            <h2 className="text-xl font-semibold text-foreground">
-              Add New Product
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Enter the information for the new product.
-            </p>
-          </div>
-
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* Basic Information Section */}
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-medium text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Product Name
                   </FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isLoading}
                       placeholder="e.g. Midnight Silk Watch"
-                      className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none"
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -109,35 +133,100 @@ export function ProductForm({
               name="sku"
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-medium text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     SKU / Reference
                   </FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isLoading}
                       placeholder="e.g. SN-2024-X"
-                      className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none font-mono text-sm"
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none font-mono text-sm"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
 
             <FormField
               control={form.control}
-              name="basePrice"
+              name="price"
               render={({ field }) => (
                 <FormItem className="space-y-1.5">
-                  <FormLabel className="text-sm font-medium text-foreground">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     Retail Price ($)
                   </FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isLoading}
                       type="number"
                       step="0.01"
                       placeholder="0.00"
-                      className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none font-semibold"
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none font-semibold"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[12px] font-medium" />
+                </FormItem>
+              )}
+            />
+
+            {/* Price was here */}
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem className="space-y-1.5">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Category
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g. Electronics"
+                        className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="unit"
+                render={({ field }) => (
+                  <FormItem className="space-y-1.5">
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Unit (e.g. piece, kg)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="piece"
+                        className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="productType"
+              render={({ field }) => (
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-medium text-foreground">
+                    Product Type
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. Physical, Digital"
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
                       {...field}
                     />
                   </FormControl>
@@ -157,7 +246,7 @@ export function ProductForm({
                   <FormControl>
                     <textarea
                       placeholder="Elaborate on the design and materials..."
-                      className="min-h-[100px] w-full p-3 border border-muted-foreground/20 rounded-[4px] focus:outline-none focus:border-primary transition-colors text-sm resize-none bg-transparent"
+                      className="min-h-[100px] w-full p-3 border border-muted-foreground/20 rounded-none focus:outline-none focus:border-primary transition-colors text-sm resize-none bg-transparent"
                       {...field}
                     />
                   </FormControl>
@@ -171,7 +260,7 @@ export function ProductForm({
               <FormLabel className="text-sm font-medium text-foreground">
                 Product Images
               </FormLabel>
-              <div className="p-4 border border-dashed border-muted-foreground/30 bg-muted/20 rounded-[4px] hover:border-primary/50 transition-colors">
+              <div className="p-4 border border-dashed border-muted-foreground/30 bg-muted/20 rounded-none hover:border-primary/50 transition-colors">
                 <FileUploader
                   onFilesChange={(newFiles) => setFiles(newFiles)}
                 />
@@ -200,7 +289,7 @@ export function ProductForm({
                               type="number"
                               step="0.01"
                               placeholder="0.00"
-                              className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
+                              className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none text-sm"
                               {...field}
                             />
                           </FormControl>
@@ -218,7 +307,7 @@ export function ProductForm({
         <div className="pt-6">
           <Button
             type="submit"
-            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-bold text-sm rounded-[4px] transition-all"
+            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-bold text-sm rounded-none transition-all"
             disabled={isLoading}
           >
             {isLoading ? (

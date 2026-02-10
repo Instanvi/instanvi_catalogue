@@ -49,83 +49,90 @@ export function CustomerForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-5">
+        <div className="space-y-4">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-medium text-foreground">
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                   Full Name
                 </FormLabel>
                 <FormControl>
                   <Input
+                    disabled={isLoading}
                     placeholder="e.g. Andre Marie"
-                    className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[12px] font-medium" />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-medium text-foreground">
-                  Email Address
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="andre.marie@gmail.com"
-                    className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Email Address
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      type="email"
+                      placeholder="andre.marie@gmail.com"
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[12px] font-medium" />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-medium text-foreground">
-                  Phone Number
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="+237 671..."
-                    className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Phone Number
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={isLoading}
+                      placeholder="+237 671..."
+                      className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[12px] font-medium" />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
             name="company"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-medium text-foreground">
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                   Company / Organization
                 </FormLabel>
                 <FormControl>
                   <Input
+                    disabled={isLoading}
                     placeholder="Acme Inc."
-                    className="h-11 border-muted-foreground/20 rounded-[4px] focus-visible:ring-0 focus-visible:border-primary focus-visible:ring-offset-0 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[12px] font-medium" />
               </FormItem>
             )}
           />
@@ -135,20 +142,23 @@ export function CustomerForm({
             name="categoryId"
             render={({ field }) => (
               <FormItem className="space-y-1.5">
-                <FormLabel className="text-sm font-medium text-foreground">
-                  Category
+                <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                  Member Category
                 </FormLabel>
                 <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  disabled={isLoading}
+                  onValueChange={(value) =>
+                    field.onChange(value === "none" ? "" : value)
+                  }
+                  value={field.value || "none"}
                 >
                   <FormControl>
-                    <SelectTrigger className="h-11 border-muted-foreground/20 rounded-[4px] focus:ring-0 focus:border-primary transition-colors shadow-none">
+                    <SelectTrigger className="h-11 border-muted-foreground/20 rounded-none focus:ring-primary/20 transition-colors shadow-none">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="rounded-[4px] border border-border">
-                    <SelectItem value="">Standard</SelectItem>
+                  <SelectContent className="rounded-none border border-border">
+                    <SelectItem value="none">Standard (No Category)</SelectItem>
                     {categories.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>
                         {cat.name}
@@ -156,16 +166,16 @@ export function CustomerForm({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-[12px] font-medium" />
               </FormItem>
             )}
           />
         </div>
 
-        <div className="pt-4">
+        <div className="pt-4 flex justify-end">
           <Button
             type="submit"
-            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-semibold text-sm rounded-[4px] transition-all"
+            className="h-11 px-8 bg-[#1c1c1c] hover:bg-[#1c1c1c]/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -173,7 +183,7 @@ export function CustomerForm({
             ) : (
               <UserPlus className="mr-2 h-4 w-4" />
             )}
-            {isLoading ? "Creating..." : "Create Contact"}
+            {isLoading ? "Creating..." : "Add Member"}
           </Button>
         </div>
       </form>

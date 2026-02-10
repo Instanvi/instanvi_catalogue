@@ -133,7 +133,7 @@ export function ScheduleForm({
 
         <Button
           type="submit"
-          className="w-full h-12 bg-black hover:bg-black/90 text-white font-bold uppercase tracking-widest rounded-none shadow-xl transition-all duration-300"
+          className="w-full h-12 bg-black hover:bg-black/90 text-white font-bold uppercase tracking-widest rounded-none shadow-none transition-all duration-300"
           disabled={isLoading}
         >
           {isLoading ? (

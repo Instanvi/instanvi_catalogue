@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, DollarSign, Target, User, Layers } from "lucide-react";
+import { Loader2, DollarSign } from "lucide-react";
 import { pricingSchema, type PricingFormValues } from "./schema";
 
 interface PricingFormProps {
@@ -58,34 +58,35 @@ export function PricingForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-6">
-          <div className="bg-muted/30 p-4 border-l-4 border-black space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="targetType"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground">
-                    Pricing Target Type
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Override Target Level
                   </FormLabel>
                   <Select
+                    disabled={isLoading}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                      <SelectTrigger className="h-11 rounded-none border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none">
+                        <SelectValue placeholder="Select target type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="rounded-none">
                       <SelectItem value="category">
                         Customer Category
                       </SelectItem>
-                      <SelectItem value="member">Specific Customer</SelectItem>
+                      <SelectItem value="member">Individual Member</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -94,29 +95,25 @@ export function PricingForm({
               control={form.control}
               name="targetId"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground">
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                     {targetType === "category"
                       ? "Target Category"
-                      : "Target Customer"}
+                      : "Target Member"}
                   </FormLabel>
                   <Select
+                    disabled={isLoading}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 rounded-none border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none">
                         <div className="flex items-center gap-2">
-                          {targetType === "category" ? (
-                            <Layers className="h-4 w-4" />
-                          ) : (
-                            <User className="h-4 w-4" />
-                          )}
                           <SelectValue placeholder={`Select ${targetType}`} />
                         </div>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="rounded-none">
                       {(targetType === "category" ? categories : members).map(
                         (item) => (
                           <SelectItem key={item.id} value={item.id}>
@@ -126,42 +123,42 @@ export function PricingForm({
                       )}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="bg-muted/30 p-4 border-l-4 border-primary space-y-4">
+          <div className="space-y-4">
             <FormField
               control={form.control}
               name="catalogueProductId"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground">
-                    Product from Catalogue
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Product
                   </FormLabel>
                   <Select
+                    disabled={isLoading}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-11 rounded-none border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none">
                         <div className="flex items-center gap-2">
-                          <Target className="h-4 w-4" />
                           <SelectValue placeholder="Select product" />
                         </div>
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="rounded-none">
                       {catalogueProducts.map((p) => (
                         <SelectItem key={p.id} value={p.id}>
-                          {p.productName} (MSRP: ${p.basePrice})
+                          {p.productName} (Base: ${p.basePrice})
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
@@ -170,45 +167,48 @@ export function PricingForm({
               control={form.control}
               name="customPrice"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium text-foreground">
-                    Custom Exclusive Price
+                <FormItem className="space-y-1.5">
+                  <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
+                    Custom Override Price
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <DollarSign className="absolute left-3 top-3 h-5 w-5 text-muted-foreground/50" />
+                      <DollarSign className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground/50" />
                       <Input
+                        disabled={isLoading}
                         type="number"
                         step="0.01"
-                        className="h-10 pl-10 text-sm font-medium"
+                        placeholder="0.00"
+                        className="h-11 pl-10 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none font-semibold"
                         {...field}
                       />
                     </div>
                   </FormControl>
-                  <FormDescription className="text-xs">
-                    This price will override the global category/base price for
-                    this target.
+                  <FormDescription className="text-[11px] text-muted-foreground/60 leading-tight">
+                    This will override any category or base MSRP price for the
+                    selected target.
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[12px] font-medium" />
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <Button
-          type="submit"
-          variant="primary-green"
-          className="w-full h-10 font-medium text-sm"
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <DollarSign className="mr-2 h-4 w-4" />
-          )}
-          {isLoading ? "Applying Price..." : "Set Exclusive Price"}
-        </Button>
+        <div className="pt-4 flex justify-end">
+          <Button
+            type="submit"
+            className="h-11 px-8 bg-[#1c1c1c] hover:bg-[#1c1c1c]/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <DollarSign className="mr-2 h-4 w-4" />
+            )}
+            {isLoading ? "Processing..." : "Set Override Price"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

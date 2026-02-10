@@ -1,123 +1,74 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { Schedule } from "@/services/schedules.service";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { MoreHorizontal, Calendar, Clock, MapPin } from "lucide-react";
+import { format } from "date-fns";
+import { MoreHorizontal, Mail, MessageSquare, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type Schedule = {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  location?: string;
-  status: "upcoming" | "completed" | "cancelled";
-};
-
 export const columns: ColumnDef<Schedule>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "title",
-    header: "Event",
+    header: "Campaign Title",
+    cell: ({ row }) => (
+      <span className="font-medium">{row.getValue("title")}</span>
+    ),
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
     cell: ({ row }) => {
-      const title = row.getValue("title") as string;
-      const status = row.original.status;
+      const type = row.getValue("type") as string;
+      const Icon =
+        type === "email" ? Mail : type === "sms" ? MessageSquare : Bell;
       return (
-        <div className="flex flex-col">
-          <span className="font-bold text-xs uppercase tracking-wider">
-            {title}
-          </span>
-          <span className="text-[10px] text-muted-foreground uppercase">
-            {status}
-          </span>
+        <div className="flex items-center gap-2 capitalize">
+          <Icon className="h-4 w-4 text-muted-foreground" />
+          {type}
         </div>
       );
     },
   },
   {
-    accessorKey: "date",
-    header: "Date",
+    accessorKey: "scheduledFor",
+    header: "Scheduled / Sent Date",
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <Calendar className="h-3 w-3 text-muted-foreground" />
-          {row.getValue("date")}
-        </div>
+        <span className="text-muted-foreground">
+          {format(new Date(row.getValue("scheduledFor")), "MMM d, yyyy h:mm a")}
+        </span>
       );
     },
   },
   {
-    accessorKey: "time",
-    header: "Time",
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <Clock className="h-3 w-3 text-muted-foreground" />
-          {row.getValue("time")}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "location",
-    header: "Location",
-    cell: ({ row }) => {
-      const location = row.getValue("location") as string;
-      if (!location) return <span className="text-muted-foreground">-</span>;
-      return (
-        <div className="flex items-center gap-2 text-xs font-medium">
-          <MapPin className="h-3 w-3 text-muted-foreground" />
-          {location}
-        </div>
-      );
-    },
+    accessorKey: "recipientCount",
+    header: "Recipients",
+    cell: ({ row }) => <span>{row.getValue("recipientCount")}</span>,
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
       const status = row.getValue("status") as string;
+      const variant =
+        status === "sent"
+          ? "default" // success/completed
+          : status === "pending"
+            ? "secondary" // waiting
+            : status === "failed"
+              ? "destructive"
+              : "outline"; // cancelled
+
       return (
-        <Badge
-          variant="outline"
-          className={`rounded-none uppercase text-[10px] tracking-wider font-bold ${
-            status === "completed"
-              ? "bg-muted text-muted-foreground border-transparent"
-              : status === "cancelled"
-                ? "bg-red-50 text-red-600 border-red-100"
-                : "bg-primary/5 text-primary border-primary/20"
-          }`}
-        >
+        <Badge variant={variant} className="capitalize">
           {status}
         </Badge>
       );
@@ -126,8 +77,6 @@ export const columns: ColumnDef<Schedule>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const schedule = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -136,25 +85,12 @@ export const columns: ColumnDef<Schedule>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="rounded-none border-muted-foreground/20"
-          >
-            <DropdownMenuLabel className="uppercase text-[10px] tracking-widest text-muted-foreground">
-              Actions
-            </DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(schedule.id)}
-              className="rounded-none"
-            >
-              Copy Event ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="rounded-none">
-              Edit Event
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600 rounded-none">
-              Cancel Event
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem>Edit Schedule</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Cancel
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

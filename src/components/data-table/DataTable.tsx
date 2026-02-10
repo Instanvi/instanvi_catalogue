@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,6 +31,12 @@ interface DataTableProps<TData, TValue> {
   searchKey?: string;
   onAdd?: () => void;
   addLabel?: string;
+  bulkActions?: {
+    label: string;
+    onClick: (rows: TData[]) => void;
+    icon?: React.ReactNode;
+    variant?: "default" | "outline" | "secondary" | "destructive";
+  }[];
 }
 
 export function DataTable<TData, TValue>({
@@ -39,9 +45,11 @@ export function DataTable<TData, TValue>({
   searchKey,
   onAdd,
   addLabel = "Add New",
+  bulkActions = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data,
@@ -52,52 +60,87 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
   });
 
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  const hasSelection = selectedRows.length > 0;
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 h-12">
         <div className="flex flex-1 items-center gap-2 max-w-sm">
-          {searchKey && (
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={`Search ${searchKey}...`}
-                value={
-                  (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn(searchKey)?.setFilterValue(event.target.value)
-                }
-                className="h-10 pl-10 border-muted-foreground/20 rounded-none focus-visible:ring-black"
-              />
+          {hasSelection && bulkActions.length > 0 ? (
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300">
+              <span className="text-xs font-bold text-[#4B6BFB] mr-2 flex items-center gap-1 bg-[#4B6BFB]/5 px-2 py-1">
+                {selectedRows.length} SELECTED
+              </span>
+              {bulkActions.map((action, i) => (
+                <Button
+                  key={i}
+                  variant={action.variant || "outline"}
+                  size="sm"
+                  onClick={() =>
+                    action.onClick(selectedRows.map((r) => r.original))
+                  }
+                  className="h-8 text-[11px] font-bold uppercase tracking-tight rounded-none border-[#4B6BFB]/20 text-[#4B6BFB] hover:bg-[#4B6BFB] hover:text-white"
+                >
+                  {action.icon && <span className="mr-1.5">{action.icon}</span>}
+                  {action.label}
+                </Button>
+              ))}
             </div>
+          ) : (
+            searchKey && (
+              <div className="relative w-full">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={`Search ${searchKey}...`}
+                  value={
+                    (table.getColumn(searchKey)?.getFilterValue() as string) ??
+                    ""
+                  }
+                  onChange={(event) =>
+                    table
+                      .getColumn(searchKey)
+                      ?.setFilterValue(event.target.value)
+                  }
+                  className="h-10 pl-10 border-muted-foreground/20 rounded-none focus-visible:ring-black"
+                />
+              </div>
+            )
           )}
         </div>
-        {onAdd && (
-          <Button onClick={onAdd} className="h-10 px-6 font-medium text-sm">
+        {!hasSelection && onAdd && (
+          <Button
+            onClick={onAdd}
+            className="h-10 px-6 font-bold text-[11px] uppercase tracking-wider"
+          >
+            <Plus className="mr-2 h-4 w-4" />
             {addLabel}
           </Button>
         )}
       </div>
 
-      <div className="border border-muted-foreground/10 bg-white">
+      <div className="bg-white">
         <Table>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className="bg-sidebar">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="hover:bg-transparent border-b-muted-foreground/10"
+                className="hover:bg-transparent border-b-muted-foreground/5"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-xs font-semibold h-12"
+                      className="text-xs font-medium h-12 text-black capitalize tracking-tight"
                     >
                       {header.isPlaceholder
                         ? null
@@ -117,7 +160,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/5 border-b-muted-foreground/10 transition-colors"
+                  className="hover:bg-muted/5 border-b-muted-foreground/5 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell

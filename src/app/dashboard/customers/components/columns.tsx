@@ -55,14 +55,7 @@ export const columns: ColumnDef<Customer>[] = [
     header: "Customer Name",
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
-      return (
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-primary text-white flex items-center justify-center font-semibold text-xs rounded-full">
-            {name.substring(0, 2).toUpperCase()}
-          </div>
-          <span className="font-medium text-sm">{name}</span>
-        </div>
-      );
+      return <span className="font-medium text-sm">{name}</span>;
     },
   },
   {
@@ -105,7 +98,7 @@ export const columns: ColumnDef<Customer>[] = [
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 hover:bg-black hover:text-white rounded-[2px]"
+              className="h-8 w-8 p-0 hover:bg-black hover:text-white rounded-none"
             >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
@@ -113,7 +106,7 @@ export const columns: ColumnDef<Customer>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="rounded-[2px] border-2 border-black"
+            className="rounded-none border-2 border-black"
           >
             <DropdownMenuLabel className="text-xs font-semibold">
               Actions

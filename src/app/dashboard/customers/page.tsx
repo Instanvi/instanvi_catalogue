@@ -1,41 +1,28 @@
 "use client";
 
 import { DataTable } from "@/components/data-table/DataTable";
-import { columns, type Customer } from "./components/columns";
+import { columns } from "./components/columns";
 import { useState } from "react";
 import { FormSheet } from "@/components/form-sheet";
 import { CustomerForm } from "@/components/forms/customer-form";
 
-const dummyData: Customer[] = [
-  {
-    id: "m1",
-    name: "John Miller",
-    email: "john@miller.com",
-    phone: "+1 234 567 890",
-    company: "Miller Luxury",
-    category: { id: "c1", name: "VIP" },
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: "m2",
-    name: "Sarah Chen",
-    email: "sarah@chen.com",
-    phone: "+1 987 654 321",
-    company: "Chen Collectibles",
-    category: null,
-    createdAt: new Date().toISOString(),
-  },
-];
+import { useCustomers, useCreateCustomer } from "@/hooks/use-customers";
 
 export default function CustomersPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { data: customers } = useCustomers();
+  const createCustomer = useCreateCustomer();
+
+  const customersData = Array.isArray(customers)
+    ? customers
+    : customers?.data || [];
 
   return (
     <div className="space-y-8">
       <div className="bg-white">
         <DataTable
           columns={columns}
-          data={dummyData}
+          data={customersData}
           searchKey="name"
           addLabel="Add New Customer"
           onAdd={() => setIsSheetOpen(true)}
@@ -50,9 +37,13 @@ export default function CustomersPage() {
       >
         <div className="mt-8">
           <CustomerForm
+            isLoading={createCustomer.isPending}
             onSubmit={(values) => {
-              console.log("Submit:", values);
-              setIsSheetOpen(false);
+              createCustomer.mutate(values, {
+                onSuccess: () => {
+                  setIsSheetOpen(false);
+                },
+              });
             }}
           />
         </div>

@@ -15,6 +15,8 @@ interface FormSheetProps {
   size?: "md" | "lg" | "xl" | "2xl";
 }
 
+import { Separator } from "@/components/ui/separator";
+
 export function FormSheet({
   isOpen,
   onOpenChange,
@@ -33,13 +35,22 @@ export function FormSheet({
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
-        className={`${sizeClasses[size]} overflow-y-auto border-l border-border`}
+        className={`${sizeClasses[size]} overflow-y-auto p-0 flex flex-col`}
       >
-        <SheetHeader>
-          <SheetTitle className="font-semibold text-xl">{title}</SheetTitle>
-          {description && <SheetDescription>{description}</SheetDescription>}
+        <SheetHeader className="p-8 pb-4">
+          <SheetTitle className="font-semibold text-2xl tracking-tight text-[#1c1c1c]">
+            {title}
+          </SheetTitle>
+          {description && (
+            <SheetDescription className="text-muted-foreground/80">
+              {description}
+            </SheetDescription>
+          )}
         </SheetHeader>
-        <div className="py-6">{children}</div>
+        <Separator className="bg-muted-foreground/5" />
+        <div className="flex-1 p-8 pt-6 overflow-y-auto">
+          <div className="max-w-full">{children}</div>
+        </div>
       </SheetContent>
     </Sheet>
   );

@@ -6,34 +6,26 @@ import { useState } from "react";
 import { FormSheet } from "@/components/form-sheet";
 import { CategoryForm } from "@/components/forms/category-form";
 
-const dummyData: MemberCategory[] = [
-  {
-    id: "c1",
-    name: "VIP Distributors",
-    discountPercentage: "25.00",
-    markupPercentage: "0.00",
-    isDefault: false,
-    memberCount: 12,
-  },
-  {
-    id: "c2",
-    name: "Retail Partners",
-    discountPercentage: "10.00",
-    markupPercentage: "5.00",
-    isDefault: true,
-    memberCount: 45,
-  },
-];
+import {
+  useCustomerCategories,
+  useCreateCustomerCategory,
+} from "@/hooks/use-customer-categories";
 
 export default function CategoriesPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { data: categories, isLoading } = useCustomerCategories();
+  const createCategory = useCreateCustomerCategory();
+
+  const categoriesData = Array.isArray(categories)
+    ? categories
+    : categories?.data || [];
 
   return (
     <div className="space-y-8">
       <div className="bg-white">
         <DataTable
           columns={columns}
-          data={dummyData}
+          data={categoriesData}
           searchKey="name"
           addLabel="Add New Category"
           onAdd={() => setIsSheetOpen(true)}
@@ -48,9 +40,13 @@ export default function CategoriesPage() {
       >
         <div className="mt-8">
           <CategoryForm
+            isLoading={createCategory.isPending}
             onSubmit={(values) => {
-              console.log("Submit Category:", values);
-              setIsSheetOpen(false);
+              createCategory.mutate(values, {
+                onSuccess: () => {
+                  setIsSheetOpen(false);
+                },
+              });
             }}
           />
         </div>
