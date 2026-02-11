@@ -97,10 +97,10 @@ export default function CatalogueViewPage() {
         onSuccess={handleAccessSuccess}
         onBack={() => setIsVerifying(false)}
       />
-      <div className="sticky top-0 z-50 bg-[#FDFDFD]/90 backdrop-blur-md">
-        <CatalogueHeader catalogue={catalogue} />
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <div className="bg-white p-6 rounded-none border border-muted/20 shadow-sm">
+      <CatalogueHeader catalogue={catalogue} />
+      <div className="sticky top-0 z-40 bg-[#FDFDFD]/90 backdrop-blur-md border-b border-muted/20">
+        <div className="max-w-5xl mx-auto px-0 md:px-4 py-0 md:py-4">
+          <div className="bg-white p-4 md:p-6 rounded-none border-none md:border md:rounded-sm border-muted/20 shadow-sm">
             <CatalogueSearch
               value={search}
               onChange={setSearch}
@@ -116,7 +116,7 @@ export default function CatalogueViewPage() {
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
         <section className="space-y-6">
-          <div className="flex items-center justify-end border-b border-muted/20 pb-4">
+          <div className="border-b border-muted/20 pb-4">
             <CataloguePagination
               currentPage={page}
               totalPages={totalPages}
@@ -127,9 +127,9 @@ export default function CatalogueViewPage() {
           {filteredProducts.length > 0 ? (
             <div
               className={cn(
-                "grid gap-6",
+                "grid gap-4 sm:gap-6",
                 view === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
                   : "grid-cols-1 gap-3",
               )}
             >

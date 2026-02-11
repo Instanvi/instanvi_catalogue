@@ -118,16 +118,16 @@ export function ProductCard({
         />
       </div>
 
-      <div className="p-4 space-y-4 flex-1 flex flex-col justify-between">
+      <div className="p-3 md:p-4 space-y-2 flex-1 flex flex-col justify-between">
         <div className="space-y-1.5">
-          <h3 className="font-bold text-sm md:text-base line-clamp-2 group-hover:text-primary transition-colors leading-tight">
+          <h3 className="font-bold text-xs md:text-sm line-clamp-2 group-hover:text-primary transition-colors leading-tight">
             {product.name}
           </h3>
           <PriceDisplay
             price={currentPrice}
             compareAtPrice={product.compareAtPrice}
             unit={selectedUnit?.name}
-            className="text-base md:text-lg font-black text-foreground"
+            className="text-sm md:text-base font-black text-foreground"
           />
         </div>
 
@@ -193,22 +193,24 @@ export function ProductListItem({
   const currentPrice = selectedUnit ? selectedUnit.price : product.price;
 
   return (
-    <div className="group flex items-center gap-6 bg-white p-4 md:p-6 rounded-none border border-muted/50 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
-      <div className="h-20 w-20 md:h-28 md:w-28 flex-shrink-0 bg-muted/20 rounded-none overflow-hidden relative border border-muted/10">
-        <Image
-          src={imageUrl}
-          alt={product.name}
-          fill
-          unoptimized
-          className="object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-      </div>
+    <div className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-white p-3 md:p-4 rounded-none border border-muted/50 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
+      <div className="flex items-start gap-3 md:gap-4 flex-1 w-full min-w-0">
+        <div className="h-16 w-16 md:h-20 md:w-20 flex-shrink-0 bg-muted/20 rounded-none overflow-hidden relative border border-muted/10">
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            fill
+            unoptimized
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        </div>
 
-      <div className="flex-1 min-w-0 flex items-center justify-between gap-8">
-        <div className="min-w-0 space-y-1.5">
-          <h3 className="font-bold text-base md:text-xl line-clamp-1 group-hover:text-primary transition-colors">
-            {product.name}
-          </h3>
+        <div className="flex-1 min-w-0 space-y-1.5">
+          <div className="flex justify-between items-start gap-2">
+            <h3 className="font-bold text-sm md:text-base line-clamp-1 group-hover:text-primary transition-colors">
+              {product.name}
+            </h3>
+          </div>
           <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
             {product.description || "No description available"}
           </p>
@@ -231,53 +233,69 @@ export function ProductListItem({
               ))}
             </div>
           )}
+
+          <div className="sm:hidden pt-2 mt-auto">
+            <PriceDisplay
+              price={currentPrice}
+              compareAtPrice={product.compareAtPrice}
+              unit={selectedUnit?.name}
+              className="font-black text-base"
+            />
+          </div>
         </div>
-        <div className="flex-shrink-0 flex flex-col items-end gap-1">
+      </div>
+
+      <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:items-end gap-3 sm:gap-1 pt-3 sm:pt-0 border-t sm:border-t-0 border-muted/10 sm:border-l sm:border-muted/10 sm:pl-4">
+        <div className="hidden sm:block">
           <PriceDisplay
             price={currentPrice}
             compareAtPrice={product.compareAtPrice}
             unit={selectedUnit?.name}
-            className="font-black text-base md:text-xl"
+            className="font-black text-base md:text-lg"
           />
         </div>
-      </div>
 
-      <div className="flex items-center gap-4 pl-4 border-l border-muted/10">
-        {quantity > 0 ? (
-          <div className="flex items-center gap-3 bg-primary/5 rounded-none p-1 border border-primary/10">
+        <div className="flex items-center gap-4 ml-auto sm:ml-0">
+          {quantity > 0 ? (
+            <div className="flex items-center gap-3 bg-primary/5 rounded-none p-1 border border-primary/10">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onRemove(selectedUnit?.id)}
+                className="h-8 w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="font-bold text-sm md:text-base text-primary min-w-[1.25rem] text-center">
+                {quantity}
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() =>
+                  onAdd(
+                    selectedUnit?.id,
+                    selectedUnit?.name,
+                    selectedUnit?.price,
+                  )
+                }
+                className="h-8 w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
             <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onRemove(selectedUnit?.id)}
-              className="h-10 w-10 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
-            >
-              <Minus className="h-5 w-5" />
-            </Button>
-            <span className="font-bold text-base text-primary min-w-[1.5rem] text-center">
-              {quantity}
-            </span>
-            <Button
-              variant="ghost"
               size="icon"
               onClick={() =>
                 onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
               }
-              className="h-10 w-10 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
+              className="h-9 w-9 md:h-10 md:w-10 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300"
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
-          </div>
-        ) : (
-          <Button
-            size="icon"
-            onClick={() =>
-              onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
-            }
-            className="h-12 w-12 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300"
-          >
-            <Plus className="h-6 w-6" />
-          </Button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

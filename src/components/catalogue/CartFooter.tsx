@@ -36,7 +36,7 @@ export function CartFooter({ items, onCheckout, onClear }: CartFooterProps) {
     <div className="fixed bottom-0 left-0 right-0 w-full z-40">
       <Sheet>
         <SheetTrigger asChild>
-          <div className="bg-primary text-white rounded-none p-6 flex items-center justify-between cursor-pointer hover:bg-primary/95 transition-all group active:opacity-90 border-t border-primary">
+          <div className="bg-primary text-white rounded-none p-4 md:p-6 flex items-center justify-between cursor-pointer hover:bg-primary/95 transition-all group active:opacity-90 border-t border-primary">
             <div className="flex items-center gap-4">
               <div className="relative">
                 <div className="bg-white/20 h-10 w-10 rounded-none flex items-center justify-center">
@@ -50,7 +50,7 @@ export function CartFooter({ items, onCheckout, onClear }: CartFooterProps) {
                 <p className="text-xs text-white/60 font-medium">
                   Your selection
                 </p>
-                <p className="font-bold text-lg leading-tight">
+                <p className="font-bold text-base md:text-lg leading-tight">
                   {new Intl.NumberFormat("fr-FR", {
                     style: "currency",
                     currency: "XAF",
@@ -61,10 +61,10 @@ export function CartFooter({ items, onCheckout, onClear }: CartFooterProps) {
             </div>
 
             <div className="flex items-center gap-2 group-hover:translate-x-1 transition-transform">
-              <span className="font-bold text-sm tracking-wide uppercase">
+              <span className="font-bold text-xs md:text-sm tracking-wide uppercase">
                 View Order
               </span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5 md:h-4 md:w-4" />
             </div>
           </div>
         </SheetTrigger>
