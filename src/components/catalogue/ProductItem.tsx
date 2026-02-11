@@ -107,7 +107,7 @@ export function ProductCard({
   const currentPrice = selectedUnit ? selectedUnit.price : product.price;
 
   return (
-    <div className="group bg-white rounded-none border border-muted/50 overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:border-primary/20">
+    <div className="group bg-white rounded-sm sm:rounded-none border border-muted/50 overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-lg sm:hover:shadow-xl hover:border-primary/20">
       <div className="relative aspect-square overflow-hidden bg-muted/20">
         <Image
           src={imageUrl}
@@ -118,27 +118,27 @@ export function ProductCard({
         />
       </div>
 
-      <div className="p-3 md:p-4 space-y-2 flex-1 flex flex-col justify-between">
-        <div className="space-y-1.5">
-          <h3 className="font-bold text-xs md:text-sm line-clamp-2 group-hover:text-primary transition-colors leading-tight">
+      <div className="p-2 sm:p-3 md:p-4 space-y-1.5 sm:space-y-2 flex-1 flex flex-col justify-between">
+        <div className="space-y-1">
+          <h3 className="font-bold text-xs sm:text-sm line-clamp-2 group-hover:text-primary transition-colors leading-tight">
             {product.name}
           </h3>
           <PriceDisplay
             price={currentPrice}
             compareAtPrice={product.compareAtPrice}
             unit={selectedUnit?.name}
-            className="text-sm md:text-base font-black text-foreground"
+            className="text-xs sm:text-sm md:text-base font-black text-foreground"
           />
         </div>
 
         {product.units && product.units.length > 1 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1">
             {product.units.map((unit) => (
               <button
                 key={unit.id}
                 onClick={() => setSelectedUnit(unit)}
                 className={cn(
-                  "px-2 py-1 text-[10px] font-bold uppercase tracking-wider border transition-colors",
+                  "px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border transition-colors",
                   selectedUnit?.id === unit.id
                     ? "bg-primary text-white border-primary"
                     : "bg-transparent text-muted-foreground border-muted-foreground/20 hover:border-primary/50",
@@ -150,7 +150,7 @@ export function ProductCard({
           </div>
         )}
 
-        <div className="flex items-center gap-2 pt-2">
+        <div className="flex items-center gap-2 pt-1 sm:pt-2">
           {quantity > 0 ? (
             <QuantitySelector
               quantity={quantity}
@@ -158,7 +158,7 @@ export function ProductCard({
                 onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
               }
               onRemove={() => onRemove(selectedUnit?.id)}
-              size="default"
+              size="sm"
             />
           ) : (
             <Button
@@ -166,10 +166,10 @@ export function ProductCard({
                 onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
               }
               size="default"
-              className="w-full h-11 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300 text-xs font-bold uppercase tracking-wider"
+              className="w-full h-8 sm:h-9 md:h-11 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider"
             >
-              <Plus className="h-4 w-4 mr-2" />
-              <span>Add to Cart</span>
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+              <span>Add</span>
             </Button>
           )}
         </div>
@@ -193,9 +193,9 @@ export function ProductListItem({
   const currentPrice = selectedUnit ? selectedUnit.price : product.price;
 
   return (
-    <div className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-white p-3 md:p-4 rounded-none border border-muted/50 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
-      <div className="flex items-start gap-3 md:gap-4 flex-1 w-full min-w-0">
-        <div className="h-16 w-16 md:h-20 md:w-20 flex-shrink-0 bg-muted/20 rounded-none overflow-hidden relative border border-muted/10">
+    <div className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 md:gap-4 bg-white p-2 sm:p-3 md:p-4 rounded-sm sm:rounded-none border border-muted/50 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
+      <div className="flex items-start gap-2 sm:gap-3 md:gap-4 flex-1 w-full min-w-0">
+        <div className="h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 flex-shrink-0 bg-muted/20 rounded-sm sm:rounded-none overflow-hidden relative border border-muted/10">
           <Image
             src={imageUrl}
             alt={product.name}
@@ -205,24 +205,24 @@ export function ProductListItem({
           />
         </div>
 
-        <div className="flex-1 min-w-0 space-y-1.5">
+        <div className="flex-1 min-w-0 space-y-1">
           <div className="flex justify-between items-start gap-2">
-            <h3 className="font-bold text-sm md:text-base line-clamp-1 group-hover:text-primary transition-colors">
+            <h3 className="font-bold text-xs sm:text-sm md:text-base line-clamp-1 group-hover:text-primary transition-colors">
               {product.name}
             </h3>
           </div>
-          <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
             {product.description || "No description available"}
           </p>
 
           {product.units && product.units.length > 1 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className="flex flex-wrap gap-1 pt-1">
               {product.units.map((unit) => (
                 <button
                   key={unit.id}
                   onClick={() => setSelectedUnit(unit)}
                   className={cn(
-                    "px-2 py-1 text-[10px] font-bold uppercase tracking-wider border transition-colors",
+                    "px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border transition-colors",
                     selectedUnit?.id === unit.id
                       ? "bg-primary text-white border-primary"
                       : "bg-transparent text-muted-foreground border-muted-foreground/20 hover:border-primary/50",
@@ -234,39 +234,39 @@ export function ProductListItem({
             </div>
           )}
 
-          <div className="sm:hidden pt-2 mt-auto">
+          <div className="sm:hidden pt-1 mt-auto">
             <PriceDisplay
               price={currentPrice}
               compareAtPrice={product.compareAtPrice}
               unit={selectedUnit?.name}
-              className="font-black text-base"
+              className="font-black text-xs"
             />
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:items-end gap-3 sm:gap-1 pt-3 sm:pt-0 border-t sm:border-t-0 border-muted/10 sm:border-l sm:border-muted/10 sm:pl-4">
+      <div className="flex items-center justify-between w-full sm:w-auto sm:flex-col sm:items-end gap-2 sm:gap-1 pt-2 sm:pt-0 border-t sm:border-t-0 border-muted/10 sm:border-l sm:border-muted/10 sm:pl-3 md:pl-4">
         <div className="hidden sm:block">
           <PriceDisplay
             price={currentPrice}
             compareAtPrice={product.compareAtPrice}
             unit={selectedUnit?.name}
-            className="font-black text-base md:text-lg"
+            className="font-black text-xs sm:text-base md:text-lg"
           />
         </div>
 
-        <div className="flex items-center gap-4 ml-auto sm:ml-0">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 ml-auto sm:ml-0">
           {quantity > 0 ? (
-            <div className="flex items-center gap-3 bg-primary/5 rounded-none p-1 border border-primary/10">
+            <div className="flex items-center gap-1 sm:gap-2 bg-primary/5 rounded-none p-0.5 sm:p-1 border border-primary/10">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onRemove(selectedUnit?.id)}
-                className="h-8 w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
+                className="h-6 w-6 sm:h-8 sm:w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all text-xs sm:text-sm"
               >
-                <Minus className="h-4 w-4" />
+                <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
-              <span className="font-bold text-sm md:text-base text-primary min-w-[1.25rem] text-center">
+              <span className="font-bold text-xs sm:text-sm md:text-base text-primary min-w-[1.25rem] text-center">
                 {quantity}
               </span>
               <Button
@@ -279,9 +279,9 @@ export function ProductListItem({
                     selectedUnit?.price,
                   )
                 }
-                className="h-8 w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
+                className="h-6 w-6 sm:h-8 sm:w-8 md:h-9 md:w-9 text-primary hover:bg-primary hover:text-white rounded-none transition-all"
               >
-                <Plus className="h-4 w-4" />
+                <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
               </Button>
             </div>
           ) : (
@@ -290,9 +290,9 @@ export function ProductListItem({
               onClick={() =>
                 onAdd(selectedUnit?.id, selectedUnit?.name, selectedUnit?.price)
               }
-              className="h-9 w-9 md:h-10 md:w-10 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300"
+              className="h-7 w-7 sm:h-9 sm:w-9 md:h-10 md:w-10 bg-primary text-white hover:bg-primary/90 shadow-none rounded-none transition-all duration-300"
             >
-              <Plus className="h-4 w-4 md:h-5 md:w-5" />
+              <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 md:h-5 md:w-5" />
             </Button>
           )}
         </div>

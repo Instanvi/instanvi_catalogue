@@ -85,7 +85,7 @@ export default function CatalogueViewPage() {
   const totalPages = meta?.totalPages || 1;
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] pb-32">
+    <div className="min-h-screen bg-[#FDFDFD] pb-24 sm:pb-32">
       <RequestAccessModal
         isOpen={isPrivate && !isVerifying && !hasGrantedAccess}
         catalogueId={catalogue?.id || ""}
@@ -99,8 +99,8 @@ export default function CatalogueViewPage() {
       />
       <CatalogueHeader catalogue={catalogue} />
       <div className="sticky top-0 z-40 bg-[#FDFDFD]/90 backdrop-blur-md border-b border-muted/20">
-        <div className="max-w-5xl mx-auto px-0 md:px-4 py-0 md:py-4">
-          <div className="bg-white p-4 md:p-6 rounded-none border-none md:border md:rounded-sm border-muted/20 shadow-sm">
+        <div className="max-w-5xl mx-auto px-2 sm:px-4 py-2 sm:py-4">
+          <div className="bg-white p-3 sm:p-6 rounded-sm md:rounded-none border border-muted/20 md:border-none md:shadow-sm">
             <CatalogueSearch
               value={search}
               onChange={setSearch}
@@ -114,9 +114,9 @@ export default function CatalogueViewPage() {
         </div>
       </div>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        <section className="space-y-6">
-          <div className="border-b border-muted/20 pb-4">
+      <main className="max-w-5xl mx-auto px-2 sm:px-4 py-4 sm:py-8 space-y-4 sm:space-y-8">
+        <section className="space-y-3 sm:space-y-6">
+          <div className="border-b border-muted/20 pb-3 sm:pb-4">
             <CataloguePagination
               currentPage={page}
               totalPages={totalPages}
@@ -127,10 +127,10 @@ export default function CatalogueViewPage() {
           {filteredProducts.length > 0 ? (
             <div
               className={cn(
-                "grid gap-4 sm:gap-6",
+                "grid gap-2 sm:gap-4 md:gap-6",
                 view === "grid"
-                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
-                  : "grid-cols-1 gap-3",
+                  ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+                  : "grid-cols-1 gap-2 sm:gap-3",
               )}
             >
               {filteredProducts.map((product) =>

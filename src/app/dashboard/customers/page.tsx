@@ -34,8 +34,8 @@ export default function CustomersPage() {
     );
 
   return (
-    <div className="space-y-8">
-      <div className="bg-white">
+    <div className="space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="bg-white border border-muted/10 rounded-sm shadow-sm">
         <DataTable
           columns={columns}
           data={customersData}

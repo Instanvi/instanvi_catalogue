@@ -36,16 +36,16 @@ function VerifyOtpContent() {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-muted/30 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-0">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-none border border-muted-foreground/10 p-8 space-y-6">
-          <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-semibold text-foreground">
+        <div className="bg-white rounded-lg sm:rounded-none border border-muted-foreground/10 p-6 sm:p-8 space-y-6 shadow-sm sm:shadow-none">
+          <div className="space-y-3 text-center">
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground break-words">
               Verify Your Code
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               We sent a verification code to{" "}
-              <span className="text-foreground font-medium">{identifier}</span>
+              <span className="text-foreground font-medium break-all">{identifier}</span>
             </p>
           </div>
 
@@ -58,7 +58,7 @@ function VerifyOtpContent() {
           <div className="pt-4 border-t border-muted-foreground/10 text-center">
             <button
               type="button"
-              className="text-sm text-muted-foreground hover:text-primary font-medium transition-colors"
+              className="text-xs sm:text-sm text-muted-foreground hover:text-primary font-medium transition-colors"
               onClick={() => router.back()}
             >
               Wrong contact details? Go back

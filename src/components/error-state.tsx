@@ -15,22 +15,22 @@ export function ErrorState({
   onRetry,
 }: ErrorStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center bg-red-50/50 border-2 border-dashed border-red-100 space-y-4">
-      <div className="bg-red-100 p-3 rounded-none">
-        <Warning size={32} className="text-red-600" weight="bold" />
+    <div className="flex flex-col items-center justify-center p-6 sm:p-12 text-center bg-red-50/50 border-2 border-dashed border-red-100 space-y-3 sm:space-y-4 rounded-sm">
+      <div className="bg-red-100 p-2 sm:p-3 rounded-none">
+        <Warning size={24} className="text-red-600 sm:!w-8 sm:!h-8" weight="bold" />
       </div>
-      <div className="space-y-2">
-        <h3 className="text-lg font-bold text-red-900">{title}</h3>
-        <p className="text-sm text-red-600 max-w-xs mx-auto">{message}</p>
+      <div className="space-y-1 sm:space-y-2">
+        <h3 className="text-base sm:text-lg font-bold text-red-900 break-words">{title}</h3>
+        <p className="text-xs sm:text-sm text-red-600 max-w-xs mx-auto leading-relaxed">{message}</p>
       </div>
       {onRetry && (
         <Button
           onClick={onRetry}
           variant="outline"
-          className="h-10 px-6 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold rounded-none"
+          className="h-8 sm:h-10 px-4 sm:px-6 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold rounded-none text-xs sm:text-sm"
         >
-          <ArrowClockwise className="mr-2" size={16} weight="bold" />
-          Retry Request
+          <ArrowClockwise className="mr-2 sm:mr-2" size={16} weight="bold" />
+          Retry
         </Button>
       )}
     </div>

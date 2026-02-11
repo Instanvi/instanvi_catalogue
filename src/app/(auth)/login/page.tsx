@@ -31,14 +31,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-muted/30 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-0">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-none border border-muted-foreground/10 p-8 space-y-6">
-          <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-semibold text-foreground">
+        <div className="bg-white rounded-lg sm:rounded-none border border-muted-foreground/10 p-6 sm:p-8 space-y-6 shadow-sm sm:shadow-none">
+          <div className="space-y-3 text-center">
+            <h1 className="text-xl sm:text-2xl font-semibold text-foreground break-words">
               Welcome Back
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               Enter your email or phone to access your account. A code will be
               sent to you for verification.
             </p>
@@ -47,11 +47,11 @@ export default function LoginPage() {
           <LoginForm onSubmit={handleLogin} isLoading={isRequestingOtp} />
 
           <div className="pt-4 border-t border-muted-foreground/10 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground">
               I don&apos;t have a business account?{" "}
               <Link
                 href="/register"
-                className="text-primary font-medium hover:underline"
+                className="text-primary font-medium hover:underline transition-colors"
               >
                 Create a Business Account
               </Link>

@@ -34,19 +34,19 @@ export function OtpForm({ onSubmit, isLoading, identifier }: OtpFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
         <FormField
           control={form.control}
           name="code"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-sm font-medium text-foreground text-center block">
+              <FormLabel className="text-xs sm:text-sm font-medium text-foreground text-center block">
                 Verification Code
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="000000"
-                  className="h-14 text-center text-2xl font-semibold tracking-widest border-muted-foreground/20"
+                  className="h-12 sm:h-14 text-center text-lg sm:text-2xl font-semibold tracking-widest border-muted-foreground/20"
                   maxLength={6}
                   {...field}
                 />
@@ -54,13 +54,13 @@ export function OtpForm({ onSubmit, isLoading, identifier }: OtpFormProps) {
               <FormDescription className="text-center text-xs">
                 Enter the 6-digit code sent to your email.
               </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
         <Button
           type="submit"
-          className="w-full h-11 font-semibold text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
+          className="w-full h-9 sm:h-11 font-semibold text-xs sm:text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
           disabled={isLoading}
         >
           {isLoading ? (

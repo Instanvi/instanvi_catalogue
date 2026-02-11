@@ -58,16 +58,16 @@ export default function DashboardLayout({
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <SidebarInset className="bg-white">
-        <header className="flex h-12 shrink-0 items-center justify-between px-4 bg-white">
-          <div className="flex items-center gap-3">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="h-4" />
-            <h1 className="text-sm font-semibold text-[#1c1c1c]">
+        <header className="flex h-10 sm:h-12 shrink-0 items-center justify-between px-2 sm:px-4 bg-white border-b border-muted/10">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <SidebarTrigger className="-ml-1 h-8 sm:h-9 w-8 sm:w-9" />
+            <Separator orientation="vertical" className="h-3 sm:h-4" />
+            <h1 className="text-xs sm:text-sm font-semibold text-[#1c1c1c] truncate">
               {currentTitle}
             </h1>
           </div>
         </header>
-        <div className="flex flex-1 flex-col p-4">{children}</div>
+        <div className="flex flex-1 flex-col p-2 sm:p-3 md:p-4 gap-2 sm:gap-4 overflow-y-auto">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

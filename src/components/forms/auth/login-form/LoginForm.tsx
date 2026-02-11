@@ -32,29 +32,29 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
         <FormField
           control={form.control}
           name="identifier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-sm font-medium text-foreground">
+              <FormLabel className="text-xs sm:text-sm font-medium text-foreground">
                 Email or Phone Number
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="name@company.com"
-                  className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20"
+                  className="h-9 sm:h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 text-sm"
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
         <Button
           type="submit"
-          className="w-full h-11 font-semibold text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
+          className="w-full h-9 sm:h-11 font-semibold text-xs sm:text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all"
           disabled={isLoading}
         >
           {isLoading ? (

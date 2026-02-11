@@ -87,13 +87,13 @@ export function DataTable<TData, TValue>({
   const hasSelection = selectedRows.length > 0;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4 h-12">
-        <div className="flex flex-1 items-center gap-2 max-w-sm">
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex items-center justify-between gap-2 sm:gap-4 h-9 sm:h-12 flex-wrap">
+        <div className="flex flex-1 items-center gap-2 min-w-0">
           {hasSelection && bulkActions.length > 0 ? (
-            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300">
-              <span className="text-xs font-bold text-[#4B6BFB] mr-2 flex items-center gap-1 bg-[#4B6BFB]/5 px-2 py-1">
-                {selectedRows.length} SELECTED
+            <div className="flex items-center gap-1 sm:gap-2 animate-in fade-in slide-in-from-left-2 duration-300 flex-wrap">
+              <span className="text-[9px] sm:text-xs font-bold text-[#4B6BFB] bg-[#4B6BFB]/5 px-1.5 sm:px-2 py-0.5 sm:py-1 whitespace-nowrap">
+                {selectedRows.length} SEL
               </span>
               {bulkActions.map((action, i) => (
                 <Button
@@ -103,9 +103,9 @@ export function DataTable<TData, TValue>({
                   onClick={() =>
                     action.onClick(selectedRows.map((r) => r.original))
                   }
-                  className="h-8 text-[11px] font-bold uppercase tracking-tight rounded-none border-[#4B6BFB]/20 text-[#4B6BFB] hover:bg-[#4B6BFB] hover:text-white"
+                  className="h-7 sm:h-8 text-[9px] sm:text-[11px] font-bold uppercase tracking-tight rounded-none border-[#4B6BFB]/20 text-[#4B6BFB] hover:bg-[#4B6BFB] hover:text-white px-2 sm:px-3"
                 >
-                  {action.icon && <span className="mr-1.5">{action.icon}</span>}
+                  {action.icon && <span className="mr-1">{action.icon}</span>}
                   {action.label}
                 </Button>
               ))}
@@ -113,9 +113,9 @@ export function DataTable<TData, TValue>({
           ) : (
             searchKey && (
               <div className="relative w-full">
-                <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
                 <Input
-                  placeholder={`Search ${searchKey}...`}
+                  placeholder={`Search...`}
                   value={
                     (table.getColumn(searchKey)?.getFilterValue() as string) ??
                     ""
@@ -125,7 +125,7 @@ export function DataTable<TData, TValue>({
                       .getColumn(searchKey)
                       ?.setFilterValue(event.target.value)
                   }
-                  className="h-10 pl-10 border-muted-foreground/20 rounded-none focus-visible:ring-black"
+                  className="h-8 sm:h-10 pl-9 border-muted-foreground/20 rounded-none focus-visible:ring-black text-xs sm:text-sm"
                 />
               </div>
             )
@@ -134,17 +134,18 @@ export function DataTable<TData, TValue>({
         {!hasSelection && onAdd && (
           <Button
             onClick={onAdd}
-            className="h-10 px-6 font-bold text-[11px] uppercase tracking-wider"
+            className="h-8 sm:h-10 px-3 sm:px-6 font-bold text-[9px] sm:text-[11px] uppercase tracking-wider flex-shrink-0"
           >
-            <Plus className="mr-2 h-4 w-4" />
-            {addLabel}
+            <Plus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">{addLabel}</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         )}
       </div>
 
-      <div className="bg-white border-0 shadow-none">
+      <div className="bg-white border border-muted/20 rounded-sm shadow-sm overflow-x-auto">
         <Table className="border-0">
-          <TableHeader className="bg-white">
+          <TableHeader className="bg-muted/5">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
@@ -154,7 +155,7 @@ export function DataTable<TData, TValue>({
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-xs font-medium h-12 text-black capitalize tracking-tight"
+                      className="text-[10px] sm:text-xs font-bold h-10 sm:h-12 text-black capitalize tracking-tight px-2 sm:px-4 whitespace-nowrap"
                     >
                       {header.isPlaceholder
                         ? null
@@ -174,12 +175,12 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/5 border-none transition-colors"
+                  className="hover:bg-muted/5 border-b border-muted/10 transition-colors last:border-0"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="h-16 py-0 font-medium tracking-tight"
+                      className="h-12 sm:h-16 py-2 sm:py-0 font-medium tracking-tight text-xs sm:text-sm px-2 sm:px-4"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -193,9 +194,9 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-32 text-center text-muted-foreground font-medium"
+                  className="h-20 sm:h-32 text-center text-muted-foreground font-medium text-xs sm:text-sm"
                 >
-                  No records matching your criteria.
+                  No records found.
                 </TableCell>
               </TableRow>
             )}
@@ -203,30 +204,30 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between px-2 py-4">
+      <div className="flex items-center justify-between px-2 sm:px-4 py-2 sm:py-4 text-xs sm:text-sm gap-2 flex-wrap">
         <p className="text-xs text-muted-foreground font-medium">
-          Showing {table.getFilteredRowModel().rows.length} records.
+          {table.getFilteredRowModel().rows.length} records
         </p>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             variant="outline"
-            className="h-8 w-8 p-0 rounded-none border-muted-foreground/20"
+            className="h-7 sm:h-8 w-7 sm:w-8 p-0 rounded-none border-muted-foreground/20 text-xs"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
-          <span className="text-xs font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+          <span className="text-xs font-medium whitespace-nowrap">
+            {table.getState().pagination.pageIndex + 1}/{" "}
             {table.getPageCount()}
           </span>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0 rounded-none border-muted-foreground/20"
+            className="h-7 sm:h-8 w-7 sm:w-8 p-0 rounded-none border-muted-foreground/20 text-xs"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
         </div>
       </div>
