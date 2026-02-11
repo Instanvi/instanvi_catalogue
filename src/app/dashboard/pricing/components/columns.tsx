@@ -68,7 +68,7 @@ export const columns: ColumnDef<CustomPrice>[] = [
         minimumFractionDigits: 0,
       }).format(price);
       return (
-        <div className="font-bold text-xs sm:text-sm text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-sm w-fit">
+        <div className="font-bold text-xs sm:text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-sm w-fit">
           {formatted}
         </div>
       );

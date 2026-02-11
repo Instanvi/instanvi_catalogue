@@ -51,7 +51,7 @@ export function DataTableSkeleton({
               <TableRow
                 key={i}
                 className={cn(
-                  "hover:bg-blue-50 dark:hover:bg-blue-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
+                  "hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
                   i % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-900/5" : "bg-white dark:bg-slate-950"
                 )}
               >

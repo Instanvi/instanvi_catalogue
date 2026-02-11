@@ -139,7 +139,7 @@ export const columns: ColumnDef<Product>[] = [
         minimumFractionDigits: 0,
       }).format(price);
       return (
-        <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-sm w-fit">
+        <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-sm w-fit">
           {formatted}
         </div>
       );
@@ -156,7 +156,7 @@ export const columns: ColumnDef<Product>[] = [
           <span
             className={cn(
               "text-[8px] sm:text-[9px] font-bold uppercase tracking-wider",
-              isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-400 dark:text-slate-500",
+              isActive ? "text-green-600 dark:text-green-400" : "text-slate-400 dark:text-slate-500",
             )}
           >
             {isActive ? "ON" : "OFF"}
@@ -193,7 +193,7 @@ export const columns: ColumnDef<Product>[] = [
               <ExternalLink className="mr-2 h-3.5 w-3.5" /> View Public
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
-            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-blue-600 dark:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20">
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-green-600 dark:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20">
               <Edit className="mr-2 h-3.5 w-3.5" /> Update Specs
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20">

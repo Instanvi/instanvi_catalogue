@@ -107,7 +107,7 @@ export const columns: ColumnDef<Customer>[] = [
       return category ? (
         <Badge
           variant="outline"
-          className="border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-semibold text-[9px] sm:text-xs"
+          className="border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 font-semibold text-[9px] sm:text-xs"
         >
           {category.name}
         </Badge>
@@ -148,7 +148,7 @@ export const columns: ColumnDef<Customer>[] = [
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
-            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-blue-600 dark:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20">
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-green-600 dark:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20">
               <Edit className="mr-2 h-3.5 w-3.5" /> Edit Profile
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20">

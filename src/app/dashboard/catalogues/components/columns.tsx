@@ -176,7 +176,7 @@ export const getColumns = (
               <Edit className="mr-2 h-3.5 w-3.5" /> Edit Details
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="text-xs font-medium cursor-pointer text-blue-600 dark:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+              className="text-xs font-medium cursor-pointer text-green-600 dark:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
               onClick={() => onAssignCategory(catalogue)}
             >
               <Users className="mr-2 h-3.5 w-3.5" /> Assign Category

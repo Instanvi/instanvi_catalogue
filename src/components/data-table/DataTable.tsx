@@ -94,7 +94,7 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-1 items-center gap-2 min-w-0 w-full sm:w-auto">
           {hasSelection && bulkActions.length > 0 ? (
             <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300 flex-wrap w-full">
-              <span className="text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1.5 rounded-md whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-green-500 to-green-600 px-3 py-1.5 rounded-md whitespace-nowrap">
                 {selectedRows.length} selected
               </span>
               {bulkActions.map((action, i) => (
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
                   onClick={() =>
                     action.onClick(selectedRows.map((r) => r.original))
                   }
-                  className="h-8 text-xs font-semibold uppercase tracking-tight rounded-md border-blue-200 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800"
+                  className="h-8 text-xs font-semibold uppercase tracking-tight rounded-md border-green-200 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 dark:text-green-400 dark:border-green-800"
                 >
                   {action.icon && <span className="mr-1.5">{action.icon}</span>}
                   <span className="hidden sm:inline">{action.label}</span>
@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
                       .getColumn(searchKey)
                       ?.setFilterValue(event.target.value)
                   }
-                  className="h-9 sm:h-10 pl-10 border-slate-200 dark:border-slate-700 rounded-lg focus-visible:ring-2 focus-visible:ring-blue-500 text-sm"
+                  className="h-9 sm:h-10 pl-10 border-slate-200 dark:border-slate-700 rounded-lg focus-visible:ring-2 focus-visible:ring-green-500 text-sm"
                 />
               </div>
             )
@@ -136,7 +136,7 @@ export function DataTable<TData, TValue>({
         {!hasSelection && onAdd && (
           <Button
             onClick={onAdd}
-            className="h-9 sm:h-10 px-4 sm:px-6 font-bold text-xs sm:text-sm uppercase tracking-wide bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex-shrink-0"
+            className="h-9 sm:h-10 px-4 sm:px-6 font-bold text-xs sm:text-sm uppercase tracking-wide bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex-shrink-0"
           >
             <Plus className="mr-1.5 h-4 w-4" />
             <span className="hidden sm:inline">{addLabel}</span>
@@ -179,7 +179,7 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
-                    "hover:bg-blue-50 dark:hover:bg-blue-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
+                    "hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
                     idx % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-900/5" : "bg-white dark:bg-slate-950"
                   )}
                 >
@@ -222,7 +222,7 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
             variant="outline"
-            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 text-xs"
+            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 text-xs"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -234,7 +234,7 @@ export function DataTable<TData, TValue>({
           </span>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 text-xs"
+            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400 text-xs"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >

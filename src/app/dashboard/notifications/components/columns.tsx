@@ -17,7 +17,7 @@ export const columns: ColumnDef<NotificationHistory>[] = [
     cell: ({ row }) => {
       const channel = row.getValue("channel") as string;
       const channelColors = {
-        email: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
+        email: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
         sms: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
         whatsapp: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
       };

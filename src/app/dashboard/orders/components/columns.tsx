@@ -89,7 +89,7 @@ export const getColumns = (
         minimumFractionDigits: 0,
       }).format(amount);
       return (
-        <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded-sm w-fit">
+        <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-sm w-fit">
           {formatted}
         </div>
       );
@@ -106,7 +106,7 @@ export const getColumns = (
             "font-bold text-[9px] sm:text-xs rounded-md",
             status === "DELIVERED" && "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
             status === "PENDING" && "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
-            status === "CONFIRMED" && "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
+            status === "CONFIRMED" && "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
             status === "CANCELLED" && "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
             status === "SHIPPED" && "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
             status === "PAID" && "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400",
@@ -153,10 +153,10 @@ export const getColumns = (
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
             <DropdownMenuItem
-              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-green-50 dark:focus:bg-green-900/20"
               onClick={() => onUpdateStatus(order.id, "CONFIRMED")}
             >
-              <CheckCircle className="mr-2 h-3.5 w-3.5 text-blue-500 dark:text-blue-400" /> Confirm
+              <CheckCircle className="mr-2 h-3.5 w-3.5 text-green-500 dark:text-green-400" /> Confirm
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-purple-50 dark:focus:bg-purple-900/20"

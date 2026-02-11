@@ -31,7 +31,7 @@ export const columns: ColumnDef<MemberCategory>[] = [
       <div className="flex flex-col gap-0.5">
         <span className="font-medium text-sm">{row.getValue("name")}</span>
         {row.original.isDefault && (
-          <span className="text-xs text-blue-600 font-semibold">
+          <span className="text-xs text-green-600 font-semibold">
             System Default
           </span>
         )}
@@ -66,7 +66,7 @@ export const columns: ColumnDef<MemberCategory>[] = [
     cell: ({ row }) => (
       <Badge
         variant="outline"
-        className="border-blue-600 text-blue-700 font-medium text-xs"
+        className="border-green-600 text-green-700 font-medium text-xs"
       >
         +{row.getValue("markupPercentage")}%
       </Badge>
@@ -97,7 +97,7 @@ export const columns: ColumnDef<MemberCategory>[] = [
               <Settings2 className="mr-2 h-3 w-3" /> Base Rules
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-blue-600">
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-green-600">
               <Edit className="mr-2 h-3 w-3" /> Edit Label
             </DropdownMenuItem>
             <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600">

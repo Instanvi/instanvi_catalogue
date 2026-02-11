@@ -160,7 +160,7 @@ export const getColumns = (
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
             <DropdownMenuItem
-              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-green-50 dark:focus:bg-green-900/20"
               onClick={() => onUpdate(item)}
             >
               <Settings2 className="mr-2 h-3.5 w-3.5" /> Update Stock
