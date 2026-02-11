@@ -1,6 +1,7 @@
 "use client";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -24,21 +25,23 @@ export function DataTableSkeleton({
   addable = true,
 }: DataTableSkeletonProps) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4 h-12">
-        <div className="flex flex-1 items-center gap-2 max-w-sm">
-          {searchable && <Skeleton className="h-10 w-full" />}
+    <div className="space-y-4 w-full">
+      {/* Toolbar Skeleton */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+        <div className="flex flex-1 gap-2 min-w-0 w-full sm:w-auto">
+          {searchable && <Skeleton className="h-9 sm:h-10 w-full flex-1 rounded-lg" />}
         </div>
-        {addable && <Skeleton className="h-10 w-32" />}
+        {addable && <Skeleton className="h-9 sm:h-10 w-28 rounded-lg flex-shrink-0" />}
       </div>
 
-      <div className="bg-white border-0 shadow-none">
+      {/* Table Skeleton */}
+      <div className="bg-white border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm overflow-hidden">
         <Table className="border-0">
-          <TableHeader className="bg-white">
-            <TableRow className="hover:bg-transparent border-none">
+          <TableHeader>
+            <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 border-b-2 border-slate-100 dark:border-slate-700">
               {Array.from({ length: columnCount }).map((_, i) => (
-                <TableHead key={i} className="h-12">
-                  <Skeleton className="h-4 w-24" />
+                <TableHead key={i} className="h-11 px-4 py-3">
+                  <Skeleton className="h-3 w-20 rounded-full" />
                 </TableHead>
               ))}
             </TableRow>
@@ -47,11 +50,14 @@ export function DataTableSkeleton({
             {Array.from({ length: rowCount }).map((_, i) => (
               <TableRow
                 key={i}
-                className="hover:bg-muted/5 border-none transition-colors"
+                className={cn(
+                  "hover:bg-blue-50 dark:hover:bg-blue-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
+                  i % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-900/5" : "bg-white dark:bg-slate-950"
+                )}
               >
                 {Array.from({ length: columnCount }).map((_, j) => (
-                  <TableCell key={j} className="h-16 py-0">
-                    <Skeleton className="h-4 w-full" />
+                  <TableCell key={j} className="h-12 sm:h-16 px-4 py-3">
+                    <Skeleton className="h-3 w-full rounded-full" />
                   </TableCell>
                 ))}
               </TableRow>
@@ -60,12 +66,13 @@ export function DataTableSkeleton({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between px-2 py-4">
-        <Skeleton className="h-4 w-32" />
-        <div className="flex items-center space-x-2">
-          <Skeleton className="h-8 w-8" />
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-8 w-8" />
+      {/* Pagination Skeleton */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+        <Skeleton className="h-4 w-32 rounded-full" />
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-8 w-8 rounded-md" />
+          <Skeleton className="h-8 w-16 rounded-md" />
+          <Skeleton className="h-8 w-8 rounded-md" />
         </div>
       </div>
     </div>

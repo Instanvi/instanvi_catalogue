@@ -50,24 +50,24 @@ export const getColumns = (
     cell: ({ row }) => {
       const catalogue = row.original;
       return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           {catalogue.coverImage && (
-            <div className="relative h-10 w-10">
+            <div className="relative h-10 sm:h-12 w-10 sm:w-12 flex-shrink-0 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm">
               <Image
                 src={catalogue.coverImage}
                 alt={catalogue.name}
                 fill
                 unoptimized
-                className="object-cover rounded-none border"
+                className="object-cover"
               />
             </div>
           )}
-          <div className="flex flex-col">
-            <span className="font-medium text-foreground">
+          <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+            <span className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-slate-100 truncate">
               {catalogue.name}
             </span>
             {catalogue.description && (
-              <span className="text-xs text-muted-foreground truncate max-w-[200px]">
+              <span className="text-[8px] sm:text-xs text-slate-500 dark:text-slate-400 truncate line-clamp-1">
                 {catalogue.description}
               </span>
             )}
@@ -81,7 +81,14 @@ export const getColumns = (
     header: "Products",
     cell: ({ row }) => {
       // TODO: Fetch count from backend
-      return <span>{row.original.products?.length || 0} items</span>;
+      const count = row.original.products?.length || 0;
+      return (
+        <div className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100">
+          <span className="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-sm inline-block">
+            {count} {count === 1 ? "item" : "items"}
+          </span>
+        </div>
+      );
     },
   },
   {
@@ -90,7 +97,7 @@ export const getColumns = (
     cell: ({ row }) => {
       const type = row.getValue("type") as string;
       return (
-        <div className="text-[10px] font-bold uppercase tracking-tight text-slate-500 bg-slate-100 px-2 py-0.5 inline-block">
+        <div className="text-[8px] sm:text-[9px] font-bold uppercase tracking-tight text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/50 px-2 py-1 rounded-sm w-fit">
           {type}
         </div>
       );
@@ -102,19 +109,19 @@ export const getColumns = (
     cell: ({ row }) => {
       const isActive = row.getValue("isActive") as boolean;
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <div
             className={cn(
-              "h-1.5 w-1.5 rounded-full",
+              "h-2 w-2 rounded-full flex-shrink-0",
               isActive
                 ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"
-                : "bg-slate-300",
+                : "bg-slate-300 dark:bg-slate-500",
             )}
           />
           <span
             className={cn(
-              "text-[10px] font-bold uppercase",
-              isActive ? "text-green-600" : "text-slate-400",
+              "text-[8px] sm:text-[9px] font-bold uppercase tracking-wider",
+              isActive ? "text-green-600 dark:text-green-400" : "text-slate-400 dark:text-slate-500",
             )}
           >
             {isActive ? "LIVE" : "DRAFT"}
@@ -128,8 +135,8 @@ export const getColumns = (
     header: "Last Updated",
     cell: ({ row }) => {
       return (
-        <span className="text-muted-foreground">
-          {format(new Date(row.getValue("updatedAt")), "MMM d, yyyy")}
+        <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+          {format(new Date(row.getValue("updatedAt")), "MMM d")}
         </span>
       );
     },
@@ -143,7 +150,7 @@ export const getColumns = (
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 hover:bg-black hover:text-white rounded-none"
+              className="h-8 w-8 p-0 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300 transition-colors"
             >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
@@ -151,34 +158,33 @@ export const getColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="rounded-none border-none p-0"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 shadow-md bg-white dark:bg-slate-950"
           >
-            <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-4 py-3 bg-[#F4F7FF]">
+            <DropdownMenuLabel className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-2 py-1.5">
               Ref: {catalogue.slug}
             </DropdownMenuLabel>
-            <div className="p-1 bg-white">
-              <DropdownMenuItem
-                className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50"
-                onClick={() =>
-                  window.open(`/${catalogue.slug}/catalogue`, "_blank")
-                }
-              >
-                <ExternalLink className="mr-2 h-3 w-3" /> Preview Public
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50">
-                <Edit className="mr-2 h-3 w-3" /> Edit Details
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50 text-blue-600"
-                onClick={() => onAssignCategory(catalogue)}
-              >
-                <Users className="mr-2 h-3 w-3" /> Assign Category
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-slate-200" />
-              <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-red-50 text-red-600">
-                <Trash2 className="mr-2 h-3 w-3" /> Delete
-              </DropdownMenuItem>
-            </div>
+            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+            <DropdownMenuItem
+              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-slate-100 dark:focus:bg-slate-800"
+              onClick={() =>
+                window.open(`/${catalogue.slug}/catalogue`, "_blank")
+              }
+            >
+              <ExternalLink className="mr-2 h-3.5 w-3.5" /> Preview Public
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-slate-100 dark:focus:bg-slate-800">
+              <Edit className="mr-2 h-3.5 w-3.5" /> Edit Details
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-xs font-medium cursor-pointer text-blue-600 dark:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+              onClick={() => onAssignCategory(catalogue)}
+            >
+              <Users className="mr-2 h-3.5 w-3.5" /> Assign Category
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20">
+              <Trash2 className="mr-2 h-3.5 w-3.5" /> Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

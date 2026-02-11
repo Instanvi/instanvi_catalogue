@@ -44,7 +44,7 @@ export const getColumns = (
     accessorKey: "product.sku",
     header: "SKU",
     cell: ({ row }) => (
-      <span className="font-mono text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5">
+      <span className="font-mono text-[9px] sm:text-[10px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/50 px-2 py-1 rounded-sm">
         {row.original.product.sku}
       </span>
     ),
@@ -54,15 +54,17 @@ export const getColumns = (
     accessorKey: "product.name",
     header: "Product Name",
     cell: ({ row }) => (
-      <span className="font-medium">{row.original.product.name}</span>
+      <span className="font-semibold text-xs sm:text-sm text-slate-900 dark:text-slate-100 truncate block max-w-[200px]">
+        {row.original.product.name}
+      </span>
     ),
   },
   {
     accessorKey: "product.category",
     header: "Category",
     cell: ({ row }) => (
-      <span className="text-[12px] text-muted-foreground uppercase font-semibold">
-        {row.original.product.category || "Uncategorized"}
+      <span className="text-[9px] sm:text-xs text-slate-600 dark:text-slate-400 uppercase font-semibold bg-slate-100 dark:bg-slate-700/50 px-2 py-1 rounded-sm w-fit inline-block">
+        {row.original.product.category || "—"}
       </span>
     ),
   },
@@ -78,15 +80,15 @@ export const getColumns = (
         <div className="flex items-center gap-2">
           <span
             className={cn(
-              "text-sm font-bold",
-              isLow ? "text-red-600" : "text-foreground",
+              "text-sm sm:text-base font-bold",
+              isLow ? "text-red-600 dark:text-red-400" : "text-slate-900 dark:text-slate-100",
             )}
           >
             {quantity}
           </span>
           {isLow && (
-            <span className="text-[10px] font-bold uppercase text-red-600 bg-red-50 px-1.5 whitespace-nowrap">
-              Low Stock
+            <span className="text-[8px] sm:text-[9px] font-bold uppercase text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded-sm whitespace-nowrap">
+              Low
             </span>
           )}
         </div>
@@ -101,10 +103,10 @@ export const getColumns = (
       const isAvailable = quantity > 0;
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <div
             className={cn(
-              "h-1.5 w-1.5 rounded-full",
+              "h-2 w-2 rounded-full flex-shrink-0",
               isAvailable
                 ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"
                 : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]",
@@ -112,11 +114,11 @@ export const getColumns = (
           />
           <span
             className={cn(
-              "text-[10px] font-bold uppercase",
-              isAvailable ? "text-green-600" : "text-red-600",
+              "text-[8px] sm:text-[9px] font-bold uppercase tracking-wider",
+              isAvailable ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400",
             )}
           >
-            {isAvailable ? "In Stock" : "Out of Stock"}
+            {isAvailable ? "In" : "Out"}
           </span>
         </div>
       );
@@ -126,11 +128,10 @@ export const getColumns = (
     accessorKey: "updatedAt",
     header: "Last Update",
     cell: ({ row }) => (
-      <span className="text-muted-foreground text-xs font-medium">
+      <span className="text-slate-600 dark:text-slate-400 text-[9px] sm:text-xs font-medium">
         {new Date(row.original.updatedAt).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
-          year: "numeric",
         })}
       </span>
     ),
@@ -144,7 +145,7 @@ export const getColumns = (
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 p-0 hover:bg-black hover:text-white rounded-none transition-colors"
+              className="h-8 w-8 p-0 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-md text-slate-600 dark:text-slate-300 transition-colors"
             >
               <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
@@ -152,26 +153,25 @@ export const getColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="rounded-none border-none p-0 shadow-2xl"
+            className="rounded-lg border border-slate-200 dark:border-slate-700 shadow-md bg-white dark:bg-slate-950"
           >
-            <DropdownMenuLabel className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-4 py-3 bg-[#F4F7FF]">
+            <DropdownMenuLabel className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 px-2 py-1.5">
               SKU: {item.product.sku}
             </DropdownMenuLabel>
-            <div className="p-1 bg-white">
-              <DropdownMenuItem
-                className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50"
-                onClick={() => onUpdate(item)}
-              >
-                <Settings2 className="mr-2 h-3 w-3" /> Update Stock
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-slate-50">
-                <History className="mr-2 h-3 w-3" /> Movement History
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-slate-100" />
-              <DropdownMenuItem className="text-xs font-medium cursor-pointer px-3 transition-colors hover:bg-red-50 text-red-600">
-                <Trash2 className="mr-2 h-3 w-3" /> Archive Record
-              </DropdownMenuItem>
-            </div>
+            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+            <DropdownMenuItem
+              className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-blue-50 dark:focus:bg-blue-900/20"
+              onClick={() => onUpdate(item)}
+            >
+              <Settings2 className="mr-2 h-3.5 w-3.5" /> Update Stock
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-slate-100 dark:focus:bg-slate-800">
+              <History className="mr-2 h-3.5 w-3.5" /> History
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
+            <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20">
+              <Trash2 className="mr-2 h-3.5 w-3.5" /> Archive
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

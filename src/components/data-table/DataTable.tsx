@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { DataTableSkeleton } from "./DataTableSkeleton";
 
@@ -87,13 +88,14 @@ export function DataTable<TData, TValue>({
   const hasSelection = selectedRows.length > 0;
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <div className="flex items-center justify-between gap-2 sm:gap-4 h-9 sm:h-12 flex-wrap">
-        <div className="flex flex-1 items-center gap-2 min-w-0">
+    <div className="space-y-4 w-full">
+      {/* Toolbar Section */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+        <div className="flex flex-1 items-center gap-2 min-w-0 w-full sm:w-auto">
           {hasSelection && bulkActions.length > 0 ? (
-            <div className="flex items-center gap-1 sm:gap-2 animate-in fade-in slide-in-from-left-2 duration-300 flex-wrap">
-              <span className="text-[9px] sm:text-xs font-bold text-[#4B6BFB] bg-[#4B6BFB]/5 px-1.5 sm:px-2 py-0.5 sm:py-1 whitespace-nowrap">
-                {selectedRows.length} SEL
+            <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300 flex-wrap w-full">
+              <span className="text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 px-3 py-1.5 rounded-md whitespace-nowrap">
+                {selectedRows.length} selected
               </span>
               {bulkActions.map((action, i) => (
                 <Button
@@ -103,19 +105,19 @@ export function DataTable<TData, TValue>({
                   onClick={() =>
                     action.onClick(selectedRows.map((r) => r.original))
                   }
-                  className="h-7 sm:h-8 text-[9px] sm:text-[11px] font-bold uppercase tracking-tight rounded-none border-[#4B6BFB]/20 text-[#4B6BFB] hover:bg-[#4B6BFB] hover:text-white px-2 sm:px-3"
+                  className="h-8 text-xs font-semibold uppercase tracking-tight rounded-md border-blue-200 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800"
                 >
-                  {action.icon && <span className="mr-1">{action.icon}</span>}
-                  {action.label}
+                  {action.icon && <span className="mr-1.5">{action.icon}</span>}
+                  <span className="hidden sm:inline">{action.label}</span>
                 </Button>
               ))}
             </div>
           ) : (
             searchKey && (
               <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
-                  placeholder={`Search...`}
+                  placeholder={`Search ${searchKey}...`}
                   value={
                     (table.getColumn(searchKey)?.getFilterValue() as string) ??
                     ""
@@ -125,7 +127,7 @@ export function DataTable<TData, TValue>({
                       .getColumn(searchKey)
                       ?.setFilterValue(event.target.value)
                   }
-                  className="h-8 sm:h-10 pl-9 border-muted-foreground/20 rounded-none focus-visible:ring-black text-xs sm:text-sm"
+                  className="h-9 sm:h-10 pl-10 border-slate-200 dark:border-slate-700 rounded-lg focus-visible:ring-2 focus-visible:ring-blue-500 text-sm"
                 />
               </div>
             )
@@ -134,28 +136,29 @@ export function DataTable<TData, TValue>({
         {!hasSelection && onAdd && (
           <Button
             onClick={onAdd}
-            className="h-8 sm:h-10 px-3 sm:px-6 font-bold text-[9px] sm:text-[11px] uppercase tracking-wider flex-shrink-0"
+            className="h-9 sm:h-10 px-4 sm:px-6 font-bold text-xs sm:text-sm uppercase tracking-wide bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex-shrink-0"
           >
-            <Plus className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <Plus className="mr-1.5 h-4 w-4" />
             <span className="hidden sm:inline">{addLabel}</span>
             <span className="sm:hidden">Add</span>
           </Button>
         )}
       </div>
 
-      <div className="bg-white border border-muted/20 rounded-sm shadow-sm overflow-x-auto">
+      {/* Table Section */}
+      <div className="bg-white border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm overflow-hidden">
         <Table className="border-0">
-          <TableHeader className="bg-muted/5">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="hover:bg-transparent border-none"
+                className="hover:bg-slate-50 dark:hover:bg-slate-900/50 border-b-2 border-slate-100 dark:border-slate-700"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-[10px] sm:text-xs font-bold h-10 sm:h-12 text-black capitalize tracking-tight px-2 sm:px-4 whitespace-nowrap"
+                      className="text-slate-800 dark:text-slate-100 font-bold text-xs sm:text-sm tracking-wider px-3 sm:px-4 py-3"
                     >
                       {header.isPlaceholder
                         ? null
@@ -171,16 +174,19 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, idx) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-muted/5 border-b border-muted/10 transition-colors last:border-0"
+                  className={cn(
+                    "hover:bg-blue-50 dark:hover:bg-blue-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
+                    idx % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-900/5" : "bg-white dark:bg-slate-950"
+                  )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="h-12 sm:h-16 py-2 sm:py-0 font-medium tracking-tight text-xs sm:text-sm px-2 sm:px-4"
+                      className="px-3 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 whitespace-nowrap overflow-hidden text-ellipsis"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -194,7 +200,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-20 sm:h-32 text-center text-muted-foreground font-medium text-xs sm:text-sm"
+                  className="h-24 sm:h-32 text-center text-sm sm:text-base text-slate-600 dark:text-slate-400 font-medium"
                 >
                   No records found.
                 </TableCell>
@@ -204,30 +210,35 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between px-2 sm:px-4 py-2 sm:py-4 text-xs sm:text-sm gap-2 flex-wrap">
-        <p className="text-xs text-muted-foreground font-medium">
-          {table.getFilteredRowModel().rows.length} records
+      {/* Footer Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium">
+          Showing{" "}
+          <span className="font-bold text-slate-900 dark:text-slate-100">
+            {table.getFilteredRowModel().rows.length}
+          </span>{" "}
+          records
         </p>
         <div className="flex items-center gap-1 sm:gap-2">
           <Button
             variant="outline"
-            className="h-7 sm:h-8 w-7 sm:w-8 p-0 rounded-none border-muted-foreground/20 text-xs"
+            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 text-xs"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+            <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-xs font-medium whitespace-nowrap">
-            {table.getState().pagination.pageIndex + 1}/{" "}
+          <span className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 px-2 py-1 bg-slate-100 dark:bg-slate-900 rounded-md whitespace-nowrap">
+            {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </span>
           <Button
             variant="outline"
-            className="h-7 sm:h-8 w-7 sm:w-8 p-0 rounded-none border-muted-foreground/20 text-xs"
+            className="h-8 w-8 p-0 rounded-md border-slate-200 dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 text-xs"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </div>
