@@ -196,18 +196,3 @@ export const getColumns = (
   },
 ];
 
-export type Order = {
-  id: string;
-  customerName: string;
-  customerEmail: string;
-  type: "B2B" | "B2C";
-  status:
-    | "PENDING"
-    | "CONFIRMED"
-    | "SHIPPED"
-    | "DELIVERED"
-    | "CANCELLED"
-    | "PAID";
-  totalAmount: number;
-  createdAt: string;
-};
