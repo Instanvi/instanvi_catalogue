@@ -47,9 +47,10 @@ export const getColumns = (
     accessorKey: "id",
     header: "Order ID",
     cell: ({ row }) => {
+      const id = String(row.getValue("id"));
       return (
         <span className="font-mono text-[8px] sm:text-xs text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700/50 px-2 py-1 rounded-sm">
-          {row.getValue("id").toString().slice(0, 12)}...
+          {id.slice(0, 12)}...
         </span>
       );
     },
