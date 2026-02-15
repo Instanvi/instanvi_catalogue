@@ -67,17 +67,15 @@ export default function PricingPage() {
         isOpen={isSheetOpen}
         onOpenChange={setIsSheetOpen}
       >
-        <div className="mt-8">
-          <PricingForm
-            members={members}
-            categories={categories}
-            catalogueProducts={catalogueProducts}
-            onSubmit={(values) => {
-              console.log("Submit Pricing Override:", values);
-              setIsSheetOpen(false);
-            }}
-          />
-        </div>
+        <PricingForm
+          members={members}
+          categories={categories}
+          catalogueProducts={catalogueProducts}
+          onSubmit={(values) => {
+            console.log("Submit Pricing Override:", values);
+            setIsSheetOpen(false);
+          }}
+        />
       </FormSheet>
     </div>
   );

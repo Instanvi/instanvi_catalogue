@@ -1,37 +1,57 @@
 "use client";
 
+import { useState, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataTable } from "@/components/data-table/DataTable";
-import { columns } from "./components/categories-columns";
-import { useState } from "react";
+import { getColumns } from "@/app/dashboard/catalogues/components/columns";
+import { cataloguesService } from "@/services/catalogues.service";
+import { CatalogueType } from "@/types/api";
 import { FormSheet } from "@/components/form-sheet";
-import { CategoryForm } from "@/components/forms/category-form";
+import {
+  CatalogueForm,
+  CatalogueFormValues,
+} from "@/components/forms/catalogue-form";
 
 import { ErrorState } from "@/components/error-state";
 
-import {
-  useCustomerCategories,
-  useCreateCustomerCategory,
-} from "@/hooks/use-customer-categories";
-
-export default function DashboardPage() {
+export default function CataloguesPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const {
-    data: categories,
+    data: catalogues,
     isLoading,
     error,
     refetch,
-  } = useCustomerCategories();
-  const createCategory = useCreateCustomerCategory();
+  } = useQuery({
+    queryKey: ["catalogues"],
+    queryFn: () => cataloguesService.getAll(),
+  });
 
-  const categoriesData = Array.isArray(categories)
-    ? categories
-    : categories?.data || [];
+  const createMutation = useMutation({
+    mutationFn: cataloguesService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["catalogues"] });
+      setIsSheetOpen(false);
+    },
+  });
+
+  const onSubmit = (values: CatalogueFormValues) => {
+    createMutation.mutate({
+      ...values,
+      type: values.type as CatalogueType,
+    });
+  };
+
+  const columns = useMemo(() => getColumns(() => {}), []);
+
+  const safeData = Array.isArray(catalogues) ? catalogues : [];
 
   if (error)
     return (
       <ErrorState
-        title="Categories Unavailable"
-        message="We couldn't synchronize your customer categories at this time."
+        title="Catalogues Offline"
+        message="Your digital showcases are currently unreachable."
         onRetry={() => refetch()}
       />
     );
@@ -41,30 +61,24 @@ export default function DashboardPage() {
       <div className="bg-white border border-muted/10 rounded-sm shadow-sm">
         <DataTable
           columns={columns}
-          data={categoriesData}
+          data={safeData}
           searchKey="name"
-          addLabel="Add New Category"
+          addLabel="Add Catalogue"
           onAdd={() => setIsSheetOpen(true)}
           isLoading={isLoading}
         />
       </div>
 
       <FormSheet
-        title="Add New Category"
-        description="Establish a new pricing tier for your distribution network."
+        title="Create Catalogue"
+        description="Create a new product catalogue to share with your customers."
         isOpen={isSheetOpen}
         onOpenChange={setIsSheetOpen}
       >
         <div className="mt-8">
-          <CategoryForm
-            isLoading={createCategory.isPending}
-            onSubmit={(values) => {
-              createCategory.mutate(values, {
-                onSuccess: () => {
-                  setIsSheetOpen(false);
-                },
-              });
-            }}
+          <CatalogueForm
+            onSubmit={onSubmit}
+            isLoading={createMutation.isPending}
           />
         </div>
       </FormSheet>

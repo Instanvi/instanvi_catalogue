@@ -12,7 +12,6 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -20,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, DollarSign } from "lucide-react";
+import { DollarSign } from "lucide-react";
 import { pricingSchema, type PricingFormValues } from "./schema";
 
 interface PricingFormProps {
@@ -34,6 +33,7 @@ interface PricingFormProps {
     basePrice: string;
   }>;
   defaultValues?: Partial<PricingFormValues>;
+  formId?: string;
 }
 
 export function PricingForm({
@@ -43,6 +43,7 @@ export function PricingForm({
   categories,
   catalogueProducts,
   defaultValues,
+  formId,
 }: PricingFormProps) {
   const form = useForm<PricingFormValues>({
     resolver: zodResolver(pricingSchema),
@@ -58,7 +59,11 @@ export function PricingForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+      >
         <div className="space-y-6">
           <div className="space-y-4">
             <FormField
@@ -193,25 +198,6 @@ export function PricingForm({
               )}
             />
           </div>
-        </div>
-
-        <div className="pt-4">
-          <Button
-            type="submit"
-            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <DollarSign className="mr-2 h-4 w-4" />
-            )}
-            {isLoading
-              ? "Processing..."
-              : defaultValues?.catalogueProductId
-                ? "Update Override Price"
-                : "Set Override Price"}
-          </Button>
         </div>
       </form>
     </Form>

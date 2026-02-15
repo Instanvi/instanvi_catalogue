@@ -9,7 +9,6 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -24,104 +23,54 @@ import { Textarea } from "@/components/ui/textarea";
 import { PaperPlaneTilt } from "@phosphor-icons/react";
 import { Loader2 } from "lucide-react";
 import { NotificationValues, notificationSchema } from "./schema";
-import { CustomerCategory } from "@/services/customer-categories.service";
 
 interface NotificationFormProps {
   onSubmit: (values: NotificationValues) => void;
   isLoading?: boolean;
-  categories: CustomerCategory[];
 }
 
 export function NotificationForm({
   onSubmit,
   isLoading,
-  categories,
 }: NotificationFormProps) {
   const form = useForm<NotificationValues>({
     resolver: zodResolver(notificationSchema),
     defaultValues: {
       channel: "email",
-      categoryId: "all",
       title: "",
       message: "",
     },
   });
 
-  const handleSubmit = (data: NotificationValues) => {
-    // If categoryId is "all", send undefined to backend
-    const payload = {
-      ...data,
-      categoryId: data.categoryId === "all" ? undefined : data.categoryId,
-    };
-    onSubmit(payload);
-  };
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField
-            control={form.control}
-            name="channel"
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel className="text-sm font-semibold">Channel</FormLabel>
-                <Select
-                  disabled={isLoading}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="h-11 border-muted-foreground/20 rounded-none focus:ring-primary/20">
-                      <SelectValue placeholder="Select channel" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="rounded-none">
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="sms">SMS</SelectItem>
-                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel className="text-sm font-semibold">
-                  Customer Category
-                </FormLabel>
-                <Select
-                  disabled={isLoading}
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="h-11 border-muted-foreground/20 rounded-none focus:ring-primary/20">
-                      <SelectValue placeholder="All Customers" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="rounded-none">
-                    <SelectItem value="all">All Customers</SelectItem>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.id}>
-                        {cat.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription className="text-[11px]">
-                  Send to all or a specific segment.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="channel"
+          render={({ field }) => (
+            <FormItem className="space-y-2">
+              <FormLabel className="text-sm font-semibold">Channel</FormLabel>
+              <Select
+                disabled={isLoading}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger className="h-11 border-muted-foreground/20 rounded-none focus:ring-primary/20">
+                    <SelectValue placeholder="Select channel" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="rounded-none">
+                  <SelectItem value="email">Email</SelectItem>
+                  <SelectItem value="sms">SMS</SelectItem>
+                  <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}

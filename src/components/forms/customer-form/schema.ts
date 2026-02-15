@@ -10,7 +10,6 @@ export const customerSchema = zod
       .optional()
       .or(zod.literal("")),
     company: zod.string().optional(),
-    categoryId: zod.string().optional().or(zod.literal("")),
   })
   .refine((data) => data.email || data.phone, {
     message: "Please provide at least one contact method (email or phone)",

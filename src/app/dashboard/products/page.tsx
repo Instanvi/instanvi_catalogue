@@ -10,7 +10,8 @@ import { useProducts, useCreateProduct } from "@/hooks/use-products";
 import { ErrorState } from "@/components/error-state";
 
 import { CatalogueSelectionSheet } from "@/components/catalogue-selection-sheet";
-import { FolderPlus } from "lucide-react";
+import { FolderPlus, Loader2, Package } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function ProductsPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -66,19 +67,33 @@ export default function ProductsPage() {
         isOpen={isSheetOpen}
         onOpenChange={setIsSheetOpen}
         size="full"
+        footer={
+          <Button
+            type="submit"
+            form="create-product-form"
+            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-bold text-sm rounded-none transition-all active:scale-[0.98]"
+            disabled={createProduct.isPending}
+          >
+            {createProduct.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Package className="mr-2 h-4 w-4" />
+            )}
+            {createProduct.isPending ? "Saving..." : "Create Product"}
+          </Button>
+        }
       >
-        <div className="mt-8">
-          <ProductForm
-            isLoading={createProduct.isPending}
-            onSubmit={(formData) => {
-              createProduct.mutate(formData, {
-                onSuccess: () => {
-                  setIsSheetOpen(false);
-                },
-              });
-            }}
-          />
-        </div>
+        <ProductForm
+          formId="create-product-form"
+          isLoading={createProduct.isPending}
+          onSubmit={(formData) => {
+            createProduct.mutate(formData, {
+              onSuccess: () => {
+                setIsSheetOpen(false);
+              },
+            });
+          }}
+        />
       </FormSheet>
     </div>
   );

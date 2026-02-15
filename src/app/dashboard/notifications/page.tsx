@@ -7,7 +7,6 @@ import {
   useNotificationsHistory,
   useSendNotification,
 } from "@/hooks/use-notifications";
-import { useCustomerCategories } from "@/hooks/use-customer-categories";
 import { NotificationForm } from "@/components/forms/notification-form/NotificationForm";
 import { NotificationValues } from "@/components/forms/notification-form/schema";
 import { ErrorState } from "@/components/error-state";
@@ -22,10 +21,8 @@ export default function NotificationsPage() {
     error: historyError,
     refetch: refetchHistory,
   } = useNotificationsHistory();
-  const { data: categoriesResponse } = useCustomerCategories();
   const sendNotification = useSendNotification();
 
-  const categories = categoriesResponse?.data || [];
   const historyData = history || [];
 
   const handleSendBroadcast = (values: NotificationValues) => {
@@ -78,7 +75,6 @@ export default function NotificationsPage() {
       >
         <div className="mt-8">
           <NotificationForm
-            categories={categories}
             isLoading={sendNotification.isPending}
             onSubmit={handleSendBroadcast}
           />

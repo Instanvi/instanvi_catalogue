@@ -9,8 +9,9 @@ import { FormSheet } from "@/components/form-sheet";
 import { StockUpdateForm } from "@/components/forms/stock-form/StockUpdateForm";
 import { StockUpdateValues } from "@/components/forms/stock-form/schema";
 import { StockItem } from "@/services/stock.service";
-import { Settings2 } from "lucide-react";
+import { Settings2, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function StockPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -91,17 +92,31 @@ export default function StockPage() {
           setIsSheetOpen(open);
           if (!open) setSelectedStock(null);
         }}
+        footer={
+          <Button
+            type="submit"
+            form="stock-update-form"
+            className="w-full h-11 bg-black hover:bg-black/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
+            disabled={updateStock.isPending}
+          >
+            {updateStock.isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            {updateStock.isPending ? "Updating..." : "Update Stock Total"}
+          </Button>
+        }
       >
-        <div className="mt-8">
-          <StockUpdateForm
-            isLoading={updateStock.isPending}
-            stockItems={data}
-            defaultValues={
-              selectedStock ? { stockId: selectedStock.id } : undefined
-            }
-            onSubmit={handleUpdateSubmit}
-          />
-        </div>
+        <StockUpdateForm
+          formId="stock-update-form"
+          isLoading={updateStock.isPending}
+          stockItems={data}
+          defaultValues={
+            selectedStock ? { stockId: selectedStock.id } : undefined
+          }
+          onSubmit={handleUpdateSubmit}
+        />
       </FormSheet>
     </div>
   );

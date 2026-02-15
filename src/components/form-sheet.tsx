@@ -13,6 +13,7 @@ interface FormSheetProps {
   description?: string;
   children: React.ReactNode;
   size?: "md" | "lg" | "xl" | "2xl" | "4xl" | "5xl" | "full";
+  footer?: React.ReactNode;
 }
 
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +25,7 @@ export function FormSheet({
   description,
   children,
   size = "md",
+  footer,
 }: FormSheetProps) {
   const sizeClasses = {
     md: "sm:max-w-md",
@@ -37,8 +39,10 @@ export function FormSheet({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className={`${sizeClasses[size]} p-0 flex flex-col h-full`}>
-        <SheetHeader className="p-4 sm:p-6 md:p-8 pb-3 sm:pb-4 flex-shrink-0">
+      <SheetContent
+        className={`${sizeClasses[size]} p-0 flex flex-col gap-0 h-full`}
+      >
+        <SheetHeader className="p-4 sm:p-5 md:p-6 pb-2 flex-shrink-0 space-y-1">
           <SheetTitle className="font-semibold text-lg sm:text-2xl tracking-tight text-[#1c1c1c] break-words">
             {title}
           </SheetTitle>
@@ -49,9 +53,17 @@ export function FormSheet({
           )}
         </SheetHeader>
         <Separator className="bg-muted-foreground/5" />
-        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 md:p-8 pt-4 sm:pt-6">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 md:p-6 pt-2">
           <div className="max-w-full">{children}</div>
         </div>
+        {footer && (
+          <>
+            <Separator className="bg-muted-foreground/5" />
+            <div className="bg-white p-4 sm:p-5 md:p-6 flex-shrink-0">
+              {footer}
+            </div>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );

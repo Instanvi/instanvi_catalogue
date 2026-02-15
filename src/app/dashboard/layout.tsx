@@ -12,13 +12,12 @@ import { Separator } from "@/components/ui/separator";
 
 const menuItems = [
   { title: "Catalogues", url: "/dashboard/catalogues" },
+  { title: "Customers", url: "/dashboard/customers" },
   { title: "Products", url: "/dashboard/products" },
   { title: "Stock", url: "/dashboard/stock" },
-  { title: "Categories", url: "/dashboard" },
-  { title: "Customers", url: "/dashboard/customers" },
-  { title: "Schedules", url: "/dashboard/schedules" },
+  { title: "Product Units", url: "/dashboard/product-units" },
   { title: "Notifications", url: "/dashboard/notifications" },
-  { title: "Pricing", url: "/dashboard/pricing" },
+  { title: "Orders", url: "/dashboard/orders" },
 ];
 
 export default function DashboardLayout({
@@ -44,7 +43,6 @@ export default function DashboardLayout({
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
-        // Only allow users with a businessId and admin/member role to access dashboard
         if (!user.businessId) {
           router.push("/login");
         }
@@ -67,7 +65,9 @@ export default function DashboardLayout({
             </h1>
           </div>
         </header>
-        <div className="flex flex-1 flex-col p-2 sm:p-3 md:p-4 gap-2 sm:gap-4 overflow-y-auto">{children}</div>
+        <div className="flex flex-1 flex-col p-2 sm:p-3 md:p-4 gap-2 sm:gap-4 overflow-y-auto">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

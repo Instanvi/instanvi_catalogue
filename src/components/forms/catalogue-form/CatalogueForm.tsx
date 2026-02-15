@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -27,12 +26,14 @@ interface CatalogueFormProps {
   initialData?: CatalogueFormValues;
   onSubmit: (values: CatalogueFormValues) => void;
   isLoading?: boolean;
+  formId?: string;
 }
 
 export function CatalogueForm({
   initialData,
   onSubmit,
   isLoading,
+  formId,
 }: CatalogueFormProps) {
   const form = useForm<CatalogueFormValues>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,10 +49,14 @@ export function CatalogueForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+      <form
+        id={formId}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-10"
+      >
         <div className="space-y-8">
           {/* Row 1: Name and Type (Columnar Layout) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
             <FormField
               control={form.control}
               name="name"
@@ -151,16 +156,6 @@ export function CatalogueForm({
               )}
             />
           </div>
-        </div>
-
-        <div className="pt-4">
-          <Button
-            disabled={isLoading}
-            type="submit"
-            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-none transition-all active:scale-[0.98]"
-          >
-            {initialData ? "Save Changes" : "Create Catalogue"}
-          </Button>
         </div>
       </form>
     </Form>

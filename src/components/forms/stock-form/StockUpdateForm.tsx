@@ -12,7 +12,6 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -20,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Save } from "lucide-react";
 import { StockUpdateValues, stockUpdateSchema } from "./schema";
 import { StockItem } from "@/services/stock.service";
 import { useEffect } from "react";
@@ -30,6 +28,7 @@ interface StockUpdateFormProps {
   isLoading?: boolean;
   stockItems: StockItem[];
   defaultValues?: Partial<StockUpdateValues>;
+  formId?: string;
 }
 
 export function StockUpdateForm({
@@ -37,6 +36,7 @@ export function StockUpdateForm({
   isLoading,
   stockItems,
   defaultValues,
+  formId,
 }: StockUpdateFormProps) {
   const form = useForm<StockUpdateValues>({
     resolver: zodResolver(stockUpdateSchema),
@@ -68,6 +68,7 @@ export function StockUpdateForm({
   return (
     <Form {...form}>
       <form
+        id={formId}
         onSubmit={form.handleSubmit((data) => onSubmit(data))}
         className="space-y-6"
       >
@@ -152,21 +153,6 @@ export function StockUpdateForm({
               </FormItem>
             )}
           />
-        </div>
-
-        <div className="pt-4">
-          <Button
-            type="submit"
-            className="w-full h-11 bg-black hover:bg-black/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            {isLoading ? "Updating..." : "Update Stock Total"}
-          </Button>
         </div>
       </form>
     </Form>

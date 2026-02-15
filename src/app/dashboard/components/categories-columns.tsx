@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { MoreHorizontal, Edit, Trash2, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {

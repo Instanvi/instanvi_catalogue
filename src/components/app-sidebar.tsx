@@ -5,7 +5,6 @@ import {
   Users,
   Package,
   Bell,
-  Tag,
   BookOpen,
   Cube,
   ShoppingCart,
@@ -34,7 +33,7 @@ import {
 const menuItems = [
   {
     title: "Catalogues",
-    url: "/dashboard/catalogues",
+    url: "/dashboard",
     icon: BookOpen,
   },
   {
@@ -53,9 +52,9 @@ const menuItems = [
     icon: Package,
   },
   {
-    title: "Categories",
-    url: "/dashboard",
-    icon: Tag,
+    title: "Product Units",
+    url: "/dashboard/product-units",
+    icon: Cube,
   },
   {
     title: "Notifications",
@@ -108,7 +107,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <TooltipProvider delayDuration={0}>
       <Sidebar
         collapsible="icon"
-        className="bg-white border-r border-gray-100"
+        className="bg-sidebar border-r border-sidebar-border"
         {...props}
       >
         {/* <SidebarHeader className="flex items-center justify-start px-4 py-6 group-data-[collapsible=icon]:justify-center">
