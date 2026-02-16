@@ -18,7 +18,7 @@ export default function CustomersPage() {
 
   const customersData = Array.isArray(customers)
     ? customers
-    : (customers as any)?.data || [];
+    : customers?.data || [];
 
   if (error)
     return (
@@ -36,7 +36,7 @@ export default function CustomersPage() {
           columns={columns}
           data={customersData}
           searchKey="name"
-          addLabel="Add New Customer"
+          addLabel="Add new customer"
           onAdd={() => setIsSheetOpen(true)}
           isLoading={isLoading}
         />
@@ -51,7 +51,7 @@ export default function CustomersPage() {
           <Button
             type="submit"
             form="create-customer-form"
-            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold text-sm rounded-lg shadow-sm transition-all active:scale-[0.98]"
             disabled={createCustomer.isPending}
           >
             {createCustomer.isPending ? (
@@ -59,7 +59,7 @@ export default function CustomersPage() {
             ) : (
               <UserPlus className="mr-2 h-4 w-4" />
             )}
-            {createCustomer.isPending ? "Saving..." : "Add Member"}
+            {createCustomer.isPending ? "Saving..." : "Add member"}
           </Button>
         }
       >

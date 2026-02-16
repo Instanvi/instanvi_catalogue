@@ -10,8 +10,12 @@ import { useCustomers } from "@/hooks/use-customers";
 import { useCustomerCategories } from "@/hooks/use-customer-categories";
 import { useProducts } from "@/hooks/use-products";
 
+import { Plus, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
 export default function PricingPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: membersRaw } = useCustomers();
   const { data: categoriesRaw } = useCustomerCategories();
@@ -66,14 +70,35 @@ export default function PricingPage() {
         description="Define a non-standard price point for a specific product and target."
         isOpen={isSheetOpen}
         onOpenChange={setIsSheetOpen}
+        footer={
+          <Button
+            type="submit"
+            form="pricing-form"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg shadow-sm transition-all active:scale-[0.98]"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Plus className="mr-2 h-4 w-4" />
+            )}
+            {isSubmitting ? "Saving..." : "Set Price Override"}
+          </Button>
+        }
       >
         <PricingForm
+          formId="pricing-form"
           members={members}
           categories={categories}
           catalogueProducts={catalogueProducts}
+          isLoading={isSubmitting}
           onSubmit={(values) => {
             console.log("Submit Pricing Override:", values);
-            setIsSheetOpen(false);
+            setIsSubmitting(true);
+            setTimeout(() => {
+              setIsSubmitting(false);
+              setIsSheetOpen(false);
+            }, 1000);
           }}
         />
       </FormSheet>

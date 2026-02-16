@@ -3,91 +3,25 @@
 import { CheckoutForm } from "@/components/forms/checkout-form/CheckoutForm";
 import { useCart } from "@/hooks/use-cart";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { CreateOrderPayload, OrderType } from "@/types/api";
-import { useCreateOrder } from "@/hooks/use-orders";
-import { getErrorMessage } from "@/lib/axios";
+import { useCheckout } from "@/hooks/use-orders";
 
 export default function CheckoutPage() {
-  const { cart, clearCart } = useCart();
+  const { cart } = useCart();
   const router = useRouter();
-  const { mutateAsync: createOrder, isPending } = useCreateOrder();
+  const { mutateAsync: handleCheckout, isPending } = useCheckout();
 
   const totalAmount = cart.reduce(
     (acc, item) => acc + parseFloat(item.price) * item.quantity,
     0,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleCheckout = async (values: any) => {
-    if (cart.length === 0) {
-      toast.error("Your cart is empty");
-      return;
-    }
-
-    // Try to find catalogueId from any item in the cart (for robustness)
-    const catalogueId = cart.find((item) => item.catalogueId)?.catalogueId;
-    const businessId = cart.find((item) => item.businessId)?.businessId;
-
-    if (!catalogueId) {
-      toast.error(
-        "Cart contains outdated items. Please clear your cart and re-add your products.",
-        {
-          duration: 5000,
-          action: {
-            label: "Clear Cart",
-            onClick: () => {
-              clearCart();
-              router.push("/");
-            },
-          },
-        },
-      );
-      return;
-    }
-
-    try {
-      const orderData: CreateOrderPayload = {
-        ...values,
-        type: OrderType.B2C,
-        catalogueId: catalogueId,
-        fromBusinessId: businessId,
-        items: cart.map((item) => {
-          if (!item.catalogueProductId) {
-            throw new Error(
-              `Missing catalogue product ID for item: ${item.name}`,
-            );
-          }
-          return {
-            catalogueProductId: item.catalogueProductId!,
-            productUnitId: item.unitId,
-            quantity: item.quantity,
-            unitPrice: parseFloat(item.price),
-          };
-        }),
-        notes: values.notes,
-        paymentMethod: "MOBILE_MONEY", // Defaulting to MOBILE_MONEY as the form currently only has mobile providers
-      };
-
-      console.log("Creating order:", orderData);
-      await createOrder(orderData);
-
-      toast.success("Order Placed Successfully! Redirecting...");
-      clearCart();
-      router.push("/dashboard/orders");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to place order.", {
-        description: getErrorMessage(error),
-      });
-    }
-  };
-
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-muted/30 px-4 sm:px-6 py-12 flex items-center justify-center">
         <div className="text-center max-w-md">
-          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words">Your cart is empty</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 break-words">
+            Your cart is empty
+          </h2>
           <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
             Add some products to your cart to proceed with checkout.
           </p>
@@ -106,15 +40,22 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-muted/30 px-2 sm:px-4 md:px-6 py-6 md:py-8">
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <div className="md:col-span-2 bg-white rounded-sm md:rounded-none border border-muted-foreground/10 p-4 sm:p-6 shadow-sm md:shadow-none">
-          <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 break-words">Checkout</h2>
+          <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 break-words">
+            Checkout
+          </h2>
           <CheckoutForm onSubmit={handleCheckout} isLoading={isPending} />
         </div>
 
         <div className="md:col-span-1 bg-white rounded-sm md:rounded-none border border-muted-foreground/10 p-4 sm:p-6 shadow-sm md:shadow-none h-fit">
-          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Order Summary</h3>
+          <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">
+            Order Summary
+          </h3>
           <div className="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 max-h-64 overflow-y-auto">
             {cart.map((item, idx) => (
-              <div key={idx} className="flex justify-between text-xs sm:text-sm gap-2">
+              <div
+                key={idx}
+                className="flex justify-between text-xs sm:text-sm gap-2"
+              >
                 <span className="flex-1 line-clamp-2">
                   {item.name} (x{item.quantity})
                 </span>

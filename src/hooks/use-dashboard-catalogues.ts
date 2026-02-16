@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { cataloguesService } from "../services/catalogues.service";
 import { BulkAddProductsPayload, UpdateCataloguePayload } from "../types/api";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export const useCatalogues = () => {
   return useQuery({
@@ -22,6 +24,12 @@ export const useBulkAddProductsToCatalogue = () => {
     onSuccess: (_, { catalogueId }) => {
       queryClient.invalidateQueries({ queryKey: ["catalogue", catalogueId] });
       queryClient.invalidateQueries({ queryKey: ["catalogues"] });
+      toast.success("Products added to catalogue");
+    },
+    onError: (error) => {
+      toast.error("Failed to add products", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -33,6 +41,12 @@ export const useUpdateCatalogue = () => {
       cataloguesService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["catalogues"] });
+      toast.success("Catalogue updated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to update catalogue", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };

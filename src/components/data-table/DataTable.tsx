@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState({});
-
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -90,7 +90,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4 w-full">
       {/* Toolbar Section */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg">
         <div className="flex flex-1 items-center gap-2 min-w-0 w-full sm:w-auto">
           {hasSelection && bulkActions.length > 0 ? (
             <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 duration-300 flex-wrap w-full">
@@ -114,7 +114,7 @@ export function DataTable<TData, TValue>({
             </div>
           ) : (
             searchKey && (
-              <div className="relative w-full">
+              <div className="relative w-full sm:max-w-sm">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   placeholder={`Search ${searchKey}...`}
@@ -127,7 +127,7 @@ export function DataTable<TData, TValue>({
                       .getColumn(searchKey)
                       ?.setFilterValue(event.target.value)
                   }
-                  className="h-9 sm:h-10 pl-10 border-slate-200 dark:border-slate-700 rounded-lg focus-visible:ring-2 focus-visible:ring-green-500 text-sm"
+                  className="h-9 sm:h-10 pl-10 bg-transparent border-slate-200 dark:border-slate-700 rounded-lg focus-visible:ring-2 focus-visible:ring-green-500 text-sm"
                 />
               </div>
             )
@@ -136,29 +136,29 @@ export function DataTable<TData, TValue>({
         {!hasSelection && onAdd && (
           <Button
             onClick={onAdd}
-            className="h-9 sm:h-10 px-4 sm:px-6 font-bold text-xs sm:text-sm uppercase tracking-wide bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex-shrink-0"
+            className="h-9 sm:h-10 px-4 sm:px-6 font-bold text-xs sm:text-sm bg-primary hover:bg-primary/90 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex-shrink-0"
           >
             <Plus className="mr-1.5 h-4 w-4" />
             <span className="hidden sm:inline">{addLabel}</span>
-            <span className="sm:hidden">Add</span>
+            <span className="sm:hidden">Add new</span>
           </Button>
         )}
       </div>
 
       {/* Table Section */}
-      <div className="bg-white border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg overflow-hidden">
         <Table className="border-0">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="hover:bg-slate-50 dark:hover:bg-slate-900/50 border-b-2 border-slate-100 dark:border-slate-700"
+                className="hover:bg-slate-50 dark:hover:bg-slate-900/50 border-0"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-slate-800 dark:text-slate-100 font-bold text-xs sm:text-sm tracking-wider px-3 sm:px-4 py-3"
+                      className="text-slate-800 dark:text-slate-100 font-semibold text-xs sm:text-sm tracking-wider px-3 sm:px-4 py-3"
                     >
                       {header.isPlaceholder
                         ? null
@@ -180,7 +180,9 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                   className={cn(
                     "hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-slate-100 dark:border-slate-700 transition-all duration-150",
-                    idx % 2 === 0 ? "bg-slate-50/50 dark:bg-slate-900/5" : "bg-white dark:bg-slate-950"
+                    idx % 2 === 0
+                      ? "bg-slate-50/50 dark:bg-slate-900/5"
+                      : "bg-white dark:bg-slate-950",
                   )}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -211,7 +213,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Footer Pagination */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white border border-slate-200 dark:border-slate-700 rounded-lg">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 p-3 sm:p-4 bg-white rounded-lg">
         <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium">
           Showing{" "}
           <span className="font-bold text-slate-900 dark:text-slate-100">

@@ -152,10 +152,35 @@ export function CatalogueSelectionSheet({
       title="Assign to Catalogue"
       description={`Refine pricing and select a destination catalogue.`}
       size="full"
+      footer={
+        <div className="flex flex-col gap-3 w-full">
+          <Button
+            className="w-full h-11 font-semibold rounded-lg bg-primary hover:bg-primary/90 text-white shadow-sm transition-all active:scale-[0.98]"
+            disabled={!selectedCatalogueId || bulkAdd.isPending}
+            onClick={handleConfirm}
+          >
+            {bulkAdd.isPending ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing Bulk Assignment...
+              </>
+            ) : (
+              `Assign ${selectedProducts.length} Products`
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full h-10 font-medium text-xs text-muted-foreground hover:text-foreground"
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel Operation
+          </Button>
+        </div>
+      }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full max-h-[70vh] overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full max-h-[calc(100vh-280px)] min-h-0">
         {/* Left: Product List & Price Editing */}
-        <div className="flex flex-col gap-4 overflow-y-auto pr-4 border-r border-muted-foreground/10">
+        <div className="flex flex-col gap-4 overflow-y-auto pr-4 border-r border-muted-foreground/10 min-h-0">
           <div className="flex items-center justify-between sticky top-0 bg-white py-2 z-10 border-b border-muted-foreground/5 mb-2">
             <span className="text-[10px] font-black uppercase tracking-widest text-[#4B6BFB]">
               Refine Products ({selectedProducts.length})
@@ -243,7 +268,7 @@ export function CatalogueSelectionSheet({
         </div>
 
         {/* Right: Catalogue Selection */}
-        <div className="flex flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-col gap-4 overflow-y-auto min-h-0">
           <div className="flex items-center justify-between sticky top-0 bg-white py-2 z-10 border-b border-muted-foreground/5 mb-2">
             <span className="text-[10px] font-black uppercase tracking-widest text-[#4B6BFB]">
               Target Catalogue
@@ -289,30 +314,6 @@ export function CatalogueSelectionSheet({
             )}
           </div>
         </div>
-      </div>
-
-      <div className="mt-8 flex flex-col gap-3">
-        <Button
-          className="w-full h-12 font-bold text-sm rounded-none bg-primary hover:bg-primary/90 text-white shadow-none transition-all active:scale-[0.99]"
-          disabled={!selectedCatalogueId || bulkAdd.isPending}
-          onClick={handleConfirm}
-        >
-          {bulkAdd.isPending ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Processing Bulk Assignment...
-            </>
-          ) : (
-            `ASSIGN ${selectedProducts.length} PRODUCTS TO CATALOGUE`
-          )}
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full h-10 font-semibold text-xs text-slate-400 hover:text-slate-600 hover:bg-transparent"
-          onClick={() => onOpenChange(false)}
-        >
-          Cancel Operation
-        </Button>
       </div>
     </FormSheet>
   );

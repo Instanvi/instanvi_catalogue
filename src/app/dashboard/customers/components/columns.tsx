@@ -1,11 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,8 +30,10 @@ export type Customer = {
     email: string;
     phone: string;
     type: string;
+    address: string | null;
   };
-  category: {
+
+  category?: {
     id: string;
     name: string;
     businessId: string;
@@ -100,21 +103,43 @@ export const columns: ColumnDef<Customer>[] = [
     ),
   },
   {
-    accessorKey: "category.name",
-    header: "Category",
+    accessorKey: "customerBusiness.address",
+    header: "Address",
     cell: ({ row }) => {
-      const category = row.original.category;
-      return category ? (
-        <Badge
-          variant="outline"
-          className="border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 font-semibold text-[9px] sm:text-xs"
-        >
-          {category.name}
-        </Badge>
-      ) : (
-        <span className="text-[9px] sm:text-xs text-slate-400 dark:text-slate-500 font-medium">
-          Standard
+      const address = row.original.customerBusiness?.address;
+      return (
+        <span className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium truncate block max-w-[200px]">
+          {address || "—"}
         </span>
+      );
+    },
+  },
+  {
+    accessorKey: "isActive",
+    header: "Status",
+    cell: ({ row }) => {
+      const isActive = row.getValue("isActive") as boolean;
+      return (
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div
+            className={cn(
+              "h-2 w-2 rounded-full flex-shrink-0",
+              isActive
+                ? "bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"
+                : "bg-slate-300 dark:bg-slate-500",
+            )}
+          />
+          <span
+            className={cn(
+              "text-[8px] sm:text-[9px] font-bold uppercase tracking-wider",
+              isActive
+                ? "text-green-600 dark:text-green-400"
+                : "text-slate-400 dark:text-slate-500",
+            )}
+          >
+            {isActive ? "Admitted" : "Revoked"}
+          </span>
+        </div>
       );
     },
   },

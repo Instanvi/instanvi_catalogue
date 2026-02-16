@@ -1,5 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { productsService } from "../services/products.service";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export const useProducts = () => {
   return useQuery({
@@ -14,6 +16,12 @@ export const useCreateProduct = () => {
     mutationFn: (data: FormData) => productsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Product created successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to create product", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -25,6 +33,12 @@ export const useUpdateProduct = () => {
       productsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Product updated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to update product", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -35,6 +49,12 @@ export const useDeleteProduct = () => {
     mutationFn: (id: string) => productsService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Product deleted successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to delete product", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };

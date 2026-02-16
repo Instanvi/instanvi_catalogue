@@ -4,6 +4,8 @@ import {
   customerAuthService,
 } from "../services/customers.service";
 import type { UpdateCustomerPayload } from "../types/api";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 // Admin Hooks
 export const useCustomers = () => {
@@ -19,6 +21,12 @@ export const useCreateCustomer = () => {
     mutationFn: customersService.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast.success("Customer created successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to create customer", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -30,6 +38,12 @@ export const useUpdateCustomer = () => {
       customersService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast.success("Customer updated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to update customer", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -40,6 +54,12 @@ export const useDeleteCustomer = () => {
     mutationFn: (id: string) => customersService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast.success("Customer deleted successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to delete customer", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };

@@ -5,6 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 interface FormSheetProps {
   isOpen: boolean;
@@ -40,29 +41,33 @@ export function FormSheet({
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
-        className={`${sizeClasses[size]} p-0 flex flex-col gap-0 h-full`}
+        className={cn(
+          sizeClasses[size],
+          "p-0 flex flex-col gap-0 h-full max-h-[100dvh] overflow-hidden",
+        )}
       >
-        <SheetHeader className="p-4 sm:p-5 md:p-6 pb-2 flex-shrink-0 space-y-1">
-          <SheetTitle className="font-semibold text-lg sm:text-2xl tracking-tight text-[#1c1c1c] break-words">
-            {title}
-          </SheetTitle>
-          {description && (
-            <SheetDescription className="text-xs sm:text-sm text-muted-foreground/80 leading-relaxed">
-              {description}
-            </SheetDescription>
-          )}
-        </SheetHeader>
-        <Separator className="bg-muted-foreground/5" />
-        <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 md:p-6 pt-2">
-          <div className="max-w-full">{children}</div>
+        <div className="flex-shrink-0 z-20 bg-white">
+          <SheetHeader className="p-4 sm:p-5 md:p-6 pb-4 space-y-1">
+            <SheetTitle className="font-bold text-xl sm:text-2xl tracking-tight text-[#1c1c1c] text-left">
+              {title}
+            </SheetTitle>
+            {description && (
+              <SheetDescription className="text-xs sm:text-sm text-left text-muted-foreground/80 leading-relaxed">
+                {description}
+              </SheetDescription>
+            )}
+          </SheetHeader>
+          <Separator className="bg-muted-foreground/10" />
         </div>
+
+        <div className="flex-1 overflow-y-auto min-h-0 p-4 sm:p-5 md:p-6">
+          <div className="max-w-full pb-8">{children}</div>
+        </div>
+
         {footer && (
-          <>
-            <Separator className="bg-muted-foreground/5" />
-            <div className="bg-white p-4 sm:p-5 md:p-6 flex-shrink-0">
-              {footer}
-            </div>
-          </>
+          <div className="flex-shrink-0 bg-slate-50/80 backdrop-blur-sm p-4 sm:p-5 md:p-6 border-t border-slate-200 shadow-[0_-8px_30px_rgb(0,0,0,0.04)] z-20">
+            {footer}
+          </div>
         )}
       </SheetContent>
     </Sheet>

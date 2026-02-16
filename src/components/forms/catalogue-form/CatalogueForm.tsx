@@ -69,7 +69,7 @@ export function CatalogueForm({
                     <Input
                       disabled={isLoading}
                       placeholder="e.g. Summer Collection 2026"
-                      className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
+                      className="h-11 rounded-md border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                       {...field}
                     />
                   </FormControl>
@@ -92,14 +92,13 @@ export function CatalogueForm({
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger className="h-11 rounded-none border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none">
+                      <SelectTrigger className="h-11 rounded-md border-muted-foreground/20 focus:ring-primary/20 transition-colors shadow-none w-full">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="rounded-none border-border">
+                    <SelectContent className="rounded-md border-border">
                       <SelectItem value="public">Public</SelectItem>
                       <SelectItem value="private">Private</SelectItem>
-                      <SelectItem value="commission">Commission</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[12px] font-medium" />
@@ -121,7 +120,7 @@ export function CatalogueForm({
                   <Input
                     disabled={isLoading}
                     placeholder="Briefly describe the purpose of this collection..."
-                    className="h-11 rounded-none border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
+                    className="h-11 rounded-md border-muted-foreground/20 focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
@@ -131,7 +130,7 @@ export function CatalogueForm({
           />
 
           {/* Row 3: Additional Settings */}
-          <div className="flex items-center justify-between p-4 border border-muted-foreground/10 bg-muted/5 rounded-none">
+          <div className="flex items-center justify-between p-4 border border-muted-foreground/10 bg-muted/5 rounded-md">
             <div className="space-y-0.5">
               <FormLabel className="text-sm font-semibold text-[#1c1c1c]">
                 Allow Cloning

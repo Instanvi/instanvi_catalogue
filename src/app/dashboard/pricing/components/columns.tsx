@@ -1,8 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { MoreHorizontal, Trash2, User, Layers, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -93,7 +91,7 @@ export const columns: ColumnDef<CustomPrice>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
