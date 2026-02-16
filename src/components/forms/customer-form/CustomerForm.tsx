@@ -56,7 +56,7 @@ export function CustomerForm({
                   <Input
                     disabled={isLoading}
                     placeholder="e.g. Andre Marie"
-                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-md focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
@@ -78,7 +78,7 @@ export function CustomerForm({
                     disabled={isLoading}
                     type="email"
                     placeholder="andre.marie@gmail.com"
-                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-md focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
@@ -99,7 +99,7 @@ export function CustomerForm({
                   <Input
                     disabled={isLoading}
                     placeholder="+237 671..."
-                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-md focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>
@@ -120,7 +120,7 @@ export function CustomerForm({
                   <Input
                     disabled={isLoading}
                     placeholder="Acme Inc."
-                    className="h-11 border-muted-foreground/20 rounded-none focus-visible:ring-primary/20 transition-colors shadow-none"
+                    className="h-11 border-muted-foreground/20 rounded-md focus-visible:ring-primary/20 transition-colors shadow-none"
                     {...field}
                   />
                 </FormControl>

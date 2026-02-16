@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import { Users } from "lucide-react";
 
 export const getColumns = (
-  onAssignCategory: (catalogue: Catalogue) => void,
+  onAddCustomer: (catalogue: Catalogue) => void,
 ): ColumnDef<Catalogue>[] => [
   {
     id: "select",
@@ -121,7 +121,9 @@ export const getColumns = (
           <span
             className={cn(
               "text-[8px] sm:text-[9px] font-bold uppercase tracking-wider",
-              isActive ? "text-green-600 dark:text-green-400" : "text-slate-400 dark:text-slate-500",
+              isActive
+                ? "text-green-600 dark:text-green-400"
+                : "text-slate-400 dark:text-slate-500",
             )}
           >
             {isActive ? "LIVE" : "DRAFT"}
@@ -166,9 +168,7 @@ export const getColumns = (
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
             <DropdownMenuItem
               className="text-xs font-medium cursor-pointer text-slate-700 dark:text-slate-200 focus:bg-slate-100 dark:focus:bg-slate-800"
-              onClick={() =>
-                window.open(`/${catalogue.slug}/catalogue`, "_blank")
-              }
+              onClick={() => window.open(`/${catalogue.slug}`, "_blank")}
             >
               <ExternalLink className="mr-2 h-3.5 w-3.5" /> Preview Public
             </DropdownMenuItem>
@@ -177,9 +177,9 @@ export const getColumns = (
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-xs font-medium cursor-pointer text-green-600 dark:text-green-400 focus:bg-green-50 dark:focus:bg-green-900/20"
-              onClick={() => onAssignCategory(catalogue)}
+              onClick={() => onAddCustomer(catalogue)}
             >
-              <Users className="mr-2 h-3.5 w-3.5" /> Assign Category
+              <Users className="mr-2 h-3.5 w-3.5" /> Add Customer
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-slate-100 dark:bg-slate-800" />
             <DropdownMenuItem className="text-xs font-medium cursor-pointer text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-900/20">

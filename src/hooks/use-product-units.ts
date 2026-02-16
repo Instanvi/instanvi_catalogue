@@ -4,6 +4,7 @@ import {
   CreateProductUnitDto,
 } from "@/services/product-units.service";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export const useProductUnits = () => {
   return useQuery({
@@ -21,8 +22,10 @@ export const useCreateProductUnit = () => {
       queryClient.invalidateQueries({ queryKey: ["product-units"] });
       toast.success("Product unit created successfully");
     },
-    onError: () => {
-      toast.error("Failed to create product unit");
+    onError: (error) => {
+      toast.error("Failed to create product unit", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -41,8 +44,10 @@ export const useUpdateProductUnit = () => {
       queryClient.invalidateQueries({ queryKey: ["product-units"] });
       toast.success("Product unit updated successfully");
     },
-    onError: () => {
-      toast.error("Failed to update product unit");
+    onError: (error) => {
+      toast.error("Failed to update product unit", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };
@@ -55,8 +60,10 @@ export const useDeleteProductUnit = () => {
       queryClient.invalidateQueries({ queryKey: ["product-units"] });
       toast.success("Product unit deleted successfully");
     },
-    onError: () => {
-      toast.error("Failed to delete product unit");
+    onError: (error) => {
+      toast.error("Failed to delete product unit", {
+        description: getErrorMessage(error),
+      });
     },
   });
 };

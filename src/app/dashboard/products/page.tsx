@@ -71,7 +71,7 @@ export default function ProductsPage() {
           <Button
             type="submit"
             form="create-product-form"
-            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-bold text-sm rounded-none transition-all active:scale-[0.98]"
+            className="w-full h-11 bg-primary text-white hover:bg-primary/90 font-semibold rounded-lg shadow-sm transition-all active:scale-[0.98]"
             disabled={createProduct.isPending}
           >
             {createProduct.isPending ? (
@@ -79,7 +79,7 @@ export default function ProductsPage() {
             ) : (
               <Package className="mr-2 h-4 w-4" />
             )}
-            {createProduct.isPending ? "Saving..." : "Create Product"}
+            {createProduct.isPending ? "Creating..." : "Create Product"}
           </Button>
         }
       >

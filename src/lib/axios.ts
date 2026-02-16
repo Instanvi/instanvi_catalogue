@@ -14,9 +14,19 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
+    const catalogueToken = localStorage.getItem("catalogue_token");
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (catalogueToken) {
+      // If no main session, use catalogue token for Authorization too (for guest access)
+      config.headers.Authorization = `Bearer ${catalogueToken}`;
     }
+
+    if (catalogueToken) {
+      config.headers["x-catalogue-token"] = catalogueToken;
+    }
+
     return config;
   },
   (error) => {
@@ -41,11 +51,15 @@ api.interceptors.response.use(
 
 export const getErrorMessage = (error: unknown): string => {
   if (isAxiosError<ApiError>(error)) {
-    return (
-      error.response?.data?.message ||
-      error.message ||
-      "An unexpected error occurred"
-    );
+    const apiError = error.response?.data;
+    if (
+      apiError?.errors &&
+      Array.isArray(apiError.errors) &&
+      apiError.errors.length > 0
+    ) {
+      return apiError.errors.join(", ");
+    }
+    return apiError?.message || error.message || "An unexpected error occurred";
   }
   return error instanceof Error
     ? error.message

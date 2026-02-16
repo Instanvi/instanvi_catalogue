@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { stockService } from "@/services/stock.service";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/axios";
 
 export function useStock() {
   return useQuery({
@@ -26,11 +27,9 @@ export function useUpdateStock() {
       queryClient.invalidateQueries({ queryKey: ["stocks"] });
       toast.success("Stock updated successfully");
     },
-    onError: (error: unknown) => {
-      const message =
-        error instanceof Error ? error.message : "Something went wrong";
+    onError: (error) => {
       toast.error("Failed to update stock", {
-        description: message,
+        description: getErrorMessage(error),
       });
     },
   });

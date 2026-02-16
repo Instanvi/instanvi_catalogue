@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import api, { getErrorMessage } from "@/lib/axios";
+import { getErrorMessage } from "@/lib/axios";
 import { useVerifyCatalogueAccess } from "@/hooks/use-catalogue-access";
 
 const verifyCodeSchema = z.object({
@@ -62,9 +62,7 @@ export function VerifyAccessModal({
       {
         onSuccess: (data) => {
           if (data.data.access_token) {
-            localStorage.setItem("token", data.data.access_token);
-            api.defaults.headers.common["Authorization"] =
-              `Bearer ${data.data.access_token}`;
+            localStorage.setItem("catalogue_token", data.data.access_token);
           }
           toast.success("Access Granted", {
             description: "You now have access to this catalogue.",

@@ -96,7 +96,7 @@ export default function StockPage() {
           <Button
             type="submit"
             form="stock-update-form"
-            className="w-full h-11 bg-black hover:bg-black/90 text-white font-semibold text-sm rounded-none transition-all active:scale-[0.98]"
+            className="w-full h-11 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg shadow-sm transition-all active:scale-[0.98]"
             disabled={updateStock.isPending}
           >
             {updateStock.isPending ? (

@@ -24,9 +24,12 @@ const checkoutSchema = z.object({
   notes: z.string().optional(),
   paymentMethod: z
     .string()
-    .refine((val) => ["MTN_MONEY", "ORANGE_MONEY"].includes(val), {
-      message: "Please select a payment method",
-    }),
+    .refine(
+      (val) => ["MTN_MONEY", "ORANGE_MONEY", "PAY_ON_DELIVERY"].includes(val),
+      {
+        message: "Please select a payment method",
+      },
+    ),
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
@@ -48,6 +51,13 @@ const PAYMENT_METHODS = [
     label: "Orange Money",
     color: "bg-[#FF6600]",
     textColor: "text-white",
+  },
+  {
+    id: "PAY_ON_DELIVERY",
+    label: "Pay on Delivery",
+    color: "bg-green-600",
+    textColor: "text-white",
+    description: "Pay with cash or card when you receive your order",
   },
 ];
 
@@ -207,7 +217,7 @@ export function CheckoutForm({ onSubmit, isLoading }: CheckoutFormProps) {
                               {method.label}
                             </p>
                             <p className="text-xs text-muted-foreground font-medium">
-                              Instant Mobile Payment
+                              {method.description || "Instant Mobile Payment"}
                             </p>
                           </div>
                           <div

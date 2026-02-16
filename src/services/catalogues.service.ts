@@ -162,6 +162,21 @@ export const cataloguesService = {
     return response.data;
   },
 
+  // Catalogue Customer Management
+  addCustomer: async (id: string, customerId: string) => {
+    const response = await api.post(`/catalogues/${id}/customers`, {
+      customerId,
+    });
+    return response.data;
+  },
+
+  removeCustomer: async (id: string, customerId: string) => {
+    const response = await api.delete(
+      `/catalogues/${id}/customers/${customerId}`,
+    );
+    return response.data;
+  },
+
   // Member Cloning endpoints
   clone: async (id: string, customName?: string) => {
     const payload: CloneCataloguePayload = { customName };

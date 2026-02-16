@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -55,7 +55,7 @@ export function PricingForm({
     },
   });
 
-  const targetType = form.watch("targetType");
+  const targetType = useWatch({ control: form.control, name: "targetType" });
 
   return (
     <Form {...form}>
